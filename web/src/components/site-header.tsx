@@ -42,7 +42,7 @@ export function SiteHeader() {
           {!isLoading && !user && (
             <>
               <Button asChild variant="ghost" size="sm">
-                <Link to="/login">Sign in</Link>
+                <Link to="/login" search={{}}>Sign in</Link>
               </Button>
               <Button asChild size="sm">
                 <Link to="/register">Sign up</Link>

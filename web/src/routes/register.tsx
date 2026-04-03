@@ -91,6 +91,7 @@ function RegisterPage() {
             Already have an account?{" "}
             <Link
               to="/login"
+              search={{}}
               className="underline underline-offset-4 hover:text-foreground"
             >
               Sign in
