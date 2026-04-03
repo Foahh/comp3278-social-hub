@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { http, HttpResponse } from "msw"
 import { renderHook, act, waitFor } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
@@ -15,7 +16,7 @@ const mockUser: AuthResponse = {
 }
 
 function wrapper({ children }: { children: ReactNode }) {
-  const qc = makeTestQueryClient()
+  const [qc] = useState(() => makeTestQueryClient())
   return <QueryClientProvider client={qc}>{children}</QueryClientProvider>
 }
 
