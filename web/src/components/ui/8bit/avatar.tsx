@@ -107,6 +107,8 @@ const Avatar = forwardRef<
           isPixel && "rounded-full",
           font !== "normal" && "retro",
           variant === "retro" && "image-rendering-pixelated",
+          overlay != null &&
+            "transition-opacity duration-200 ease-out group-hover:opacity-0",
           className
         )}
         {...props}
@@ -115,7 +117,7 @@ const Avatar = forwardRef<
       {overlay != null && (
         <div
           className={cn(
-            "pointer-events-none absolute inset-0 z-[5] overflow-hidden opacity-0 transition-opacity group-hover:opacity-100",
+            "pointer-events-none absolute inset-0 z-[5] overflow-hidden opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100",
             isPixel ? "rounded-full" : "rounded-none"
           )}
           aria-hidden
