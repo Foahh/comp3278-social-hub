@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/8bit/dropdown-menu"
 import { Separator } from "@/components/ui/8bit/separator"
-import { PenSquare, Rss } from "pixelarticons/react"
+import { Logout, PenSquare, Rss, User } from "pixelarticons/react"
 import { SearchBar } from "./SearchBar"
 import { useAuth } from "@/context/AuthContext"
 
@@ -78,13 +78,15 @@ export function SiteHeader() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link to="/user/$username" params={{ username: user.username }}>
+                    <User className="size-4" />
                     Profile
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  variant="destructive"
                   onClick={() => void logout()}
-                  className="text-destructive focus:text-destructive"
                 >
+                  <Logout className="size-4" />
                   Sign out
                 </DropdownMenuItem>
               </DropdownMenuContent>
