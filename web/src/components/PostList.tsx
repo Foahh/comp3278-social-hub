@@ -8,12 +8,13 @@ interface Props {
   hasNextPage: boolean
   isFetchingNextPage: boolean
   fetchNextPage: () => void
+  isLoading?: boolean
 }
 
-export function PostList({ pages, hasNextPage, isFetchingNextPage, fetchNextPage }: Props) {
+export function PostList({ pages, hasNextPage, isFetchingNextPage, fetchNextPage, isLoading }: Props) {
   const posts = pages.flatMap((p) => p.posts)
 
-  if (posts.length === 0 && !isFetchingNextPage) {
+  if (posts.length === 0 && !isFetchingNextPage && !isLoading) {
     return (
       <p className="py-12 text-center text-sm text-muted-foreground">
         No posts yet. Be the first!

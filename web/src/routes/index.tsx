@@ -40,6 +40,7 @@ function FeedPage() {
           hasNextPage={hasNextPage}
           isFetchingNextPage={isFetchingNextPage}
           fetchNextPage={fetchNextPage}
+          isLoading={isLoading}
         />
       )}
     </div>
