@@ -81,8 +81,14 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-footer"
       className={cn(
-        "flex items-center rounded-b-xl px-6 group-data-[size=sm]/card:px-4 [.border-t]:pt-6 group-data-[size=sm]/card:[.border-t]:pt-4",
-        className
+        "relative flex items-center rounded-b-xl px-6 group-data-[size=sm]/card:px-4",
+        "[.border-t]:pt-6 group-data-[size=sm]/card:[.border-t]:pt-4",
+        "[.border-t]:before:pointer-events-none [.border-t]:before:absolute [.border-t]:before:left-6 [.border-t]:before:right-6 [.border-t]:before:top-0 [.border-t]:before:h-0.5 [.border-t]:before:shrink-0",
+        "group-data-[size=sm]/card:[.border-t]:before:left-4 group-data-[size=sm]/card:[.border-t]:before:right-4",
+        "[.border-t]:before:bg-[length:16px_8px] [.border-t]:before:bg-[linear-gradient(90deg,var(--foreground)_75%,transparent_75%)] dark:[.border-t]:before:bg-[linear-gradient(90deg,var(--ring)_75%,transparent_75%)]",
+        "[.border-t]:before:content-['']",
+        className,
+        "[.border-t]:border-t-0"
       )}
       {...props}
     />
