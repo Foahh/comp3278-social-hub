@@ -1,5 +1,6 @@
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
+from typing import Any
 
 import aiomysql
 
@@ -12,18 +13,24 @@ async def init_pool(
     user: str,
     password: str,
     db: str,
+    *,
+    connect_timeout: int = 10,
 ) -> None:
     global _pool
-    _pool = await aiomysql.create_pool(
-        host=host,
-        port=port,
-        user=user,
-        password=password,
-        db=db,
-        minsize=2,
-        maxsize=10,
-        autocommit=True,
-    )
+
+    kwargs: dict[str, Any] = {
+        "host": host,
+        "port": port,
+        "user": user,
+        "password": password,
+        "db": db,
+        "minsize": 2,
+        "maxsize": 10,
+        "autocommit": True,
+        "connect_timeout": connect_timeout,
+    }
+
+    _pool = await aiomysql.create_pool(**kwargs)
 
 
 async def close_pool() -> None:

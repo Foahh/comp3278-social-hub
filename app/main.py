@@ -24,6 +24,8 @@ log = structlog.get_logger()
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     log.info("starting up")
+
+    log.info("initializing database")
     await db.init_pool(
         host=settings.mysql_host,
         port=settings.mysql_port,
@@ -31,12 +33,15 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
         password=settings.mysql_password,
         db=settings.mysql_database,
     )
+
+    log.info("initializing S3")
     s3.init_s3()
     await s3.ensure_bucket()
 
     if settings.openai_api_key:
         from app.core.vanna import init_vanna, mount_vanna_routes, seed_memory
 
+        log.info("initializing Vanna.ai")
         init_vanna()
         await seed_memory()
         mount_vanna_routes(app)
