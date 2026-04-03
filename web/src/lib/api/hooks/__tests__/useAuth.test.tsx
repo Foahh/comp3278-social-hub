@@ -47,7 +47,11 @@ describe("useRegister", () => {
     server.use(http.post("/api/auth/register", () => HttpResponse.json(mockUser)))
     const { result } = renderHook(() => useRegister(), { wrapper })
     act(() => {
-      result.current.mutate({ username: "bob", password: "password1" })
+      result.current.mutate({
+        username: "bob",
+        name: "Bob",
+        password: "password1",
+      })
     })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
   })

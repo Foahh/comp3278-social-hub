@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router"
 import { formatDistanceToNow } from "date-fns"
 import { MessageCircle } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/8bit/avatar"
+import { Badge } from "@/components/ui/8bit/badge"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/8bit/card"
 import { LikeButton } from "./LikeButton"
 import type { components } from "@/lib/api/schema"
 

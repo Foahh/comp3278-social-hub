@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
 import { Camera } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/8bit/avatar"
 import { appConstants } from "@/lib/appConstants"
 
 interface Props {

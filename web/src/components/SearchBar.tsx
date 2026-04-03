@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "@tanstack/react-router"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/8bit/input"
+import { Button } from "@/components/ui/8bit/button"
 import { SearchIcon } from "lucide-react"
 
 export function SearchBar() {

@@ -1,5 +1,5 @@
 import { Heart } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/8bit/button"
 import { cn } from "@/lib/utils"
 import { useToggleLike } from "@/lib/api/hooks/useLikes"
 import { useAuth } from "@/context/AuthContext"

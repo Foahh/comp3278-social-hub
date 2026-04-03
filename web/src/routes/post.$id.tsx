@@ -1,11 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
-import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
+import { Button } from "@/components/ui/8bit/button"
+import { Skeleton } from "@/components/ui/8bit/skeleton"
 import { PostCard } from "@/components/PostCard"
 import { CommentList } from "@/components/CommentList"
 import { usePost, useDeletePost } from "@/lib/api/hooks/usePosts"
 import { useAuth } from "@/context/AuthContext"
-import { toast } from "sonner"
+import { toast } from "@/components/ui/8bit/toast"
 
 export const Route = createFileRoute("/post/$id")({
   component: PostDetailPage,

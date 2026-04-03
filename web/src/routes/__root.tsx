@@ -3,7 +3,7 @@ import { Outlet, createRootRoute, useRouter } from "@tanstack/react-router"
 import { SiteHeader } from "@/components/site-header"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/8bit/button"
 
 export const Route = createRootRoute({
   component: RootComponent,

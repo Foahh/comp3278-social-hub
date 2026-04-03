@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/8bit/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/8bit/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,8 +8,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/ui/8bit/dropdown-menu"
+import { Separator } from "@/components/ui/8bit/separator"
 import { Rss, PenSquareIcon } from "lucide-react"
 import { SearchBar } from "./SearchBar"
 import { useAuth } from "@/context/AuthContext"

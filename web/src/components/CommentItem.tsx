@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router"
 import { formatDistanceToNow } from "date-fns"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/8bit/avatar"
 import type { components } from "@/lib/api/schema"
 
 type CommentResponse = components["schemas"]["CommentResponse"]

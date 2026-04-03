@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
+import { Button } from "@/components/ui/8bit/button"
+import { Skeleton } from "@/components/ui/8bit/skeleton"
 import { PostCard } from "./PostCard"
 import type { components } from "@/lib/api/schema"
 

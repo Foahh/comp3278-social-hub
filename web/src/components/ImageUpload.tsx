@@ -1,7 +1,7 @@
 import { useRef, useState, useMemo, useEffect } from "react"
 import { X, Plus } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/8bit/button"
+import { Input } from "@/components/ui/8bit/input"
 import { appConstants } from "@/lib/appConstants"
 
 interface Props {

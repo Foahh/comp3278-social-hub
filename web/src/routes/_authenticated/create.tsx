@@ -1,13 +1,13 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/8bit/button"
+import { Textarea } from "@/components/ui/8bit/textarea"
+import { Label } from "@/components/ui/8bit/label"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/8bit/card"
 import { ImageUpload } from "@/components/ImageUpload"
 import { useCreatePost } from "@/lib/api/hooks/usePosts"
 import { appConstants } from "@/lib/appConstants"
-import { toast } from "sonner"
+import { toast } from "@/components/ui/8bit/toast"
 
 export const Route = createFileRoute("/_authenticated/create")({
   component: CreatePostPage,
