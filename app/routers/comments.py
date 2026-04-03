@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import structlog
 from fastapi import APIRouter, Depends
@@ -56,7 +56,7 @@ async def create_comment(
     body: CreateCommentRequest,
     current_user_id: int = Depends(auth.get_current_user),
 ) -> CommentResponse:
-    created_at = datetime.now(timezone.utc)
+    created_at = datetime.now(UTC)
     async with db.transaction() as conn:
         post = await queries.get_post(conn, post_id)
         if not post:

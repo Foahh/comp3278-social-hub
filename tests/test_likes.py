@@ -1,8 +1,8 @@
-import pytest
-import jwt
-from httpx import AsyncClient, ASGITransport
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, patch
 
+import jwt
+import pytest
+from httpx import ASGITransport, AsyncClient
 
 TOKEN = jwt.encode({"user_id": 1, "exp": 9999999999}, "change-me-in-production", algorithm="HS256")
 

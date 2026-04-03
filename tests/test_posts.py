@@ -1,8 +1,8 @@
-import json
+from datetime import UTC, datetime
+from unittest.mock import AsyncMock, patch
+
 import pytest
-from httpx import AsyncClient, ASGITransport
-from unittest.mock import AsyncMock, MagicMock, patch
-from datetime import datetime, timezone
+from httpx import ASGITransport, AsyncClient
 
 
 @pytest.fixture
@@ -28,7 +28,7 @@ def make_post_row(post_id=1, user_id=2, like_count=0, comment_count=0):
         "text_content": "Hello world",
         "like_count": like_count,
         "comment_count": comment_count,
-        "created_at": datetime(2024, 1, 1, tzinfo=timezone.utc),
+        "created_at": datetime(2024, 1, 1, tzinfo=UTC),
     }
 
 
@@ -38,7 +38,7 @@ async def test_list_posts_latest(client):
     with (
         patch("app.routers.posts.queries") as mock_q,
         patch("app.routers.posts.db") as mock_db,
-        patch("app.routers.posts.s3") as mock_s3,
+        patch("app.routers.posts.s3"),
     ):
         mock_conn = AsyncMock()
         mock_db.get_conn.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
@@ -62,7 +62,7 @@ async def test_list_posts_returns_next_cursor(client):
     with (
         patch("app.routers.posts.queries") as mock_q,
         patch("app.routers.posts.db") as mock_db,
-        patch("app.routers.posts.s3") as mock_s3,
+        patch("app.routers.posts.s3"),
     ):
         mock_conn = AsyncMock()
         mock_db.get_conn.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
@@ -84,7 +84,7 @@ async def test_get_single_post(client):
     with (
         patch("app.routers.posts.queries") as mock_q,
         patch("app.routers.posts.db") as mock_db,
-        patch("app.routers.posts.s3") as mock_s3,
+        patch("app.routers.posts.s3"),
     ):
         mock_conn = AsyncMock()
         mock_db.get_conn.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
@@ -118,8 +118,8 @@ async def test_get_single_post_not_found(client):
 @pytest.mark.asyncio
 async def test_delete_post_forbidden(client):
     """Authenticated as user 1, post belongs to user 2 — expect 403."""
-    from app.main import app
     from app.core import auth
+    from app.main import app
 
     with (
         patch("app.routers.posts.queries") as mock_q,
@@ -142,14 +142,14 @@ async def test_delete_post_forbidden(client):
 
 @pytest.mark.asyncio
 async def test_create_post_text_only(client):
-    from app.main import app
     from app.core import auth
+    from app.main import app
 
     post_row = make_post_row(post_id=10, user_id=1)
     with (
         patch("app.routers.posts.queries") as mock_q,
         patch("app.routers.posts.db") as mock_db,
-        patch("app.routers.posts.s3") as mock_s3,
+        patch("app.routers.posts.s3"),
     ):
         app.dependency_overrides[auth.get_current_user] = lambda: 1
         try:

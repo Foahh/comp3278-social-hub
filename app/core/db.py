@@ -35,7 +35,7 @@ async def close_pool() -> None:
 
 
 @asynccontextmanager
-async def get_conn() -> AsyncGenerator[aiomysql.Connection, None]:
+async def get_conn() -> AsyncGenerator[aiomysql.Connection]:
     """Yield a connection from the pool. Used for single-query reads."""
     assert _pool is not None
     async with _pool.acquire() as conn:
@@ -43,7 +43,7 @@ async def get_conn() -> AsyncGenerator[aiomysql.Connection, None]:
 
 
 @asynccontextmanager
-async def transaction() -> AsyncGenerator[aiomysql.Connection, None]:
+async def transaction() -> AsyncGenerator[aiomysql.Connection]:
     """Yield a connection with an explicit transaction (BEGIN/COMMIT/ROLLBACK)."""
     assert _pool is not None
     async with _pool.acquire() as conn:

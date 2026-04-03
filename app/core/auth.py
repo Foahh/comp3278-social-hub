@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import bcrypt
 import jwt
@@ -18,7 +18,7 @@ def create_token(user_id: int) -> str:
 
     payload = {
         "user_id": user_id,
-        "exp": datetime.now(timezone.utc) + timedelta(hours=settings.jwt_expire_hours),
+        "exp": datetime.now(UTC) + timedelta(hours=settings.jwt_expire_hours),
     }
     return jwt.encode(payload, settings.jwt_secret, algorithm="HS256")
 
@@ -34,7 +34,7 @@ def get_current_user(request: Request) -> int:
         payload = jwt.decode(token, settings.jwt_secret, algorithms=["HS256"])
         return int(payload["user_id"])
     except jwt.PyJWTError:
-        raise HTTPException(status_code=401, detail="Invalid session")
+        raise HTTPException(status_code=401, detail="Invalid session") from None
 
 
 def get_optional_user(request: Request) -> int | None:

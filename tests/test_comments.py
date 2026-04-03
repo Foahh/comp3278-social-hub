@@ -1,9 +1,9 @@
-import pytest
-import jwt
-from datetime import datetime, timezone
-from httpx import AsyncClient, ASGITransport
-from unittest.mock import AsyncMock, MagicMock, patch
+from datetime import UTC, datetime
+from unittest.mock import AsyncMock, patch
 
+import jwt
+import pytest
+from httpx import ASGITransport, AsyncClient
 
 TOKEN = jwt.encode({"user_id": 1, "exp": 9999999999}, "change-me-in-production", algorithm="HS256")
 
@@ -30,7 +30,7 @@ def make_comment_row(comment_id=1, user_id=2, post_id=3):
         "username": "dave",
         "avatar_key": None,
         "content": "Great post!",
-        "created_at": datetime(2024, 1, 1, tzinfo=timezone.utc),
+        "created_at": datetime(2024, 1, 1, tzinfo=UTC),
     }
 
 

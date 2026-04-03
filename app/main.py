@@ -1,12 +1,12 @@
-from contextlib import asynccontextmanager
 from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
 
 import structlog
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.core.config import settings
 from app.core import db, s3
+from app.core.config import settings
 from app.exceptions import register_exception_handlers
 
 structlog.configure(
@@ -22,7 +22,7 @@ log = structlog.get_logger()
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     log.info("starting up")
     await db.init_pool(
         host=settings.mysql_host,
@@ -35,7 +35,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     await s3.ensure_bucket()
 
     if settings.openai_api_key:
-        from app.core.vanna import init_vanna, seed_memory, mount_vanna_routes
+        from app.core.vanna import init_vanna, mount_vanna_routes, seed_memory
 
         init_vanna()
         await seed_memory()
@@ -57,7 +57,7 @@ app.add_middleware(
 )
 register_exception_handlers(app)
 
-from app.routers import auth, posts, likes, comments, users  # noqa: E402
+from app.routers import auth, comments, likes, posts, users  # noqa: E402
 
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(posts.router, prefix="/api/posts", tags=["posts"])

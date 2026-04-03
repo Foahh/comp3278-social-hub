@@ -1,3 +1,6 @@
+from datetime import UTC
+
+
 def test_register_request_valid():
     from app.schemas.auth import RegisterRequest
 
@@ -7,18 +10,20 @@ def test_register_request_valid():
 
 def test_register_request_username_too_short():
     from pydantic import ValidationError
+
     from app.schemas.auth import RegisterRequest
 
     try:
         RegisterRequest(username="ab", email="a@b.com", password="securepass")
-        assert False, "should have raised"
+        raise AssertionError("should have raised")
     except ValidationError:
         pass
 
 
 def test_post_response_construction():
-    from datetime import datetime, timezone
-    from app.schemas.post import PostResponse, ImageResponse
+    from datetime import datetime
+
+    from app.schemas.post import ImageResponse, PostResponse
 
     pr = PostResponse(
         post_id=1,
@@ -30,7 +35,7 @@ def test_post_response_construction():
         like_count=5,
         comment_count=2,
         liked_by_me=False,
-        created_at=datetime.now(timezone.utc),
+        created_at=datetime.now(UTC),
     )
     assert pr.post_id == 1
     assert len(pr.images) == 1
@@ -44,7 +49,8 @@ def test_like_toggle_response():
 
 
 def test_comment_response_construction():
-    from datetime import datetime, timezone
+    from datetime import datetime
+
     from app.schemas.comment import CommentResponse
 
     c = CommentResponse(
@@ -53,6 +59,6 @@ def test_comment_response_construction():
         username="carol",
         avatar_url=None,
         content="nice",
-        created_at=datetime.now(timezone.utc),
+        created_at=datetime.now(UTC),
     )
     assert c.comment_id == 1

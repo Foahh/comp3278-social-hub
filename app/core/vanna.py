@@ -47,23 +47,28 @@ DDL = Path("schema.sql").read_text()
 TRAINING_PAIRS = [
     (
         "What are the most liked posts?",
-        "SELECT p.*, u.username FROM posts p JOIN users u ON p.user_id = u.user_id ORDER BY p.like_count DESC LIMIT 10;",
+        "SELECT p.*, u.username FROM posts p JOIN users u ON p.user_id = u.user_id "
+        "ORDER BY p.like_count DESC LIMIT 10;",
     ),
     (
         "Which users have the most posts?",
-        "SELECT u.username, COUNT(*) as post_count FROM users u JOIN posts p ON u.user_id = p.user_id GROUP BY u.user_id ORDER BY post_count DESC LIMIT 10;",
+        "SELECT u.username, COUNT(*) as post_count FROM users u JOIN posts p "
+        "ON u.user_id = p.user_id GROUP BY u.user_id ORDER BY post_count DESC LIMIT 10;",
     ),
     (
         "What are the most commented posts?",
-        "SELECT p.*, u.username FROM posts p JOIN users u ON p.user_id = u.user_id ORDER BY p.comment_count DESC LIMIT 10;",
+        "SELECT p.*, u.username FROM posts p JOIN users u ON p.user_id = u.user_id "
+        "ORDER BY p.comment_count DESC LIMIT 10;",
     ),
     (
         "Show posts from this week",
-        "SELECT p.*, u.username FROM posts p JOIN users u ON p.user_id = u.user_id WHERE p.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) ORDER BY p.created_at DESC;",
+        "SELECT p.*, u.username FROM posts p JOIN users u ON p.user_id = u.user_id "
+        "WHERE p.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) ORDER BY p.created_at DESC;",
     ),
     (
         "Who liked a specific post?",
-        "SELECT u.username, l.created_at FROM likes l JOIN users u ON l.user_id = u.user_id WHERE l.post_id = 1 ORDER BY l.created_at DESC;",
+        "SELECT u.username, l.created_at FROM likes l JOIN users u ON l.user_id = u.user_id "
+        "WHERE l.post_id = 1 ORDER BY l.created_at DESC;",
     ),
 ]
 

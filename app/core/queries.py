@@ -1,6 +1,5 @@
 import aiomysql
 
-
 # --- Users ---
 
 

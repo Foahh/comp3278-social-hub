@@ -59,8 +59,9 @@ async def delete_file(key: str) -> None:
 
 async def ensure_bucket() -> None:
     """Create the bucket if it doesn't exist. Called once at startup."""
-    from app.core.config import settings
     from botocore.exceptions import ClientError
+
+    from app.core.config import settings
 
     async with _client() as client:
         try:

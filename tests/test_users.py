@@ -1,10 +1,10 @@
 import io
-import pytest
-import jwt
-from datetime import datetime, timezone
-from httpx import AsyncClient, ASGITransport
-from unittest.mock import AsyncMock, MagicMock, patch
+from datetime import UTC, datetime
+from unittest.mock import AsyncMock, patch
 
+import jwt
+import pytest
+from httpx import ASGITransport, AsyncClient
 
 TOKEN = jwt.encode({"user_id": 1, "exp": 9999999999}, "change-me-in-production", algorithm="HS256")
 
@@ -28,7 +28,7 @@ async def test_get_user_profile(client):
     with (
         patch("app.routers.users.queries") as mock_q,
         patch("app.routers.users.db") as mock_db,
-        patch("app.routers.users.s3") as mock_s3,
+        patch("app.routers.users.s3"),
     ):
         mock_conn = AsyncMock()
         mock_db.get_conn.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
@@ -38,7 +38,7 @@ async def test_get_user_profile(client):
                 "user_id": 1,
                 "username": "alice",
                 "avatar_key": None,
-                "created_at": datetime(2024, 1, 1, tzinfo=timezone.utc),
+                "created_at": datetime(2024, 1, 1, tzinfo=UTC),
                 "post_count": 5,
                 "total_likes": 42,
             }

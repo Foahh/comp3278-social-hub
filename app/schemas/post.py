@@ -1,15 +1,15 @@
 from datetime import datetime
-from enum import Enum
+from enum import StrEnum
 
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, HttpUrl
 
 
-class FeedSort(str, Enum):
+class FeedSort(StrEnum):
     latest = "latest"
     popular = "popular"
 
 
-class ImageType(str, Enum):
+class ImageType(StrEnum):
     blob = "blob"
     url = "url"
 

@@ -1,3 +1,4 @@
+import contextlib
 import json
 import uuid
 from typing import Annotated
@@ -60,7 +61,7 @@ async def _build_post_response(conn, row: dict, current_user_id: int | None) -> 
 
 @router.get("", response_model=PostListResponse)
 async def list_posts(
-    sort: FeedSort = Query(FeedSort.latest),
+    sort: Annotated[FeedSort, Query()] = FeedSort.latest,
     cursor: int | None = Query(None),
     current_user_id: int | None = Depends(auth.get_optional_user),
 ) -> PostListResponse:
@@ -101,7 +102,9 @@ async def create_post(
             raw = json.loads(image_urls)
             url_inputs = [ImageInput(url=u) for u in raw]
         except Exception:
-            raise HTTPException(status_code=422, detail="image_urls must be a JSON array of URLs")
+            raise HTTPException(
+                status_code=422, detail="image_urls must be a JSON array of URLs"
+            ) from None
 
     blob_files = images or []
 
@@ -130,10 +133,8 @@ async def create_post(
             uploaded_keys.append(key)
     except Exception:
         for key in uploaded_keys:
-            try:
+            with contextlib.suppress(Exception):
                 await s3.delete_file(key)
-            except Exception:
-                pass
         raise
 
     try:
@@ -148,10 +149,8 @@ async def create_post(
                 position += 1
     except Exception:
         for key in uploaded_keys:
-            try:
+            with contextlib.suppress(Exception):
                 await s3.delete_file(key)
-            except Exception:
-                pass
         raise
 
     async with db.get_conn() as conn:

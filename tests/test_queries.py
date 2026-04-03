@@ -1,7 +1,6 @@
-import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock
 
-import aiomysql
+import pytest
 
 
 @pytest.mark.asyncio
@@ -65,7 +64,7 @@ async def test_list_posts_latest_with_cursor(mock_conn):
     conn, cursor = mock_conn
     cursor.fetchall = AsyncMock(return_value=[{"post_id": 3}])
 
-    result = await queries.list_posts_latest(conn, 5, 20)
+    await queries.list_posts_latest(conn, 5, 20)
 
     call_args = cursor.execute.call_args
     assert "%s" in call_args[0][0]
