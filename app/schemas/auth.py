@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, EmailStr, Field
 
 
@@ -17,3 +19,12 @@ class AuthResponse(BaseModel):
     username: str
     email: str
     avatar_url: str | None
+
+
+class UserProfileResponse(BaseModel):
+    user_id: int
+    username: str
+    avatar_url: str | None
+    created_at: datetime
+    post_count: int
+    total_likes: int
