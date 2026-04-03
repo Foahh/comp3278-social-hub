@@ -60,8 +60,7 @@ function RegisterPage() {
           <CardHeader>
             <CardTitle>Create an account</CardTitle>
             <CardDescription>
-              Optionally add a display name, choose a username, and set a password to create your
-              account
+              Enter your information below to create your account
             </CardDescription>
           </CardHeader>
           <CardContent>
