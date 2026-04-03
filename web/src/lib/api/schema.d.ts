@@ -264,8 +264,8 @@ export interface components {
             user_id: number;
             /** Username */
             username: string;
-            /** Email */
-            email: string;
+            /** Name */
+            name: string;
             /** Avatar Url */
             avatar_url: string | null;
         };
@@ -382,6 +382,8 @@ export interface components {
             user_id: number;
             /** Username */
             username: string;
+            /** Name */
+            name: string;
             /** Avatar Url */
             avatar_url: string | null;
             /** Content */
@@ -425,11 +427,8 @@ export interface components {
         };
         /** LoginRequest */
         LoginRequest: {
-            /**
-             * Email
-             * Format: email
-             */
-            email: string;
+            /** Username */
+            username: string;
             /** Password */
             password: string;
         };
@@ -448,6 +447,8 @@ export interface components {
             user_id: number;
             /** Username */
             username: string;
+            /** Name */
+            name: string;
             /** Avatar Url */
             avatar_url: string | null;
             /** Text Content */
@@ -470,11 +471,8 @@ export interface components {
         RegisterRequest: {
             /** Username */
             username: string;
-            /**
-             * Email
-             * Format: email
-             */
-            email: string;
+            /** Name */
+            name: string;
             /** Password */
             password: string;
         };
@@ -488,7 +486,7 @@ export interface components {
          *
          *     Example:
          *         context = RequestContext(
-         *             cookies={'vanna_email': 'alice@example.com'},
+         *             cookies={'session': 'abc123'},
          *             headers={'Authorization': 'Bearer token'},
          *             remote_addr='127.0.0.1'
          *         )
@@ -535,6 +533,8 @@ export interface components {
             user_id: number;
             /** Username */
             username: string;
+            /** Name */
+            name: string;
             /** Avatar Url */
             avatar_url: string | null;
             /**

@@ -1,10 +1,23 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useRegister } from "@/lib/api/hooks/useAuth"
+import { appConstants } from "@/lib/appConstants"
 
 export const Route = createFileRoute("/register")({
   component: RegisterPage,
@@ -16,7 +29,7 @@ function RegisterPage() {
   const [error, setError] = useState<string | null>(null)
   const [passwordError, setPasswordError] = useState<string | null>(null)
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
     setError(null)
     setPasswordError(null)
@@ -30,7 +43,7 @@ function RegisterPage() {
     register.mutate(
       {
         username: fd.get("username") as string,
-        email: fd.get("email") as string,
+        name: fd.get("name") as string,
         password,
       },
       {
@@ -42,63 +55,94 @@ function RegisterPage() {
 
   return (
     <div className="flex min-h-[calc(100svh-3.5rem)] items-center justify-center px-4">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle>Create account</CardTitle>
-          <CardDescription>
-            Pick a username, add your email, choose a password.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-1">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                id="username" name="username" required
-                minLength={3} maxLength={50}
-                pattern="^[a-zA-Z0-9_]+"
-                title="Letters, numbers, and underscores only"
-                autoComplete="username"
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" required autoComplete="email" />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password" name="password" type="password"
-                required minLength={8} maxLength={128} autoComplete="new-password"
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="confirm">Confirm password</Label>
-              <Input
-                id="confirm" name="confirm" type="password"
-                required minLength={8} maxLength={128} autoComplete="new-password"
-              />
-              {passwordError && (
-                <p className="text-sm text-destructive">{passwordError}</p>
-              )}
-            </div>
-            {error && <p className="text-sm text-destructive">{error}</p>}
-            <Button type="submit" className="w-full" disabled={register.isPending}>
-              {register.isPending ? "Creating account…" : "Sign up"}
-            </Button>
-          </form>
-          <p className="mt-4 text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link
-              to="/login"
-              search={{}}
-              className="underline underline-offset-4 hover:text-foreground"
-            >
-              Sign in
-            </Link>
-          </p>
-        </CardContent>
-      </Card>
+      <div className="flex w-full max-w-sm flex-col gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Create an account</CardTitle>
+            <CardDescription>
+              Optionally add a display name, choose a username, and set a password to create your
+              account
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit}>
+              <FieldGroup>
+                <Field>
+                  <FieldLabel htmlFor="name">Name (optional)</FieldLabel>
+                  <Input
+                    id="name"
+                    name="name"
+                    maxLength={appConstants.nameMaxLength}
+                    autoComplete="name"
+                  />
+                  <FieldDescription>
+                    Up to {appConstants.nameMaxLength} characters; leave blank if you prefer.
+                  </FieldDescription>
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="username">Username</FieldLabel>
+                  <Input
+                    id="username"
+                    name="username"
+                    required
+                    minLength={appConstants.usernameMinLen}
+                    maxLength={appConstants.usernameMaxLen}
+                    pattern="^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*"
+                    title="Letters and numbers, hyphens between segments (e.g. alice-01)"
+                    autoComplete="username"
+                  />
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="password">Password</FieldLabel>
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+                    minLength={appConstants.passwordMinLength}
+                    maxLength={appConstants.passwordMaxLength}
+                    autoComplete="new-password"
+                  />
+                  <FieldDescription>
+                    Must be at least {appConstants.passwordMinLength} characters long.
+                  </FieldDescription>
+                </Field>
+                <Field data-invalid={!!passwordError}>
+                  <FieldLabel htmlFor="confirm">Confirm password</FieldLabel>
+                  <Input
+                    id="confirm"
+                    name="confirm"
+                    type="password"
+                    required
+                    minLength={appConstants.passwordMinLength}
+                    maxLength={appConstants.passwordMaxLength}
+                    autoComplete="new-password"
+                    aria-invalid={!!passwordError}
+                  />
+                  <FieldDescription>Please confirm your password.</FieldDescription>
+                  {passwordError ? <FieldError>{passwordError}</FieldError> : null}
+                </Field>
+                {error ? (
+                  <Field data-invalid>
+                    <FieldError>{error}</FieldError>
+                  </Field>
+                ) : null}
+                <Field>
+                  <Button type="submit" className="w-full" disabled={register.isPending}>
+                    {register.isPending ? "Creating account…" : "Create account"}
+                  </Button>
+                  <FieldDescription className="px-6 text-center">
+                    Already have an account?{" "}
+                    <Link to="/login" search={{}}>
+                      Sign in
+                    </Link>
+                  </FieldDescription>
+                </Field>
+              </FieldGroup>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

@@ -12,7 +12,7 @@ import type { ReactNode } from "react"
 type AuthResponse = components["schemas"]["AuthResponse"]
 
 const mockUser: AuthResponse = {
-  user_id: 2, username: "bob", email: "bob@example.com", avatar_url: null,
+  user_id: 2, username: "bob", name: "Bob", avatar_url: null,
 }
 
 function wrapper({ children }: { children: ReactNode }) {
@@ -24,7 +24,7 @@ describe("useLogin", () => {
   it("resolves with AuthResponse on 200", async () => {
     server.use(http.post("/api/auth/login", () => HttpResponse.json(mockUser)))
     const { result } = renderHook(() => useLogin(), { wrapper })
-    act(() => { result.current.mutate({ email: "bob@example.com", password: "password1" }) })
+    act(() => { result.current.mutate({ username: "bob", password: "password1" }) })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual(mockUser)
   })
@@ -36,7 +36,7 @@ describe("useLogin", () => {
       ),
     )
     const { result } = renderHook(() => useLogin(), { wrapper })
-    act(() => { result.current.mutate({ email: "x@x.com", password: "wrong" }) })
+    act(() => { result.current.mutate({ username: "bob", password: "wrong" }) })
     await waitFor(() => expect(result.current.isError).toBe(true))
     expect(result.current.error?.message).toContain("Invalid credentials")
   })
@@ -47,7 +47,7 @@ describe("useRegister", () => {
     server.use(http.post("/api/auth/register", () => HttpResponse.json(mockUser)))
     const { result } = renderHook(() => useRegister(), { wrapper })
     act(() => {
-      result.current.mutate({ username: "bob", email: "bob@example.com", password: "password1" })
+      result.current.mutate({ username: "bob", password: "password1" })
     })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
   })

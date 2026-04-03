@@ -5,6 +5,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Separator } from "@/components/ui/separator"
@@ -56,13 +58,20 @@ export function SiteHeader() {
                 <button className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                   <Avatar className="size-8">
                     {user.avatar_url && (
-                      <AvatarImage src={user.avatar_url} alt={user.username} />
+                      <AvatarImage src={user.avatar_url} alt={user.name} />
                     )}
-                    <AvatarFallback>{user.username[0]?.toUpperCase() ?? "?"}</AvatarFallback>
+                    <AvatarFallback>{user.name[0]?.toUpperCase() ?? "?"}</AvatarFallback>
                   </Avatar>
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-sm font-medium">{user.name}</span>
+                    <span className="text-xs text-muted-foreground">@{user.username}</span>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link to="/user/$username" params={{ username: user.username }}>
                     Profile

@@ -16,18 +16,19 @@ export function PostCard({ post }: { post: PostResponse }) {
         <Link to="/user/$username" params={{ username: post.username }}>
           <Avatar className="size-9">
             {post.avatar_url && (
-              <AvatarImage src={post.avatar_url} alt={post.username} />
+              <AvatarImage src={post.avatar_url} alt={post.name} />
             )}
-            <AvatarFallback>{post.username[0]?.toUpperCase() ?? "?"}</AvatarFallback>
+            <AvatarFallback>{post.name[0]?.toUpperCase() ?? "?"}</AvatarFallback>
           </Avatar>
         </Link>
         <div className="min-w-0">
           <Link
             to="/user/$username"
             params={{ username: post.username }}
-            className="truncate font-medium hover:underline"
+            className="truncate hover:underline"
           >
-            {post.username}
+            <span className="font-medium">{post.name}</span>{" "}
+            <span className="font-normal text-muted-foreground">@{post.username}</span>
           </Link>
           <p className="text-xs text-muted-foreground">
             {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}

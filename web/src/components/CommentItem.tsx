@@ -11,9 +11,9 @@ export function CommentItem({ comment }: { comment: CommentResponse }) {
       <Link to="/user/$username" params={{ username: comment.username }} className="shrink-0">
         <Avatar className="size-8">
           {comment.avatar_url && (
-            <AvatarImage src={comment.avatar_url} alt={comment.username} />
+            <AvatarImage src={comment.avatar_url} alt={comment.name} />
           )}
-          <AvatarFallback>{comment.username[0]?.toUpperCase() ?? "?"}</AvatarFallback>
+          <AvatarFallback>{comment.name[0]?.toUpperCase() ?? "?"}</AvatarFallback>
         </Avatar>
       </Link>
       <div className="min-w-0 flex-1">
@@ -21,9 +21,10 @@ export function CommentItem({ comment }: { comment: CommentResponse }) {
           <Link
             to="/user/$username"
             params={{ username: comment.username }}
-            className="text-sm font-medium hover:underline"
+            className="text-sm hover:underline"
           >
-            {comment.username}
+            <span className="font-medium">{comment.name}</span>{" "}
+            <span className="font-normal text-muted-foreground">@{comment.username}</span>
           </Link>
           <span className="text-xs text-muted-foreground">
             {formatDistanceToNow(new Date(comment.created_at), { addSuffix: true })}

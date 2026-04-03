@@ -11,7 +11,7 @@ import type { ReactNode } from "react"
 type PostResponse = components["schemas"]["PostResponse"]
 
 const basePost: PostResponse = {
-  post_id: 1, user_id: 1, username: "alice", avatar_url: null,
+  post_id: 1, user_id: 1, username: "alice", name: "Alice", avatar_url: null,
   text_content: "hi", images: [], like_count: 3,
   comment_count: 0, liked_by_me: false, created_at: "2026-04-04T00:00:00",
 }

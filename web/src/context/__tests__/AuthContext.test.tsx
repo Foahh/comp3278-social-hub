@@ -24,7 +24,7 @@ describe("AuthContext", () => {
 
   it("returns user data on 200", async () => {
     const mockUser: AuthResponse = {
-      user_id: 1, username: "alice", email: "alice@example.com", avatar_url: null,
+      user_id: 1, username: "alice", name: "Alice", avatar_url: null,
     }
     server.use(http.get("/api/auth/me", () => HttpResponse.json(mockUser)))
     const qc = makeTestQueryClient()

@@ -54,6 +54,7 @@ function UserProfilePage() {
           {isOwner ? (
             <AvatarUpload
               currentUrl={profile.avatar_url}
+              displayName={profile.name}
               username={profile.username}
               onFileSelected={handleAvatarSelected}
               error={avatarError}
@@ -62,16 +63,17 @@ function UserProfilePage() {
           ) : (
             <Avatar className="size-24">
               {profile.avatar_url && (
-                <AvatarImage src={profile.avatar_url} alt={profile.username} />
+                <AvatarImage src={profile.avatar_url} alt={profile.name} />
               )}
               <AvatarFallback className="text-3xl">
-                {profile.username[0]?.toUpperCase() ?? "?"}
+                {profile.name[0]?.toUpperCase() ?? "?"}
               </AvatarFallback>
             </Avatar>
           )}
 
           <div className="flex-1 space-y-2 text-center sm:text-left">
-            <h1 className="text-2xl font-bold">{profile.username}</h1>
+            <h1 className="text-2xl font-bold">{profile.name}</h1>
+            <p className="text-sm text-muted-foreground">@{profile.username}</p>
             <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground sm:justify-start">
               <span className="flex items-center gap-1">
                 <CalendarIcon className="size-4" />

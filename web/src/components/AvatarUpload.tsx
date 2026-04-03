@@ -6,6 +6,7 @@ import { appConstants } from "@/lib/appConstants"
 interface Props {
   currentUrl: string | null
   username: string
+  displayName?: string
   onFileSelected: (file: File) => void
   error?: string | null
   isPending?: boolean
@@ -14,10 +15,12 @@ interface Props {
 export function AvatarUpload({
   currentUrl,
   username,
+  displayName,
   onFileSelected,
   error,
   isPending,
 }: Props) {
+  const label = displayName ?? username
   const inputRef = useRef<HTMLInputElement>(null)
   const [localError, setLocalError] = useState<string | null>(null)
 
@@ -49,8 +52,8 @@ export function AvatarUpload({
         aria-label="Change avatar"
       >
         <Avatar className="size-24">
-          {currentUrl && <AvatarImage src={currentUrl} alt={username} />}
-          <AvatarFallback className="text-2xl">{username[0]?.toUpperCase() ?? "?"}</AvatarFallback>
+          {currentUrl && <AvatarImage src={currentUrl} alt={label} />}
+          <AvatarFallback className="text-2xl">{label[0]?.toUpperCase() ?? "?"}</AvatarFallback>
         </Avatar>
         <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
           <Camera className="size-6 text-white" />
