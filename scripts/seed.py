@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import string
 import sys
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
@@ -33,6 +34,16 @@ type LikeRow = tuple[int, int]
 type CommentRow = tuple[int, int, str]
 
 _USER_BATCH = 2000
+
+_ALNUM = string.ascii_lowercase + string.digits
+
+
+def _unique_seed_username(fake: Faker) -> str:
+    """Alphanumeric only (GitHub-style path-safe); avoids Faker user_name() underscores/dots."""
+    length = fake.random_int(min=3, max=20)
+    return fake.unique.lexify("?" * length, letters=_ALNUM)
+
+
 _POST_BATCH = 500
 _ROWS_PER_INSERT = 3000
 
@@ -127,7 +138,7 @@ async def _insert_users_batch(
     return await _insert_many_returning_ids(
         conn,
         table="users",
-        columns=("username", "email", "password_hash"),
+        columns=("username", "password_hash", "name"),
         rows=rows,
     )
 
@@ -279,10 +290,9 @@ async def _seed(
                 batch: list[UserRow] = []
 
                 for _ in range(chunk_size):
-                    username = fake.unique.user_name()
-                    email = fake.unique.email()
+                    username = _unique_seed_username(fake)
                     usernames.append(username)
-                    batch.append((username, email, password_hash))
+                    batch.append((username, password_hash, fake.name()))
 
                 user_ids.extend(await _insert_users_batch(conn, batch))
 

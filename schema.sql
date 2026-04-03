@@ -1,10 +1,12 @@
 CREATE TABLE users (
     user_id       INT PRIMARY KEY AUTO_INCREMENT,
-    username      VARCHAR(50)  NOT NULL UNIQUE,
-    email         VARCHAR(255) NOT NULL UNIQUE,
+    username      VARCHAR(39)  NOT NULL,
+    name          VARCHAR(50) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     avatar_key    VARCHAR(255) DEFAULT NULL,
-    created_at    DATETIME     NOT NULL DEFAULT NOW()
+    created_at    DATETIME     NOT NULL DEFAULT NOW(),
+
+    UNIQUE KEY users_username_lower ((LOWER(username)))
 );
 
 CREATE TABLE posts (
