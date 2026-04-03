@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import client from "@/lib/api/client"
 import type { components } from "@/lib/api/schema"
 
@@ -7,15 +7,6 @@ type PostResponse = components["schemas"]["PostResponse"]
 export function useToggleLike(postId: number) {
   const queryClient = useQueryClient()
   const queryKey = ["posts", postId]
-
-  // Subscribe as a passive observer so gcTime:0 does not evict optimistic data
-  // between the mutation callbacks and the consuming component re-render.
-  useQuery<PostResponse>({
-    queryKey,
-    queryFn: () => queryClient.getQueryData<PostResponse>(queryKey)!,
-    enabled: false,
-    staleTime: Infinity,
-  })
 
   return useMutation({
     mutationFn: async () => {
@@ -26,8 +17,8 @@ export function useToggleLike(postId: number) {
       return data!
     },
     onMutate: async () => {
-      const previous = queryClient.getQueryData<PostResponse>(queryKey)
       await queryClient.cancelQueries({ queryKey })
+      const previous = queryClient.getQueryData<PostResponse>(queryKey)
       if (previous) {
         queryClient.setQueryData<PostResponse>(queryKey, {
           ...previous,

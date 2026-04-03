@@ -31,6 +31,7 @@ describe("useToggleLike", () => {
       }),
     )
     const qc = makeTestQueryClient()
+    qc.setQueryDefaults(["posts", 1], { staleTime: Infinity, gcTime: Infinity })
     qc.setQueryData(["posts", 1], basePost)
 
     const { result } = renderHook(() => useToggleLike(1), { wrapper: makeWrapper(qc) })
