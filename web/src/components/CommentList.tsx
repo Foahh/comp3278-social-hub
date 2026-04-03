@@ -61,28 +61,33 @@ export function CommentList({
       )}
 
       {user && (
-        <form onSubmit={handleSubmit} className="mt-4 space-y-2">
-          <Textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Write a comment…"
-            maxLength={appConstants.maxCommentLength}
-            rows={2}
-          />
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">
-              {text.length}/{appConstants.maxCommentLength}
-            </span>
-            <Button
-              type="submit"
-              size="sm"
-              disabled={create.isPending || !text.trim()}
-            >
-              {create.isPending ? "Posting…" : "Post"}
-            </Button>
-          </div>
-          {error && <p className="text-sm text-destructive">{error}</p>}
-        </form>
+        <div className="sticky bottom-0 z-10 mt-4 -mx-[0.125rem] w-[calc(100%+0.25rem)] max-w-none border-t border-border bg-background/95 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-sm supports-[backdrop-filter]:bg-background/80">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-2 px-[0.125rem]"
+          >
+            <Textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Write a comment…"
+              maxLength={appConstants.maxCommentLength}
+              rows={2}
+            />
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-muted-foreground">
+                {text.length}/{appConstants.maxCommentLength}
+              </span>
+              <Button
+                type="submit"
+                size="sm"
+                disabled={create.isPending || !text.trim()}
+              >
+                {create.isPending ? "Posting…" : "Post"}
+              </Button>
+            </div>
+            {error && <p className="text-sm text-destructive">{error}</p>}
+          </form>
+        </div>
       )}
     </div>
   )
