@@ -46,6 +46,7 @@ async def _build_post_response(conn, row: dict, current_user_id: int | None) -> 
         post_id=row["post_id"],
         user_id=row["user_id"],
         username=row["username"],
+        name=row["name"],
         avatar_url=avatar_url,
         text_content=row.get("text_content"),
         images=images,

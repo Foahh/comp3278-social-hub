@@ -13,6 +13,7 @@ class CommentResponse(BaseModel):
     comment_id: int
     user_id: int
     username: str
+    name: str
     avatar_url: str | None
     content: str
     created_at: datetime

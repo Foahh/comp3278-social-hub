@@ -30,6 +30,7 @@ class PostResponse(BaseModel):
     post_id: int
     user_id: int
     username: str
+    name: str
     avatar_url: str | None
     text_content: str | None
     images: list[ImageResponse]

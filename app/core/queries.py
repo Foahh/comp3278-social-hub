@@ -9,25 +9,22 @@ async def get_user_by_id(conn: aiomysql.Connection, user_id: int) -> dict | None
         return await cur.fetchone()
 
 
-async def get_user_by_email(conn: aiomysql.Connection, email: str) -> dict | None:
-    async with conn.cursor(aiomysql.DictCursor) as cur:
-        await cur.execute("SELECT * FROM users WHERE email = %s", (email,))
-        return await cur.fetchone()
-
-
 async def get_user_by_username(conn: aiomysql.Connection, username: str) -> dict | None:
     async with conn.cursor(aiomysql.DictCursor) as cur:
-        await cur.execute("SELECT * FROM users WHERE username = %s", (username,))
+        await cur.execute(
+            "SELECT * FROM users WHERE LOWER(username) = LOWER(%s)",
+            (username,),
+        )
         return await cur.fetchone()
 
 
 async def insert_user(
-    conn: aiomysql.Connection, username: str, email: str, password_hash: str
+    conn: aiomysql.Connection, username: str, password_hash: str, name: str
 ) -> int:
     async with conn.cursor() as cur:
         await cur.execute(
-            "INSERT INTO users (username, email, password_hash) VALUES (%s, %s, %s)",
-            (username, email, password_hash),
+            "INSERT INTO users (username, name, password_hash) VALUES (%s, %s, %s)",
+            (username, name, password_hash),
         )
         return cur.lastrowid
 
@@ -45,7 +42,7 @@ async def update_avatar(conn: aiomysql.Connection, user_id: int, avatar_key: str
 async def get_post(conn: aiomysql.Connection, post_id: int) -> dict | None:
     async with conn.cursor(aiomysql.DictCursor) as cur:
         await cur.execute(
-            "SELECT p.*, u.username, u.avatar_key FROM posts p "
+            "SELECT p.*, u.username, u.name, u.avatar_key FROM posts p "
             "JOIN users u ON p.user_id = u.user_id WHERE p.post_id = %s",
             (post_id,),
         )
@@ -58,14 +55,14 @@ async def list_posts_latest(
     async with conn.cursor(aiomysql.DictCursor) as cur:
         if cursor is not None:
             await cur.execute(
-                "SELECT p.*, u.username, u.avatar_key FROM posts p "
+                "SELECT p.*, u.username, u.name, u.avatar_key FROM posts p "
                 "JOIN users u ON p.user_id = u.user_id "
                 "WHERE p.post_id < %s ORDER BY p.post_id DESC LIMIT %s",
                 (cursor, limit),
             )
         else:
             await cur.execute(
-                "SELECT p.*, u.username, u.avatar_key FROM posts p "
+                "SELECT p.*, u.username, u.name, u.avatar_key FROM posts p "
                 "JOIN users u ON p.user_id = u.user_id ORDER BY p.post_id DESC LIMIT %s",
                 (limit,),
             )
@@ -81,7 +78,7 @@ async def list_posts_popular(
     async with conn.cursor(aiomysql.DictCursor) as cur:
         if cursor_likes is not None and cursor_id is not None:
             await cur.execute(
-                "SELECT p.*, u.username, u.avatar_key FROM posts p "
+                "SELECT p.*, u.username, u.name, u.avatar_key FROM posts p "
                 "JOIN users u ON p.user_id = u.user_id "
                 "WHERE (p.like_count, p.post_id) < (%s, %s) "
                 "ORDER BY p.like_count DESC, p.post_id DESC LIMIT %s",
@@ -89,7 +86,7 @@ async def list_posts_popular(
             )
         else:
             await cur.execute(
-                "SELECT p.*, u.username, u.avatar_key FROM posts p "
+                "SELECT p.*, u.username, u.name, u.avatar_key FROM posts p "
                 "JOIN users u ON p.user_id = u.user_id "
                 "ORDER BY p.like_count DESC, p.post_id DESC LIMIT %s",
                 (limit,),
@@ -163,7 +160,7 @@ async def delete_like(conn: aiomysql.Connection, user_id: int, post_id: int) -> 
 async def list_comments(conn: aiomysql.Connection, post_id: int) -> list[dict]:
     async with conn.cursor(aiomysql.DictCursor) as cur:
         await cur.execute(
-            "SELECT c.*, u.username, u.avatar_key FROM comments c "
+            "SELECT c.*, u.username, u.name, u.avatar_key FROM comments c "
             "JOIN users u ON c.user_id = u.user_id "
             "WHERE c.post_id = %s ORDER BY c.created_at ASC",
             (post_id,),
@@ -203,13 +200,13 @@ async def get_user_profile(conn: aiomysql.Connection, username: str) -> dict | N
     """Returns user row + post_count + total_likes_received."""
     async with conn.cursor(aiomysql.DictCursor) as cur:
         await cur.execute(
-            "SELECT u.user_id, u.username, u.avatar_key, u.created_at, "
+            "SELECT u.user_id, u.username, u.name, u.avatar_key, u.created_at, "
             "COUNT(DISTINCT p.post_id) AS post_count, "
             "COALESCE(SUM(p.like_count), 0) AS total_likes "
             "FROM users u "
             "LEFT JOIN posts p ON p.user_id = u.user_id "
-            "WHERE u.username = %s "
-            "GROUP BY u.user_id",
+            "WHERE LOWER(u.username) = LOWER(%s) "
+            "GROUP BY u.user_id, u.username, u.name, u.avatar_key, u.created_at",
             (username,),
         )
         return await cur.fetchone()

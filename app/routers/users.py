@@ -7,14 +7,14 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from app.core import auth, db, queries, s3
 from app.core.constants import APP_CONSTANTS
 from app.exceptions import ForbiddenError, NotFoundError
-from app.schemas.auth import AuthResponse, UserProfileResponse
+from app.schemas.auth import AuthResponse, UsernameStr, UserProfileResponse
 
 router = APIRouter()
 log = structlog.get_logger()
 
 
 @router.get("/{username}", response_model=UserProfileResponse)
-async def get_user_profile(username: str) -> UserProfileResponse:
+async def get_user_profile(username: UsernameStr) -> UserProfileResponse:
     async with db.get_conn() as conn:
         profile = await queries.get_user_profile(conn, username)
     if not profile:
@@ -25,6 +25,7 @@ async def get_user_profile(username: str) -> UserProfileResponse:
     return UserProfileResponse(
         user_id=profile["user_id"],
         username=profile["username"],
+        name=profile["name"],
         avatar_url=avatar_url,
         created_at=profile["created_at"],
         post_count=profile["post_count"],
@@ -34,7 +35,7 @@ async def get_user_profile(username: str) -> UserProfileResponse:
 
 @router.put("/{username}/avatar", response_model=AuthResponse)
 async def upload_avatar(
-    username: str,
+    username: UsernameStr,
     avatar: Annotated[UploadFile, File()],
     current_user_id: int = Depends(auth.get_current_user),
 ) -> AuthResponse:
@@ -79,6 +80,6 @@ async def upload_avatar(
     return AuthResponse(
         user_id=updated_user["user_id"],
         username=updated_user["username"],
-        email=updated_user["email"],
+        name=updated_user["name"],
         avatar_url=avatar_url,
     )

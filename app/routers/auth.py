@@ -19,7 +19,7 @@ async def _build_auth_response(conn, user_id: int) -> AuthResponse:
     return AuthResponse(
         user_id=user["user_id"],
         username=user["username"],
-        email=user["email"],
+        name=user["name"],
         avatar_url=avatar_url,
     )
 
@@ -27,12 +27,10 @@ async def _build_auth_response(conn, user_id: int) -> AuthResponse:
 @router.post("/register", response_model=AuthResponse)
 async def register(body: RegisterRequest, response: Response) -> AuthResponse:
     async with db.transaction() as conn:
-        if await queries.get_user_by_email(conn, body.email):
-            raise ConflictError("Email already registered")
         if await queries.get_user_by_username(conn, body.username):
             raise ConflictError("Username already taken")
         hashed = auth.hash_password(body.password)
-        user_id = await queries.insert_user(conn, body.username, body.email, hashed)
+        user_id = await queries.insert_user(conn, body.username, hashed, body.name)
 
     async with db.get_conn() as conn:
         result = await _build_auth_response(conn, user_id)
@@ -46,7 +44,7 @@ async def register(body: RegisterRequest, response: Response) -> AuthResponse:
 @router.post("/login", response_model=AuthResponse)
 async def login(body: LoginRequest, response: Response) -> AuthResponse:
     async with db.get_conn() as conn:
-        user = await queries.get_user_by_email(conn, body.email)
+        user = await queries.get_user_by_username(conn, body.username)
     if not user or not auth.verify_password(body.password, user["password_hash"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
@@ -56,7 +54,7 @@ async def login(body: LoginRequest, response: Response) -> AuthResponse:
     result = AuthResponse(
         user_id=user["user_id"],
         username=user["username"],
-        email=user["email"],
+        name=user["name"],
         avatar_url=avatar_url,
     )
 
