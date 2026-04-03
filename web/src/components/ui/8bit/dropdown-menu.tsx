@@ -142,7 +142,7 @@ function DropdownMenuContent({
 }: BitDropownMenuContentProps) {
   return (
     <ShadcnDropdownMenuContent
-      className={cn("p-0", font !== "normal" && "retro", className)}
+      className={cn(font !== "normal" && "retro", className)}
       {...props}
     >
       {children}
