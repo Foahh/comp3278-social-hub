@@ -1,7 +1,11 @@
 import { http, HttpResponse } from "msw"
 import { renderHook, act, waitFor } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import {
+  QueryClient,
+  QueryClientProvider,
+  type InfiniteData,
+} from "@tanstack/react-query"
 import { server } from "@/test/server"
 import { makeTestQueryClient } from "@/test/wrappers"
 import { useToggleLike } from "../useLikes"
@@ -9,6 +13,7 @@ import type { components } from "@/lib/api/schema"
 import type { ReactNode } from "react"
 
 type PostResponse = components["schemas"]["PostResponse"]
+type PostListResponse = components["schemas"]["PostListResponse"]
 
 const basePost: PostResponse = {
   post_id: 1,
@@ -57,5 +62,38 @@ describe("useToggleLike", () => {
     const cached = qc.getQueryData<PostResponse>(["posts", 1])
     expect(cached?.like_count).toBe(4)
     expect(cached?.liked_by_me).toBe(true)
+  })
+
+  it("updates the post inside feed infinite cache", async () => {
+    server.use(
+      http.post("/api/posts/1/like", async () => {
+        await new Promise((r) => setTimeout(r, 50))
+        return HttpResponse.json({ liked: true, like_count: 4 })
+      })
+    )
+    const qc = makeTestQueryClient()
+    const feedKey = ["posts", "feed", "latest"] as const
+    qc.setQueryDefaults(feedKey, { staleTime: Infinity, gcTime: Infinity })
+    const feedData: InfiniteData<PostListResponse> = {
+      pages: [{ posts: [basePost], next_cursor: null }],
+      pageParams: [undefined],
+    }
+    qc.setQueryData(feedKey, feedData)
+
+    const { result } = renderHook(() => useToggleLike(1), {
+      wrapper: makeWrapper(qc),
+    })
+    act(() => {
+      result.current.mutate()
+    })
+
+    await waitFor(() => {
+      const cached = qc.getQueryData<InfiniteData<PostListResponse>>(feedKey)
+      return cached?.pages[0]?.posts[0]?.like_count === 4
+    })
+
+    const cached = qc.getQueryData<InfiniteData<PostListResponse>>(feedKey)
+    expect(cached?.pages[0]?.posts[0]?.like_count).toBe(4)
+    expect(cached?.pages[0]?.posts[0]?.liked_by_me).toBe(true)
   })
 })

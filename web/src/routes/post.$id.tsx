@@ -46,7 +46,7 @@ function PostDetailPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-4">
-      <PostCard post={post} />
+      <PostCard post={post} hidePostLink />
 
       {user?.user_id === post.user_id && (
         <div className="mt-4 flex justify-end">
@@ -61,7 +61,7 @@ function PostDetailPage() {
         </div>
       )}
 
-      <CommentList postId={postId} />
+      <CommentList postId={postId} commentCount={post.comment_count} />
     </div>
   )
 }

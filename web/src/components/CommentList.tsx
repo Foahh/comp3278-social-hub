@@ -7,7 +7,13 @@ import { useComments, useCreateComment } from "@/lib/api/hooks/useComments"
 import { useAuth } from "@/context/AuthContext"
 import { appConstants } from "@/lib/appConstants"
 
-export function CommentList({ postId }: { postId: number }) {
+export function CommentList({
+  postId,
+  commentCount,
+}: {
+  postId: number
+  commentCount?: number
+}) {
   const { user } = useAuth()
   const { data: comments, isLoading } = useComments(postId)
   const create = useCreateComment(postId)
@@ -32,7 +38,10 @@ export function CommentList({ postId }: { postId: number }) {
 
   return (
     <div className="mt-6">
-      <h2 className="mb-4 text-lg font-semibold">Comments</h2>
+      <h2 className="mb-4 text-lg font-semibold">
+        Comments
+        {commentCount !== undefined ? ` (${commentCount})` : null}
+      </h2>
 
       {isLoading && (
         <div className="space-y-4">
