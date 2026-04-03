@@ -1,18 +1,9 @@
 import { Link } from "@tanstack/react-router"
 import { formatDistanceToNow } from "date-fns"
 import { Comment } from "pixelarticons/react"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/8bit/avatar"
-import { Badge } from "@/components/ui/8bit/badge"
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/8bit/card"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/8bit/avatar"
+import { Button } from "@/components/ui/8bit/button"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/8bit/card"
 import { LikeButton } from "./LikeButton"
 import type { components } from "@/lib/api/schema"
 
@@ -27,9 +18,7 @@ export function PostCard({ post }: { post: PostResponse }) {
             {post.avatar_url && (
               <AvatarImage src={post.avatar_url} alt={post.name} />
             )}
-            <AvatarFallback>
-              {post.name[0]?.toUpperCase() ?? "?"}
-            </AvatarFallback>
+            <AvatarFallback>{post.name[0]?.toUpperCase() ?? "?"}</AvatarFallback>
           </Avatar>
         </Link>
         <div className="min-w-0">
@@ -39,21 +28,17 @@ export function PostCard({ post }: { post: PostResponse }) {
             className="truncate hover:underline"
           >
             <span className="font-medium">{post.name}</span>{" "}
-            <span className="font-normal text-muted-foreground">
-              @{post.username}
-            </span>
+            <span className="font-normal text-muted-foreground">@{post.username}</span>
           </Link>
           <p className="text-xs text-muted-foreground">
-            {formatDistanceToNow(new Date(post.created_at), {
-              addSuffix: true,
-            })}
+            {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
           </p>
         </div>
       </CardHeader>
 
       {post.text_content && (
-        <CardContent className="pt-0 pb-2">
-          <p className="text-sm whitespace-pre-wrap">{post.text_content}</p>
+        <CardContent className="pb-2 pt-0">
+          <p className="whitespace-pre-wrap text-sm">{post.text_content}</p>
         </CardContent>
       )}
 
@@ -72,12 +57,16 @@ export function PostCard({ post }: { post: PostResponse }) {
 
       <CardFooter className="flex items-center gap-2 pt-0">
         <LikeButton post={post} />
-        <Link to="/post/$id" params={{ id: String(post.post_id) }}>
-          <Badge variant="secondary" className="gap-1 px-2 py-0.5">
-            <Comment className="size-3" />
+        <Button variant="secondary" size="sm" className="gap-1.5 w-16" asChild>
+          <Link
+            to="/post/$id"
+            params={{ id: String(post.post_id) }}
+            className="inline-flex items-center gap-1.5 whitespace-nowrap"
+          >
+            <Comment className="size-4 shrink-0" />
             <span className="text-xs tabular-nums">{post.comment_count}</span>
-          </Badge>
-        </Link>
+          </Link>
+        </Button>
       </CardFooter>
     </Card>
   )

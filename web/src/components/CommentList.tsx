@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { Separator } from "@/components/ui/8bit/separator"
 import { Button } from "@/components/ui/8bit/button"
 import { Textarea } from "@/components/ui/8bit/textarea"
 import { Skeleton } from "@/components/ui/8bit/skeleton"
@@ -32,8 +31,7 @@ export function CommentList({ postId }: { postId: number }) {
   }
 
   return (
-    <div>
-      <Separator className="my-6" />
+    <div className="mt-6">
       <h2 className="mb-4 text-lg font-semibold">Comments</h2>
 
       {isLoading && (
