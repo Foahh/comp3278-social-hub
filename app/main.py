@@ -36,6 +36,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
     if settings.openai_api_key:
         from app.core.vanna import init_vanna, seed_memory, mount_vanna_routes
+
         init_vanna()
         await seed_memory()
         mount_vanna_routes(app)

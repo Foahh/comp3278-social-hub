@@ -11,6 +11,7 @@ TOKEN = jwt.encode({"user_id": 1, "exp": 9999999999}, "change-me-in-production",
 @pytest.fixture
 async def client():
     from app.main import app
+
     with (
         patch("app.core.db.init_pool", new_callable=AsyncMock),
         patch("app.core.s3.init_s3"),
@@ -63,9 +64,9 @@ async def test_create_comment(client):
         mock_db.transaction.return_value.__aexit__ = AsyncMock(return_value=False)
         mock_q.get_post = AsyncMock(return_value={"post_id": 3})
         mock_q.insert_comment = AsyncMock(return_value=10)
-        mock_q.get_user_by_id = AsyncMock(return_value={
-            "user_id": 1, "username": "alice", "avatar_key": None
-        })
+        mock_q.get_user_by_id = AsyncMock(
+            return_value={"user_id": 1, "username": "alice", "avatar_key": None}
+        )
 
         resp = await client.post(
             "/api/posts/3/comments",

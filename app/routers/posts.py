@@ -35,9 +35,7 @@ async def _resolve_images(conn, post_id: int) -> list[ImageResponse]:
     return result
 
 
-async def _build_post_response(
-    conn, row: dict, current_user_id: int | None
-) -> PostResponse:
+async def _build_post_response(conn, row: dict, current_user_id: int | None) -> PostResponse:
     images = await _resolve_images(conn, row["post_id"])
     liked_by_me = False
     if current_user_id is not None:
@@ -109,7 +107,8 @@ async def create_post(
 
     if not text_content and not url_inputs and not blob_files:
         raise HTTPException(
-            status_code=422, detail="At least one of text_content, image_urls, or images is required"
+            status_code=422,
+            detail="At least one of text_content, image_urls, or images is required",
         )
 
     for f in blob_files:

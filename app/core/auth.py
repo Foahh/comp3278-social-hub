@@ -15,6 +15,7 @@ def verify_password(password: str, hashed: str) -> bool:
 
 def create_token(user_id: int) -> str:
     from app.core.config import settings
+
     payload = {
         "user_id": user_id,
         "exp": datetime.now(timezone.utc) + timedelta(hours=settings.jwt_expire_hours),
@@ -25,6 +26,7 @@ def create_token(user_id: int) -> str:
 def get_current_user(request: Request) -> int:
     """FastAPI dependency. Returns user_id or raises 401."""
     from app.core.config import settings
+
     token = request.cookies.get("session")
     if not token:
         raise HTTPException(status_code=401, detail="Not authenticated")

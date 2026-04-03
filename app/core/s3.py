@@ -15,6 +15,7 @@ def init_s3() -> None:
 @asynccontextmanager
 async def _client() -> AsyncGenerator:
     from app.core.config import settings
+
     assert _session is not None
     async with _session.client(
         "s3",
@@ -28,14 +29,19 @@ async def _client() -> AsyncGenerator:
 
 async def upload_file(key: str, data: bytes, content_type: str) -> None:
     from app.core.config import settings
+
     async with _client() as client:
         await client.put_object(
-            Bucket=settings.s3_bucket, Key=key, Body=data, ContentType=content_type,
+            Bucket=settings.s3_bucket,
+            Key=key,
+            Body=data,
+            ContentType=content_type,
         )
 
 
 async def generate_presigned_url(key: str, expires_in: int = 3600) -> str:
     from app.core.config import settings
+
     async with _client() as client:
         return await client.generate_presigned_url(
             "get_object",
@@ -46,6 +52,7 @@ async def generate_presigned_url(key: str, expires_in: int = 3600) -> str:
 
 async def delete_file(key: str) -> None:
     from app.core.config import settings
+
     async with _client() as client:
         await client.delete_object(Bucket=settings.s3_bucket, Key=key)
 
@@ -54,6 +61,7 @@ async def ensure_bucket() -> None:
     """Create the bucket if it doesn't exist. Called once at startup."""
     from app.core.config import settings
     from botocore.exceptions import ClientError
+
     async with _client() as client:
         try:
             await client.head_bucket(Bucket=settings.s3_bucket)

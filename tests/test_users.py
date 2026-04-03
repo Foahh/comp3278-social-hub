@@ -12,6 +12,7 @@ TOKEN = jwt.encode({"user_id": 1, "exp": 9999999999}, "change-me-in-production",
 @pytest.fixture
 async def client():
     from app.main import app
+
     with (
         patch("app.core.db.init_pool", new_callable=AsyncMock),
         patch("app.core.s3.init_s3"),
@@ -32,14 +33,16 @@ async def test_get_user_profile(client):
         mock_conn = AsyncMock()
         mock_db.get_conn.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
         mock_db.get_conn.return_value.__aexit__ = AsyncMock(return_value=False)
-        mock_q.get_user_profile = AsyncMock(return_value={
-            "user_id": 1,
-            "username": "alice",
-            "avatar_key": None,
-            "created_at": datetime(2024, 1, 1, tzinfo=timezone.utc),
-            "post_count": 5,
-            "total_likes": 42,
-        })
+        mock_q.get_user_profile = AsyncMock(
+            return_value={
+                "user_id": 1,
+                "username": "alice",
+                "avatar_key": None,
+                "created_at": datetime(2024, 1, 1, tzinfo=timezone.utc),
+                "post_count": 5,
+                "total_likes": 42,
+            }
+        )
 
         resp = await client.get("/api/users/alice")
 
@@ -76,9 +79,9 @@ async def test_upload_avatar_forbidden(client):
         mock_conn = AsyncMock()
         mock_db.get_conn.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
         mock_db.get_conn.return_value.__aexit__ = AsyncMock(return_value=False)
-        mock_q.get_user_by_username = AsyncMock(return_value={
-            "user_id": 2, "username": "bob", "avatar_key": None
-        })
+        mock_q.get_user_by_username = AsyncMock(
+            return_value={"user_id": 2, "username": "bob", "avatar_key": None}
+        )
 
         fake_image = io.BytesIO(b"\xff\xd8\xff" + b"\x00" * 10)
         resp = await client.put(

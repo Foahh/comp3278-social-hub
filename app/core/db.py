@@ -7,12 +7,22 @@ _pool: aiomysql.Pool | None = None
 
 
 async def init_pool(
-    host: str, port: int, user: str, password: str, db: str,
+    host: str,
+    port: int,
+    user: str,
+    password: str,
+    db: str,
 ) -> None:
     global _pool
     _pool = await aiomysql.create_pool(
-        host=host, port=port, user=user, password=password, db=db,
-        minsize=2, maxsize=10, autocommit=True,
+        host=host,
+        port=port,
+        user=user,
+        password=password,
+        db=db,
+        minsize=2,
+        maxsize=10,
+        autocommit=True,
     )
 
 

@@ -16,6 +16,7 @@ class ImageType(str, Enum):
 
 class ImageInput(BaseModel):
     """Used in create-post requests for URL-type images."""
+
     url: HttpUrl
 
 

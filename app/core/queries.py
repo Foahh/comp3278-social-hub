@@ -3,6 +3,7 @@ import aiomysql
 
 # --- Users ---
 
+
 async def get_user_by_id(conn: aiomysql.Connection, user_id: int) -> dict | None:
     async with conn.cursor(aiomysql.DictCursor) as cur:
         await cur.execute("SELECT * FROM users WHERE user_id = %s", (user_id,))
@@ -40,6 +41,7 @@ async def update_avatar(conn: aiomysql.Connection, user_id: int, avatar_key: str
 
 
 # --- Posts ---
+
 
 async def get_post(conn: aiomysql.Connection, post_id: int) -> dict | None:
     async with conn.cursor(aiomysql.DictCursor) as cur:
@@ -96,9 +98,7 @@ async def list_posts_popular(
         return await cur.fetchall()
 
 
-async def insert_post(
-    conn: aiomysql.Connection, user_id: int, text_content: str | None
-) -> int:
+async def insert_post(conn: aiomysql.Connection, user_id: int, text_content: str | None) -> int:
     async with conn.cursor() as cur:
         await cur.execute(
             "INSERT INTO posts (user_id, text_content) VALUES (%s, %s)",
@@ -113,6 +113,7 @@ async def delete_post(conn: aiomysql.Connection, post_id: int) -> None:
 
 
 # --- Images ---
+
 
 async def get_images_for_post(conn: aiomysql.Connection, post_id: int) -> list[dict]:
     async with conn.cursor(aiomysql.DictCursor) as cur:
@@ -133,6 +134,7 @@ async def insert_image(
 
 
 # --- Likes ---
+
 
 async def get_like(conn: aiomysql.Connection, user_id: int, post_id: int) -> dict | None:
     async with conn.cursor(aiomysql.DictCursor) as cur:
@@ -158,6 +160,7 @@ async def delete_like(conn: aiomysql.Connection, user_id: int, post_id: int) -> 
 
 # --- Comments ---
 
+
 async def list_comments(conn: aiomysql.Connection, post_id: int) -> list[dict]:
     async with conn.cursor(aiomysql.DictCursor) as cur:
         await cur.execute(
@@ -181,6 +184,7 @@ async def insert_comment(
 
 
 # --- Users profile (aggregated) ---
+
 
 async def get_user_profile(conn: aiomysql.Connection, username: str) -> dict | None:
     """Returns user row + post_count + total_likes_received."""

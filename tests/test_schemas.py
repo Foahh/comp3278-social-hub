@@ -1,5 +1,6 @@
 def test_register_request_valid():
     from app.schemas.auth import RegisterRequest
+
     r = RegisterRequest(username="alice_01", email="a@b.com", password="securepass")
     assert r.username == "alice_01"
 
@@ -7,6 +8,7 @@ def test_register_request_valid():
 def test_register_request_username_too_short():
     from pydantic import ValidationError
     from app.schemas.auth import RegisterRequest
+
     try:
         RegisterRequest(username="ab", email="a@b.com", password="securepass")
         assert False, "should have raised"
@@ -17,6 +19,7 @@ def test_register_request_username_too_short():
 def test_post_response_construction():
     from datetime import datetime, timezone
     from app.schemas.post import PostResponse, ImageResponse
+
     pr = PostResponse(
         post_id=1,
         user_id=2,
@@ -35,6 +38,7 @@ def test_post_response_construction():
 
 def test_like_toggle_response():
     from app.schemas.like import LikeToggleResponse
+
     r = LikeToggleResponse(liked=True, like_count=10)
     assert r.liked is True
 
@@ -42,6 +46,7 @@ def test_like_toggle_response():
 def test_comment_response_construction():
     from datetime import datetime, timezone
     from app.schemas.comment import CommentResponse
+
     c = CommentResponse(
         comment_id=1,
         user_id=2,

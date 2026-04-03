@@ -10,6 +10,7 @@ TOKEN = jwt.encode({"user_id": 1, "exp": 9999999999}, "change-me-in-production",
 @pytest.fixture
 async def client():
     from app.main import app
+
     with (
         patch("app.core.db.init_pool", new_callable=AsyncMock),
         patch("app.core.s3.init_s3"),

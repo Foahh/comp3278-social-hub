@@ -48,7 +48,9 @@ async def upload_avatar(
         raise ForbiddenError("You can only update your own avatar")
 
     if avatar.content_type not in ALLOWED_MIME_TYPES:
-        raise HTTPException(status_code=422, detail=f"Unsupported image type: {avatar.content_type}")
+        raise HTTPException(
+            status_code=422, detail=f"Unsupported image type: {avatar.content_type}"
+        )
     data = await avatar.read()
     if len(data) > MAX_FILE_SIZE:
         raise HTTPException(status_code=422, detail="Avatar image exceeds 5 MB limit")
