@@ -38,6 +38,7 @@ async def test_like_post_not_liked_yet(client):
     assert resp.status_code == 200
     data = resp.json()
     assert data["liked"] is True
+    assert data["like_count"] == 5
 
 
 @pytest.mark.asyncio
@@ -58,6 +59,7 @@ async def test_unlike_post(client):
     assert resp.status_code == 200
     data = resp.json()
     assert data["liked"] is False
+    assert data["like_count"] == 4
 
 
 @pytest.mark.asyncio
