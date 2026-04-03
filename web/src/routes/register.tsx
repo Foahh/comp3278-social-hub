@@ -1,49 +1,50 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
-import { useState } from "react"
-import { Button } from "@/components/ui/8bit/button"
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { Button } from "@/components/ui/8bit/button";
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/8bit/card"
+} from "@/components/ui/8bit/card";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field"
+} from "@/components/ui/field";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/8bit/input-group"
-import { AtSign, Lock, User } from "pixelarticons/react"
-import { useRegister } from "@/lib/api/hooks/useAuth"
-import { appConstants } from "@/lib/appConstants"
+} from "@/components/ui/8bit/input-group";
+import { AtSign, Lock, User } from "pixelarticons/react";
+import { useRegister } from "@/lib/api/hooks/useAuth";
+import { appConstants } from "@/lib/appConstants";
 
 export const Route = createFileRoute("/register")({
   component: RegisterPage,
-})
+});
 
 function RegisterPage() {
-  const navigate = useNavigate()
-  const register = useRegister()
-  const [error, setError] = useState<string | null>(null)
-  const [passwordError, setPasswordError] = useState<string | null>(null)
+  const navigate = useNavigate();
+  const register = useRegister();
+  const [error, setError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
 
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setError(null)
-    setPasswordError(null)
-    const fd = new FormData(e.currentTarget)
-    const password = fd.get("password") as string
-    const confirm = fd.get("confirm") as string
+    e.preventDefault();
+    setError(null);
+    setPasswordError(null);
+    const fd = new FormData(e.currentTarget);
+    const password = fd.get("password") as string;
+    const confirm = fd.get("confirm") as string;
     if (password !== confirm) {
-      setPasswordError("Passwords do not match")
-      return
+      setPasswordError("Passwords do not match");
+      return;
     }
     register.mutate(
       {
@@ -54,22 +55,22 @@ function RegisterPage() {
       {
         onSuccess: () => void navigate({ to: "/" }),
         onError: (err) => setError(err.message),
-      }
-    )
+      },
+    );
   }
 
   return (
     <div className="flex min-h-[calc(100svh-3.5rem)] items-center justify-center px-4">
       <div className="flex w-full max-w-sm flex-col gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Create an account</CardTitle>
-            <CardDescription>
-              Enter your information below to create your account
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
+          <Card>
+            <CardHeader>
+              <CardTitle>Create an account</CardTitle>
+              <CardDescription>
+                Enter your information below to create your account
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
               <FieldGroup>
                 <Field>
                   <FieldLabel htmlFor="name">Name</FieldLabel>
@@ -157,28 +158,27 @@ function RegisterPage() {
                     <FieldError>{error}</FieldError>
                   </Field>
                 ) : null}
-                <Field>
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={register.isPending}
-                  >
-                    {register.isPending
-                      ? "Creating account…"
-                      : "Create account"}
-                  </Button>
-                  <FieldDescription className="px-6 text-center">
-                    Already have an account?{" "}
-                    <Link to="/login" search={{}}>
-                      Sign in
-                    </Link>
-                  </FieldDescription>
-                </Field>
               </FieldGroup>
-            </form>
-          </CardContent>
-        </Card>
+            </CardContent>
+            <CardFooter className="flex flex-col items-stretch gap-4 border-t pt-6">
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={register.isPending}
+              >
+                {register.isPending ? "Creating account…" : "Create account"}
+              </Button>
+              <FieldDescription className="text-center">
+                Already have an account?
+                <br />
+                <Link to="/login" search={{}}>
+                  Sign in
+                </Link>
+              </FieldDescription>
+            </CardFooter>
+          </Card>
+        </form>
       </div>
     </div>
-  )
+  );
 }
