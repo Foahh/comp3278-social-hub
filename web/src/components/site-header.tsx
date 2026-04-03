@@ -58,7 +58,7 @@ export function SiteHeader() {
                     {user.avatar_url && (
                       <AvatarImage src={user.avatar_url} alt={user.username} />
                     )}
-                    <AvatarFallback>{user.username[0].toUpperCase()}</AvatarFallback>
+                    <AvatarFallback>{user.username[0]?.toUpperCase() ?? "?"}</AvatarFallback>
                   </Avatar>
                 </button>
               </DropdownMenuTrigger>

@@ -18,7 +18,7 @@ export function PostCard({ post }: { post: PostResponse }) {
             {post.avatar_url && (
               <AvatarImage src={post.avatar_url} alt={post.username} />
             )}
-            <AvatarFallback>{post.username[0].toUpperCase()}</AvatarFallback>
+            <AvatarFallback>{post.username[0]?.toUpperCase() ?? "?"}</AvatarFallback>
           </Avatar>
         </Link>
         <div className="min-w-0">
