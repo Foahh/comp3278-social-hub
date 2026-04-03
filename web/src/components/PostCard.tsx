@@ -15,6 +15,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/8bit/card";
+import { Progress } from "@/components/ui/8bit/progress";
 import { LikeButton } from "./LikeButton";
 import {
   Carousel,
@@ -32,34 +33,53 @@ function PostImagesCarousel({
   images: PostResponse["images"];
 }) {
   const [api, setApi] = useState<CarouselApi>();
-  const [selectedSnap, setSelectedSnap] = useState(0);
   const [snapCount, setSnapCount] = useState(images.length);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
+  const [scrollProgressPercent, setScrollProgressPercent] = useState(0);
 
   const updateFromApi = useCallback((instance: CarouselApi | undefined) => {
     if (!instance) return;
     setSnapCount(instance.scrollSnapList().length);
-    setSelectedSnap(instance.selectedScrollSnap());
     setCanScrollPrev(instance.canScrollPrev());
     setCanScrollNext(instance.canScrollNext());
   }, []);
 
+  const syncScrollProgress = useCallback((instance: CarouselApi | undefined) => {
+    if (!instance) return;
+    const snaps = instance.scrollSnapList().length;
+    if (snaps <= 1) {
+      setScrollProgressPercent(100);
+      return;
+    }
+    setScrollProgressPercent(instance.scrollProgress() * 100);
+  }, []);
+
   useEffect(() => {
     if (!api) return;
-    const sync = () => updateFromApi(api);
-    sync();
-    api.on("select", sync);
-    api.on("reInit", sync);
-    return () => {
-      api.off("select", sync);
-      api.off("reInit", sync);
+    const syncNav = () => updateFromApi(api);
+    const syncProgress = () => syncScrollProgress(api);
+    const syncAll = () => {
+      syncNav();
+      syncProgress();
     };
-  }, [api, updateFromApi]);
+    syncAll();
+    api.on("select", syncAll);
+    api.on("reInit", syncAll);
+    api.on("scroll", syncProgress);
+    return () => {
+      api.off("select", syncAll);
+      api.off("reInit", syncAll);
+      api.off("scroll", syncProgress);
+    };
+  }, [api, updateFromApi, syncScrollProgress]);
 
   const onImageLoad = useCallback(() => {
     api?.reInit();
   }, [api]);
+
+  const progressLabel =
+    snapCount > 0 ? `${Math.round(Math.max(0, Math.min(scrollProgressPercent, 100)))}%` : "";
 
   return (
     <div className="space-y-2">
@@ -87,8 +107,8 @@ function PostImagesCarousel({
         </CarouselContent>
       </Carousel>
 
-      <div className="flex items-center justify-between gap-3 px-0.5">
-        <div className="flex gap-1.5">
+      <div className="flex items-center gap-3 px-0.5">
+        <div className="flex shrink-0 gap-1.5">
           <Button
             type="button"
             variant="secondary"
@@ -110,9 +130,21 @@ function PostImagesCarousel({
             <ChevronRight className="size-4" />
           </Button>
         </div>
-        <p className="text-sm tabular-nums text-muted-foreground">
-          {snapCount > 0 ? `${selectedSnap + 1} / ${snapCount}` : ""}
-        </p>
+        <Progress
+          variant="retro"
+          value={scrollProgressPercent}
+          max={100}
+          className="h-3 min-w-0 flex-1"
+          aria-label={
+            snapCount > 0
+              ? `Carousel scroll progress, ${progressLabel}`
+              : "Carousel scroll progress"
+          }
+          aria-valuetext={snapCount > 0 ? progressLabel : undefined}
+        />
+        <span className="w-10 shrink-0 text-right text-sm tabular-nums text-muted-foreground">
+          {progressLabel}
+        </span>
       </div>
     </div>
   );
