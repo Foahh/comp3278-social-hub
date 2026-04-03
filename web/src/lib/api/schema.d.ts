@@ -11,8 +11,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Root */
-        get: operations["root__get"];
+        /**
+         * Index
+         * @description Serve the main chat interface.
+         */
+        get: operations["index__get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -211,6 +214,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/vanna/v2/chat_sse": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Chat Sse
+         * @description Server-Sent Events endpoint for streaming chat.
+         */
+        post: operations["chat_sse_api_vanna_v2_chat_sse_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/vanna/v2/chat_poll": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Chat Poll
+         * @description Polling endpoint for chat.
+         */
+        post: operations["chat_poll_api_vanna_v2_chat_poll_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -239,6 +282,97 @@ export interface components {
         Body_upload_avatar_api_users__username__avatar_put: {
             /** Avatar */
             avatar: string;
+        };
+        /**
+         * ChatRequest
+         * @description Request model for chat endpoints.
+         */
+        ChatRequest: {
+            /**
+             * Message
+             * @description User message
+             */
+            message: string;
+            /**
+             * Conversation Id
+             * @description Conversation ID
+             */
+            conversation_id?: string | null;
+            /**
+             * Request Id
+             * @description Request ID for tracing
+             */
+            request_id?: string | null;
+            /** @description Request context for user resolution */
+            request_context?: components["schemas"]["RequestContext"];
+            /**
+             * Metadata
+             * @description Additional metadata
+             */
+            metadata?: {
+                [key: string]: unknown;
+            };
+        };
+        /**
+         * ChatResponse
+         * @description Complete chat response for polling endpoints.
+         */
+        ChatResponse: {
+            /**
+             * Chunks
+             * @description Response chunks
+             */
+            chunks: components["schemas"]["ChatStreamChunk"][];
+            /**
+             * Conversation Id
+             * @description Conversation ID
+             */
+            conversation_id: string;
+            /**
+             * Request Id
+             * @description Request ID
+             */
+            request_id: string;
+            /**
+             * Total Chunks
+             * @description Total number of chunks
+             */
+            total_chunks: number;
+        };
+        /**
+         * ChatStreamChunk
+         * @description Single chunk in a streaming chat response.
+         */
+        ChatStreamChunk: {
+            /**
+             * Rich
+             * @description Rich component data for advanced UIs
+             */
+            rich: {
+                [key: string]: unknown;
+            };
+            /**
+             * Simple
+             * @description Simple component data for basic UIs
+             */
+            simple?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Conversation Id
+             * @description Conversation ID
+             */
+            conversation_id: string;
+            /**
+             * Request Id
+             * @description Request ID
+             */
+            request_id: string;
+            /**
+             * Timestamp
+             * @description Timestamp
+             */
+            timestamp?: number;
         };
         /** CommentResponse */
         CommentResponse: {
@@ -344,6 +478,57 @@ export interface components {
             /** Password */
             password: string;
         };
+        /**
+         * RequestContext
+         * @description Context from a web request for user resolution.
+         *
+         *     This structured object replaces raw dictionaries for passing request
+         *     data to UserResolver implementations, making it easier to access
+         *     cookies, headers, and other request metadata.
+         *
+         *     Example:
+         *         context = RequestContext(
+         *             cookies={'vanna_email': 'alice@example.com'},
+         *             headers={'Authorization': 'Bearer token'},
+         *             remote_addr='127.0.0.1'
+         *         )
+         *         user = await resolver.resolve_user(context)
+         */
+        RequestContext: {
+            /**
+             * Cookies
+             * @description Request cookies
+             */
+            cookies?: {
+                [key: string]: string;
+            };
+            /**
+             * Headers
+             * @description Request headers
+             */
+            headers?: {
+                [key: string]: string;
+            };
+            /**
+             * Remote Addr
+             * @description Remote IP address
+             */
+            remote_addr?: string | null;
+            /**
+             * Query Params
+             * @description Query parameters
+             */
+            query_params?: {
+                [key: string]: string;
+            };
+            /**
+             * Metadata
+             * @description Additional framework-specific metadata
+             */
+            metadata?: {
+                [key: string]: unknown;
+            };
+        };
         /** UserProfileResponse */
         UserProfileResponse: {
             /** User Id */
@@ -384,7 +569,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    root__get: {
+    index__get: {
         parameters: {
             query?: never;
             header?: never;
@@ -399,9 +584,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
+                    "text/html": string;
                 };
             };
         };
@@ -824,6 +1007,72 @@ export interface operations {
                     "application/json": {
                         [key: string]: string;
                     };
+                };
+            };
+        };
+    };
+    chat_sse_api_vanna_v2_chat_sse_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChatRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    chat_poll_api_vanna_v2_chat_poll_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChatRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
