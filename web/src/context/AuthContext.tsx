@@ -29,6 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     await client.POST("/api/auth/logout")
+    queryClient.setQueryData(["auth", "me"], null)
     queryClient.clear()
   }
 

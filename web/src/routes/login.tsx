@@ -27,7 +27,7 @@ function LoginPage() {
     login.mutate(
       { email: fd.get("email") as string, password: fd.get("password") as string },
       {
-        onSuccess: () => void navigate({ to: redirectTo ?? "/" }),
+        onSuccess: () => void navigate({ to: redirectTo?.startsWith("/") ? redirectTo : "/" }),
         onError: (err) => setError(err.message),
       },
     )

@@ -29,6 +29,10 @@ function PostDetailPage() {
     })
   }
 
+  if (!Number.isInteger(postId)) {
+    return <p className="px-6 text-muted-foreground">Invalid post ID.</p>
+  }
+
   if (isLoading) {
     return (
       <div className="mx-auto max-w-2xl px-4">
