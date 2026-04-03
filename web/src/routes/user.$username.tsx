@@ -4,7 +4,7 @@ import { formatDistanceToNow } from "date-fns"
 import { CalendarIcon, HeartIcon, FileTextIcon } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { PostList } from "@/components/PostList"
 import { AvatarUpload } from "@/components/AvatarUpload"
 import { useUserProfile, useUpdateAvatar } from "@/lib/api/hooks/useUsers"
@@ -61,6 +61,9 @@ function UserProfilePage() {
             />
           ) : (
             <Avatar className="size-24">
+              {profile.avatar_url && (
+                <AvatarImage src={profile.avatar_url} alt={profile.username} />
+              )}
               <AvatarFallback className="text-3xl">
                 {profile.username[0]?.toUpperCase() ?? "?"}
               </AvatarFallback>

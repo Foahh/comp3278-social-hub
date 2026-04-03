@@ -1,4 +1,4 @@
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { Camera } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { appConstants } from "@/lib/appConstants"
@@ -19,12 +19,22 @@ export function AvatarUpload({
   isPending,
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
+  const [localError, setLocalError] = useState<string | null>(null)
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setLocalError(null)
     const file = e.target.files?.[0]
     if (!file) return
-    if (!appConstants.allowedImageMimeTypes.includes(file.type)) return
-    if (file.size > appConstants.imageUploadMaxMb * 1024 * 1024) return
+    if (!appConstants.allowedImageMimeTypes.includes(file.type)) {
+      setLocalError("Unsupported file type.")
+      e.target.value = ""
+      return
+    }
+    if (file.size > appConstants.imageUploadMaxMb * 1024 * 1024) {
+      setLocalError(`File exceeds ${appConstants.imageUploadMaxMb} MB limit.`)
+      e.target.value = ""
+      return
+    }
     onFileSelected(file)
     e.target.value = ""
   }
@@ -53,7 +63,9 @@ export function AvatarUpload({
         onChange={handleChange}
         className="sr-only"
       />
-      {error && <p className="text-xs text-destructive">{error}</p>}
+      {(localError ?? error) && (
+        <p className="text-xs text-destructive">{localError ?? error}</p>
+      )}
     </div>
   )
 }
