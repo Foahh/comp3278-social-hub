@@ -42,6 +42,8 @@ export function usePost(postId: number) {
 export function useCreatePost() {
   const queryClient = useQueryClient()
   return useMutation({
+    // Raw fetch is used here because openapi-fetch does not support multipart/form-data (FormData) uploads.
+    // Credentials and base URL are handled manually.
     mutationFn: async (formData: FormData) => {
       const response = await fetch("/api/posts", {
         method: "POST",
