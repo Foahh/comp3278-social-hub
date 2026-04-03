@@ -11,7 +11,7 @@ router = APIRouter()
 log = structlog.get_logger()
 
 
-async def _build_comment_response(conn, comment_id: int, user_id: int, content: str) -> CommentResponse:
+async def _build_comment_response(conn, comment_id: int, user_id: int, content: str, created_at: datetime) -> CommentResponse:
     user = await queries.get_user_by_id(conn, user_id)
     avatar_url = None
     if user and user.get("avatar_key"):
@@ -22,7 +22,7 @@ async def _build_comment_response(conn, comment_id: int, user_id: int, content: 
         username=user["username"] if user else "unknown",
         avatar_url=avatar_url,
         content=content,
-        created_at=datetime.now(timezone.utc),
+        created_at=created_at,
     )
 
 
@@ -52,12 +52,13 @@ async def create_comment(
     body: CreateCommentRequest,
     current_user_id: int = Depends(auth.get_current_user),
 ) -> CommentResponse:
+    created_at = datetime.now(timezone.utc)
     async with db.transaction() as conn:
         post = await queries.get_post(conn, post_id)
         if not post:
             raise NotFoundError("Post")
         comment_id = await queries.insert_comment(conn, current_user_id, post_id, body.content)
-        result = await _build_comment_response(conn, comment_id, current_user_id, body.content)
+        result = await _build_comment_response(conn, comment_id, current_user_id, body.content, created_at)
 
     log.info("comment_created", comment_id=comment_id, post_id=post_id, user_id=current_user_id)
     return result

@@ -8,8 +8,6 @@ from app.schemas.auth import AuthResponse, LoginRequest, RegisterRequest
 router = APIRouter()
 log = structlog.get_logger()
 
-PAGE_LIMIT = 20
-
 
 async def _build_auth_response(conn, user_id: int) -> AuthResponse:
     user = await queries.get_user_by_id(conn, user_id)
