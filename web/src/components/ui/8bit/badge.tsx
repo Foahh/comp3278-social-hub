@@ -79,7 +79,7 @@ function Badge({
       {/* Left pixel bar */}
       <div
         className={cn(
-          "absolute inset-y-[4px] -left-1.5 w-1.5",
+          "absolute inset-y-[3px] -left-0.5 w-0.5",
           color,
           visualClasses
         )}
@@ -87,7 +87,7 @@ function Badge({
       {/* Right pixel bar */}
       <div
         className={cn(
-          "absolute inset-y-[4px] -right-1.5 w-1.5",
+          "absolute inset-y-[3px] -right-0.5 w-0.5",
           color,
           visualClasses
         )}

@@ -36,7 +36,6 @@ export function SiteHeader() {
               asChild
               variant="ghost"
               size="icon"
-              bitBorder="thin"
               className="h-8 w-8"
               aria-label="New post"
             >
@@ -51,7 +50,7 @@ export function SiteHeader() {
               <Button asChild variant="ghost" size="sm">
                 <Link to="/login" search={{}}>Sign in</Link>
               </Button>
-              <Button asChild size="sm" bitBorder="thin">
+              <Button asChild size="sm">
                 <Link to="/register">Sign up</Link>
               </Button>
             </>

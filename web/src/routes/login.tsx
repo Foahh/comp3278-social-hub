@@ -110,7 +110,7 @@ function LoginPage() {
                 ) : null}
               </FieldGroup>
             </CardContent>
-            <CardFooter className="flex flex-col items-stretch gap-4 border-t pt-6">
+            <CardFooter className="flex flex-col items-stretch gap-4 border-t">
               <Button
                 type="submit"
                 className="w-full"

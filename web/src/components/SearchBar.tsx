@@ -21,7 +21,7 @@ export function SearchBar() {
 
   return (
     <form onSubmit={handleSubmit} className="flex items-center">
-      <InputGroup variant="thin" className="h-8 w-48 text-sm lg:w-64">
+      <InputGroup className="h-8 w-48 text-sm lg:w-64">
         <InputGroupAddon align="inline-start" aria-hidden>
           <Search className="size-4" />
         </InputGroupAddon>

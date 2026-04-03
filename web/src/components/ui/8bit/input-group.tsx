@@ -8,68 +8,41 @@ import { Textarea } from "@/components/ui/textarea"
 
 import "@/components/ui/8bit/styles/retro.css"
 
-const inputGroupVariants = cva(
-  [
-    "group/input-group relative flex h-9 w-full min-w-0 items-center border-foreground bg-input/30 !p-0 outline-none transition-[color,border-color] dark:border-ring",
-    "in-data-[slot=combobox-content]:focus-within:border-inherit",
-    "has-[[data-slot=input-group-control]:focus-visible]:border-primary dark:has-[[data-slot=input-group-control]:focus-visible]:border-primary",
-    "has-[[data-slot][aria-invalid=true]]:border-destructive dark:has-[[data-slot][aria-invalid=true]]:border-destructive/50",
-    "has-[>textarea]:h-auto has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col",
-    "has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3",
-    "has-[>[data-align=inline-end]]:[&>input]:pr-1.5 has-[>[data-align=inline-start]]:[&>input]:pl-1.5",
-  ],
-  {
-    variants: {
-      variant: {
-        default: "border-y-6",
-        thin: "border-y-[0.125rem]",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
+const inputGroupClassName = cn(
+  "group/input-group relative flex h-9 w-full min-w-0 items-center border-y-[0.125rem] border-foreground bg-input/30 !p-0 outline-none transition-[color,border-color] dark:border-ring",
+  "in-data-[slot=combobox-content]:focus-within:border-inherit",
+  "has-[[data-slot=input-group-control]:focus-visible]:border-primary dark:has-[[data-slot=input-group-control]:focus-visible]:border-primary",
+  "has-[[data-slot=input-group-control][aria-invalid=true]]:border-destructive dark:has-[[data-slot=input-group-control][aria-invalid=true]]:border-destructive",
+  "group-data-[invalid=true]/field:border-destructive dark:group-data-[invalid=true]/field:border-destructive",
+  "data-[invalid=true]:border-destructive dark:data-[invalid=true]:border-destructive",
+  "has-[>textarea]:h-auto has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col",
+  "has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3",
+  "has-[>[data-align=inline-end]]:[&>input]:pr-1.5 has-[>[data-align=inline-start]]:[&>input]:pl-1.5"
 )
 
-const inputGroupSideBorderVariants = cva(
-  [
-    "pointer-events-none absolute inset-0 border-foreground transition-[border-color] dark:border-ring",
-    "group-has-[[data-slot=input-group-control]:focus-visible]/input-group:border-primary",
-    "dark:group-has-[[data-slot=input-group-control]:focus-visible]/input-group:border-primary",
-    "group-has-[[data-slot][aria-invalid=true]]/input-group:border-destructive",
-    "dark:group-has-[[data-slot][aria-invalid=true]]/input-group:border-destructive/50",
-  ],
-  {
-    variants: {
-      variant: {
-        default: "-mx-1.5 border-x-6",
-        thin: "-mx-[0.125rem] border-x-[0.125rem]",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
+const inputGroupSideBorderClassName = cn(
+  "pointer-events-none absolute inset-0 -mx-[0.125rem] border-x-[0.125rem] border-foreground transition-[border-color] dark:border-ring",
+  "group-has-[[data-slot=input-group-control]:focus-visible]/input-group:border-primary",
+  "dark:group-has-[[data-slot=input-group-control]:focus-visible]/input-group:border-primary",
+  "group-has-[[data-slot=input-group-control][aria-invalid=true]]/input-group:border-destructive",
+  "dark:group-has-[[data-slot=input-group-control][aria-invalid=true]]/input-group:border-destructive",
+  "group-data-[invalid=true]/field:border-destructive dark:group-data-[invalid=true]/field:border-destructive"
 )
 
 function InputGroup({
   className,
-  variant = "default",
   children,
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof inputGroupVariants>) {
+}: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="input-group"
       role="group"
-      className={cn(inputGroupVariants({ variant }), className)}
+      className={cn(inputGroupClassName, className)}
       {...props}
     >
       {children}
-      <div
-        className={inputGroupSideBorderVariants({ variant })}
-        aria-hidden
-      />
+      <div className={inputGroupSideBorderClassName} aria-hidden />
     </div>
   )
 }
@@ -110,9 +83,10 @@ function InputGroupAddon({
         if ((e.target as HTMLElement).closest("button")) {
           return
         }
-        e.currentTarget.parentElement
-          ?.querySelector("[data-slot=input-group-control]")
-          ?.focus()
+        const el = e.currentTarget.parentElement?.querySelector(
+          "[data-slot=input-group-control]"
+        )
+        ;(el as HTMLElement | undefined)?.focus()
       }}
       {...props}
     />
