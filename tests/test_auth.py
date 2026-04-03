@@ -27,14 +27,13 @@ async def test_register_success(client):
         mock_conn = AsyncMock()
         mock_db.transaction.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
         mock_db.transaction.return_value.__aexit__ = AsyncMock(return_value=False)
-        mock_q.get_user_by_email = AsyncMock(return_value=None)
         mock_q.get_user_by_username = AsyncMock(return_value=None)
         mock_q.insert_user = AsyncMock(return_value=1)
         mock_q.get_user_by_id = AsyncMock(
             return_value={
                 "user_id": 1,
                 "username": "alice",
-                "email": "alice@test.com",
+                "name": "Alice",
                 "avatar_key": None,
             }
         )
@@ -43,7 +42,7 @@ async def test_register_success(client):
             "/api/auth/register",
             json={
                 "username": "alice",
-                "email": "alice@test.com",
+                "name": "Alice",
                 "password": "password123",
             },
         )
@@ -51,11 +50,12 @@ async def test_register_success(client):
     assert resp.status_code == 200
     data = resp.json()
     assert data["username"] == "alice"
+    assert data["name"] == "Alice"
     assert "Set-Cookie" in resp.headers
 
 
 @pytest.mark.asyncio
-async def test_register_duplicate_email(client):
+async def test_register_duplicate_username(client):
     with (
         patch("app.routers.auth.queries") as mock_q,
         patch("app.routers.auth.db") as mock_db,
@@ -63,13 +63,13 @@ async def test_register_duplicate_email(client):
         mock_conn = AsyncMock()
         mock_db.transaction.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
         mock_db.transaction.return_value.__aexit__ = AsyncMock(return_value=False)
-        mock_q.get_user_by_email = AsyncMock(return_value={"user_id": 99})
+        mock_q.get_user_by_username = AsyncMock(return_value={"user_id": 99})
 
         resp = await client.post(
             "/api/auth/register",
             json={
-                "username": "alice2",
-                "email": "taken@test.com",
+                "username": "taken-name",
+                "name": "Taken",
                 "password": "password123",
             },
         )
@@ -90,11 +90,11 @@ async def test_login_success(client):
         mock_conn = AsyncMock()
         mock_db.get_conn.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
         mock_db.get_conn.return_value.__aexit__ = AsyncMock(return_value=False)
-        mock_q.get_user_by_email = AsyncMock(
+        mock_q.get_user_by_username = AsyncMock(
             return_value={
                 "user_id": 1,
                 "username": "alice",
-                "email": "alice@test.com",
+                "name": "Alice",
                 "password_hash": hashed,
                 "avatar_key": None,
             }
@@ -103,12 +103,14 @@ async def test_login_success(client):
         resp = await client.post(
             "/api/auth/login",
             json={
-                "email": "alice@test.com",
+                "username": "alice",
                 "password": "password123",
             },
         )
 
     assert resp.status_code == 200
+    data = resp.json()
+    assert data["name"] == "Alice"
     assert "Set-Cookie" in resp.headers
 
 
@@ -125,11 +127,11 @@ async def test_login_wrong_password(client):
         mock_conn = AsyncMock()
         mock_db.get_conn.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
         mock_db.get_conn.return_value.__aexit__ = AsyncMock(return_value=False)
-        mock_q.get_user_by_email = AsyncMock(
+        mock_q.get_user_by_username = AsyncMock(
             return_value={
                 "user_id": 1,
                 "username": "alice",
-                "email": "alice@test.com",
+                "name": "Alice",
                 "password_hash": hashed,
                 "avatar_key": None,
             }
@@ -138,7 +140,7 @@ async def test_login_wrong_password(client):
         resp = await client.post(
             "/api/auth/login",
             json={
-                "email": "alice@test.com",
+                "username": "alice",
                 "password": "wrongpass",
             },
         )

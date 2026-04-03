@@ -4,7 +4,9 @@ import jwt
 import pytest
 from httpx import ASGITransport, AsyncClient
 
-TOKEN = jwt.encode({"user_id": 1, "exp": 9999999999}, "change-me-in-production", algorithm="HS256")
+from app.core.config import settings
+
+TOKEN = jwt.encode({"user_id": 1, "exp": 9999999999}, settings.jwt_secret, algorithm="HS256")
 
 
 @pytest.fixture

@@ -37,11 +37,11 @@ async def test_insert_user(mock_conn):
     conn, cursor = mock_conn
     cursor.lastrowid = 42
 
-    result = await queries.insert_user(conn, "alice", "alice@example.com", "hashed")
+    result = await queries.insert_user(conn, "alice", "hashed", "Alice")
 
     cursor.execute.assert_called_once_with(
-        "INSERT INTO users (username, email, password_hash) VALUES (%s, %s, %s)",
-        ("alice", "alice@example.com", "hashed"),
+        "INSERT INTO users (username, name, password_hash) VALUES (%s, %s, %s)",
+        ("alice", "Alice", "hashed"),
     )
     assert result == 42
 
@@ -96,3 +96,31 @@ async def test_insert_comment_returns_id(mock_conn):
     result = await queries.insert_comment(conn, 1, 2, "Great post!")
 
     assert result == 99
+
+
+@pytest.mark.asyncio
+async def test_get_user_by_username_found(mock_conn):
+    from app.core import queries
+
+    conn, cursor = mock_conn
+    cursor.fetchone = AsyncMock(return_value={"user_id": 1, "username": "Alice"})
+
+    result = await queries.get_user_by_username(conn, "alice")
+
+    cursor.execute.assert_called_once_with(
+        "SELECT * FROM users WHERE LOWER(username) = LOWER(%s)",
+        ("alice",),
+    )
+    assert result == {"user_id": 1, "username": "Alice"}
+
+
+@pytest.mark.asyncio
+async def test_get_user_by_username_not_found(mock_conn):
+    from app.core import queries
+
+    conn, cursor = mock_conn
+    cursor.fetchone = AsyncMock(return_value=None)
+
+    result = await queries.get_user_by_username(conn, "nonexistent")
+
+    assert result is None

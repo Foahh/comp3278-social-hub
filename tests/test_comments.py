@@ -5,7 +5,9 @@ import jwt
 import pytest
 from httpx import ASGITransport, AsyncClient
 
-TOKEN = jwt.encode({"user_id": 1, "exp": 9999999999}, "change-me-in-production", algorithm="HS256")
+from app.core.config import settings
+
+TOKEN = jwt.encode({"user_id": 1, "exp": 9999999999}, settings.jwt_secret, algorithm="HS256")
 
 
 @pytest.fixture
@@ -28,6 +30,7 @@ def make_comment_row(comment_id=1, user_id=2, post_id=3):
         "user_id": user_id,
         "post_id": post_id,
         "username": "dave",
+        "name": "Dave",
         "avatar_key": None,
         "content": "Great post!",
         "created_at": datetime(2024, 1, 1, tzinfo=UTC),
@@ -51,6 +54,7 @@ async def test_list_comments(client):
     data = resp.json()
     assert len(data) == 1
     assert data[0]["content"] == "Great post!"
+    assert data[0]["name"] == "Dave"
 
 
 @pytest.mark.asyncio
@@ -65,7 +69,7 @@ async def test_create_comment(client):
         mock_q.get_post = AsyncMock(return_value={"post_id": 3})
         mock_q.insert_comment = AsyncMock(return_value=10)
         mock_q.get_user_by_id = AsyncMock(
-            return_value={"user_id": 1, "username": "alice", "avatar_key": None}
+            return_value={"user_id": 1, "username": "alice", "name": "Alice", "avatar_key": None}
         )
 
         resp = await client.post(
@@ -78,6 +82,7 @@ async def test_create_comment(client):
     data = resp.json()
     assert data["comment_id"] == 10
     assert data["content"] == "Awesome!"
+    assert data["name"] == "Alice"
 
 
 @pytest.mark.asyncio

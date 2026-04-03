@@ -6,7 +6,9 @@ import jwt
 import pytest
 from httpx import ASGITransport, AsyncClient
 
-TOKEN = jwt.encode({"user_id": 1, "exp": 9999999999}, "change-me-in-production", algorithm="HS256")
+from app.core.config import settings
+
+TOKEN = jwt.encode({"user_id": 1, "exp": 9999999999}, settings.jwt_secret, algorithm="HS256")
 
 
 @pytest.fixture
@@ -37,6 +39,7 @@ async def test_get_user_profile(client):
             return_value={
                 "user_id": 1,
                 "username": "alice",
+                "name": "Alice",
                 "avatar_key": None,
                 "created_at": datetime(2024, 1, 1, tzinfo=UTC),
                 "post_count": 5,
@@ -49,6 +52,7 @@ async def test_get_user_profile(client):
     assert resp.status_code == 200
     data = resp.json()
     assert data["username"] == "alice"
+    assert data["name"] == "Alice"
     assert data["post_count"] == 5
     assert data["total_likes"] == 42
 
@@ -80,7 +84,7 @@ async def test_upload_avatar_forbidden(client):
         mock_db.get_conn.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
         mock_db.get_conn.return_value.__aexit__ = AsyncMock(return_value=False)
         mock_q.get_user_by_username = AsyncMock(
-            return_value={"user_id": 2, "username": "bob", "avatar_key": None}
+            return_value={"user_id": 2, "username": "bob", "name": "Bob", "avatar_key": None}
         )
 
         fake_image = io.BytesIO(b"\xff\xd8\xff" + b"\x00" * 10)

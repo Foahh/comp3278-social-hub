@@ -4,17 +4,70 @@ from datetime import UTC
 def test_register_request_valid():
     from app.schemas.auth import RegisterRequest
 
-    r = RegisterRequest(username="alice_01", email="a@b.com", password="securepass")
-    assert r.username == "alice_01"
+    r = RegisterRequest(username="alice-01", name="Alice", password="securepass")
+    assert r.username == "alice-01"
 
 
-def test_register_request_username_too_short():
+def test_register_request_name_empty_or_omitted():
+    from app.schemas.auth import RegisterRequest
+
+    assert RegisterRequest(username="alice-01", name="", password="securepass").name == ""
+    assert RegisterRequest(username="alice-01", password="securepass").name == ""
+
+
+def test_register_request_name_null_becomes_empty():
+    from app.schemas.auth import RegisterRequest
+
+    r = RegisterRequest(username="alice-01", name=None, password="securepass")
+    assert r.name == ""
+
+
+def test_register_request_name_too_long():
     from pydantic import ValidationError
 
     from app.schemas.auth import RegisterRequest
 
     try:
-        RegisterRequest(username="ab", email="a@b.com", password="securepass")
+        RegisterRequest(username="alice-01", name="x" * 51, password="securepass")
+        raise AssertionError("should have raised")
+    except ValidationError:
+        pass
+
+
+def test_register_request_single_char_username():
+    from pydantic import ValidationError
+
+    from app.schemas.auth import RegisterRequest
+
+    for short in ("a", "ab"):
+        try:
+            RegisterRequest(username=short, name="X", password="securepass")
+            raise AssertionError(f"expected ValidationError for {short!r}")
+        except ValidationError:
+            pass
+
+
+def test_register_request_username_invalid_pattern():
+    from pydantic import ValidationError
+
+    from app.schemas.auth import RegisterRequest
+
+    invalid = ("alice_01", "-bad", "bad-", "user--name", "")
+    for u in invalid:
+        try:
+            RegisterRequest(username=u, name="X", password="securepass")
+            raise AssertionError(f"expected ValidationError for {u!r}")
+        except ValidationError:
+            pass
+
+
+def test_register_request_username_too_long():
+    from pydantic import ValidationError
+
+    from app.schemas.auth import RegisterRequest
+
+    try:
+        RegisterRequest(username="a" * 40, name="X", password="securepass")
         raise AssertionError("should have raised")
     except ValidationError:
         pass
@@ -29,6 +82,7 @@ def test_post_response_construction():
         post_id=1,
         user_id=2,
         username="bob",
+        name="Bob",
         avatar_url=None,
         text_content="hello",
         images=[ImageResponse(image_id=1, url="http://x.com/a.jpg", position=0)],
@@ -57,6 +111,7 @@ def test_comment_response_construction():
         comment_id=1,
         user_id=2,
         username="carol",
+        name="Carol",
         avatar_url=None,
         content="nice",
         created_at=datetime.now(UTC),

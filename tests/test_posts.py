@@ -26,6 +26,7 @@ def make_post_row(post_id=1, user_id=2, like_count=0, comment_count=0):
         "post_id": post_id,
         "user_id": user_id,
         "username": "bob",
+        "name": "Bob",
         "avatar_key": None,
         "text_content": "Hello world",
         "like_count": like_count,
