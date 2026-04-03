@@ -1,8 +1,11 @@
 import { useState } from "react"
 import { useNavigate } from "@tanstack/react-router"
-import { Input } from "@/components/ui/8bit/input"
-import { Button } from "@/components/ui/8bit/button"
 import { Search } from "pixelarticons/react"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/8bit/input-group"
 
 export function SearchBar() {
   const [query, setQuery] = useState("")
@@ -17,16 +20,20 @@ export function SearchBar() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center gap-1">
-      <Input
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="…"
-        className="h-8 w-48 text-sm lg:w-64"
-      />
-      <Button type="submit" variant="ghost" size="icon" className="h-8 w-8" aria-label="Search">
-        <Search className="size-4" />
-      </Button>
+    <form onSubmit={handleSubmit} className="flex items-center">
+      <InputGroup className="h-8 w-48 text-sm lg:w-64">
+        <InputGroupAddon align="inline-start" aria-hidden>
+          <Search className="size-4" />
+        </InputGroupAddon>
+        <InputGroupInput
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="…"
+          aria-label="Search"
+          name="q"
+          className="min-h-0 py-0 !h-8"
+        />
+      </InputGroup>
     </form>
   )
 }
