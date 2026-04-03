@@ -14,6 +14,13 @@ import {
   CardHeader,
 } from "@/components/ui/8bit/card";
 import { LikeButton } from "./LikeButton";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import type { components } from "@/lib/api/schema";
 
 type PostResponse = components["schemas"]["PostResponse"];
@@ -65,15 +72,26 @@ export function PostCard({
       )}
 
       {post.images.length > 0 && (
-        <div className="flex gap-2 overflow-x-auto px-4 pb-2">
-          {post.images.map((img) => (
-            <img
-              key={img.image_id}
-              src={img.url}
-              alt=""
-              className="h-48 w-auto shrink-0 rounded-md object-cover"
-            />
-          ))}
+        <div className="px-4 pb-2">
+          <Carousel className="w-full">
+            <CarouselContent className="-ml-2">
+              {post.images.map((img) => (
+                <CarouselItem key={img.image_id} className="basis-full pl-2">
+                  <img
+                    src={img.url}
+                    alt=""
+                    className="h-48 w-full rounded-md object-cover"
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            {post.images.length > 1 && (
+              <>
+                <CarouselPrevious className="left-1 top-1/2 size-8 -translate-y-1/2 border bg-background/80 shadow-sm" />
+                <CarouselNext className="right-1 top-1/2 size-8 -translate-y-1/2 border bg-background/80 shadow-sm" />
+              </>
+            )}
+          </Carousel>
         </div>
       )}
 

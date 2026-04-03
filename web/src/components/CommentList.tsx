@@ -73,7 +73,7 @@ export function CommentList({
               maxLength={appConstants.maxCommentLength}
               rows={2}
             />
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between pt-2">
               <span className="text-xs text-muted-foreground">
                 {text.length}/{appConstants.maxCommentLength}
               </span>
