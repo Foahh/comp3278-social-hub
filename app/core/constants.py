@@ -14,6 +14,12 @@ _CONSTANTS_FILE = _REPO_ROOT / "constants.json"
 class AppConstants(BaseModel):
     model_config = ConfigDict(frozen=True)
 
+    username_min_len: int = Field(validation_alias="USERNAME_MIN_LEN")
+    username_max_len: int = Field(validation_alias="USERNAME_MAX_LEN")
+    name_max_length: int = Field(validation_alias="NAME_MAX_LENGTH")
+    password_min_length: int = Field(validation_alias="PASSWORD_MIN_LENGTH")
+    password_max_length: int = Field(validation_alias="PASSWORD_MAX_LENGTH")
+
     max_post_text_length: int = Field(validation_alias="MAX_POST_TEXT_LENGTH")
     max_comment_length: int = Field(validation_alias="MAX_COMMENT_LENGTH")
     feed_page_size: int = Field(validation_alias="FEED_PAGE_SIZE")
