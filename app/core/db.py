@@ -24,6 +24,7 @@ async def close_pool() -> None:
         _pool = None
 
 
+@asynccontextmanager
 async def get_conn() -> AsyncGenerator[aiomysql.Connection, None]:
     """Yield a connection from the pool. Used for single-query reads."""
     assert _pool is not None

@@ -53,8 +53,12 @@ async def delete_file(key: str) -> None:
 async def ensure_bucket() -> None:
     """Create the bucket if it doesn't exist. Called once at startup."""
     from app.core.config import settings
+    from botocore.exceptions import ClientError
     async with _client() as client:
         try:
             await client.head_bucket(Bucket=settings.s3_bucket)
-        except client.exceptions.ClientError:
-            await client.create_bucket(Bucket=settings.s3_bucket)
+        except ClientError as e:
+            if e.response["Error"]["Code"] in ("404", "NoSuchBucket"):
+                await client.create_bucket(Bucket=settings.s3_bucket)
+            else:
+                raise
