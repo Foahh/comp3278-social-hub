@@ -1,5 +1,5 @@
 import json
-import time
+import uuid
 from typing import Annotated
 
 import structlog
@@ -126,7 +126,7 @@ async def create_post(
     uploaded_keys: list[str] = []
     try:
         for data, content_type in blob_data:
-            key = f"posts/post_{current_user_id}_{int(time.time() * 1000)}_{len(uploaded_keys)}.webp"
+            key = f"posts/{uuid.uuid4()}.webp"
             await s3.upload_file(key, data, content_type)
             uploaded_keys.append(key)
     except Exception:
@@ -177,18 +177,14 @@ async def delete_post(
     post_id: int,
     current_user_id: int = Depends(auth.get_current_user),
 ) -> dict[str, str]:
-    async with db.get_conn() as conn:
-        row = await queries.get_post(conn, post_id)
-    if not row:
-        raise NotFoundError("Post")
-    if row["user_id"] != current_user_id:
-        raise ForbiddenError("You can only delete your own posts")
-
-    async with db.get_conn() as conn:
-        image_rows = await queries.get_images_for_post(conn, post_id)
-    blob_keys = [r["value"] for r in image_rows if r["type"] == "blob"]
-
     async with db.transaction() as conn:
+        row = await queries.get_post(conn, post_id)
+        if not row:
+            raise NotFoundError("Post")
+        if row["user_id"] != current_user_id:
+            raise ForbiddenError("You can only delete your own posts")
+        image_rows = await queries.get_images_for_post(conn, post_id)
+        blob_keys = [r["value"] for r in image_rows if r["type"] == "blob"]
         await queries.delete_post(conn, post_id)
 
     for key in blob_keys:

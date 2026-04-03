@@ -117,21 +117,57 @@ async def test_get_single_post_not_found(client):
 @pytest.mark.asyncio
 async def test_delete_post_forbidden(client):
     """Authenticated as user 1, post belongs to user 2 — expect 403."""
-    import jwt
-    token = jwt.encode({"user_id": 1, "exp": 9999999999}, "change-me-in-production", algorithm="HS256")
+    from app.main import app
+    from app.core import auth
 
     with (
         patch("app.routers.posts.queries") as mock_q,
         patch("app.routers.posts.db") as mock_db,
     ):
-        mock_conn = AsyncMock()
-        mock_db.get_conn.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
-        mock_db.get_conn.return_value.__aexit__ = AsyncMock(return_value=False)
-        mock_q.get_post = AsyncMock(return_value=make_post_row(post_id=7, user_id=2))
+        app.dependency_overrides[auth.get_current_user] = lambda: 1
+        try:
+            mock_conn = AsyncMock()
+            mock_db.transaction.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
+            mock_db.transaction.return_value.__aexit__ = AsyncMock(return_value=False)
+            mock_q.get_post = AsyncMock(return_value=make_post_row(post_id=7, user_id=2))
+            mock_q.get_images_for_post = AsyncMock(return_value=[])
 
-        resp = await client.delete(
-            "/api/posts/7",
-            cookies={"session": token},
-        )
+            resp = await client.delete("/api/posts/7")
+        finally:
+            app.dependency_overrides.pop(auth.get_current_user, None)
 
     assert resp.status_code == 403
+
+
+@pytest.mark.asyncio
+async def test_create_post_text_only(client):
+    from app.main import app
+    from app.core import auth
+
+    post_row = make_post_row(post_id=10, user_id=1)
+    with (
+        patch("app.routers.posts.queries") as mock_q,
+        patch("app.routers.posts.db") as mock_db,
+        patch("app.routers.posts.s3") as mock_s3,
+    ):
+        app.dependency_overrides[auth.get_current_user] = lambda: 1
+        try:
+            mock_conn = AsyncMock()
+            mock_db.transaction.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
+            mock_db.transaction.return_value.__aexit__ = AsyncMock(return_value=False)
+            mock_db.get_conn.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
+            mock_db.get_conn.return_value.__aexit__ = AsyncMock(return_value=False)
+            mock_q.insert_post = AsyncMock(return_value=10)
+            mock_q.get_post = AsyncMock(return_value=post_row)
+            mock_q.get_images_for_post = AsyncMock(return_value=[])
+            mock_q.get_like = AsyncMock(return_value=None)
+
+            resp = await client.post(
+                "/api/posts",
+                data={"text_content": "Hello world"},
+            )
+        finally:
+            app.dependency_overrides.pop(auth.get_current_user, None)
+
+    assert resp.status_code == 200
+    assert resp.json()["post_id"] == 10
