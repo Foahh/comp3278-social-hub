@@ -31,8 +31,9 @@ const Avatar = forwardRef<
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> & {
     font?: "normal" | "retro";
     variant?: "default" | "retro" | "pixel";
+    overlay?: React.ReactNode;
   }
->(({ className = "", font, variant = "retro", ...props }, ref) => {
+>(({ className = "", font, variant = "retro", overlay, ...props }, ref) => {
   const isPixel = variant === "pixel";
 
   return (
@@ -101,7 +102,7 @@ const Avatar = forwardRef<
         ref={ref}
         data-slot="avatar"
         className={cn(
-          "relative flex size-10 shrink-0 overflow-hidden text-xs",
+          "relative z-0 flex size-10 shrink-0 overflow-hidden text-xs",
           !isPixel && "rounded-none",
           isPixel && "rounded-full",
           font !== "normal" && "retro",
@@ -111,15 +112,27 @@ const Avatar = forwardRef<
         {...props}
       />
 
+      {overlay != null && (
+        <div
+          className={cn(
+            "pointer-events-none absolute inset-0 z-[5] overflow-hidden opacity-0 transition-opacity group-hover:opacity-100",
+            isPixel ? "rounded-full" : "rounded-none"
+          )}
+          aria-hidden
+        >
+          {overlay}
+        </div>
+      )}
+
       {/* Original border styling (only show if not pixel variant) */}
       {!isPixel && (
         <>
-          <div className="pointer-events-none absolute top-0 left-0 h-0.5 w-full bg-foreground dark:bg-ring" />
-          <div className="pointer-events-none absolute bottom-0 h-0.5 w-full bg-foreground dark:bg-ring" />
-          <div className="pointer-events-none absolute top-0.5 -left-0.5 h-1/2 w-0.5 bg-foreground dark:bg-ring" />
-          <div className="pointer-events-none absolute bottom-0.5 -left-0.5 h-1/2 w-0.5 bg-foreground dark:bg-ring" />
-          <div className="pointer-events-none absolute top-0.5 -right-0.5 h-1/2 w-0.5 bg-foreground dark:bg-ring" />
-          <div className="pointer-events-none absolute bottom-0.5 -right-0.5 h-1/2 w-0.5 bg-foreground dark:bg-ring" />
+          <div className="pointer-events-none absolute top-0 left-0 z-10 h-0.5 w-full bg-foreground dark:bg-ring" />
+          <div className="pointer-events-none absolute bottom-0 z-10 h-0.5 w-full bg-foreground dark:bg-ring" />
+          <div className="pointer-events-none absolute top-0.5 -left-0.5 z-10 h-1/2 w-0.5 bg-foreground dark:bg-ring" />
+          <div className="pointer-events-none absolute bottom-0.5 -left-0.5 z-10 h-1/2 w-0.5 bg-foreground dark:bg-ring" />
+          <div className="pointer-events-none absolute top-0.5 -right-0.5 z-10 h-1/2 w-0.5 bg-foreground dark:bg-ring" />
+          <div className="pointer-events-none absolute bottom-0.5 -right-0.5 z-10 h-1/2 w-0.5 bg-foreground dark:bg-ring" />
         </>
       )}
     </div>

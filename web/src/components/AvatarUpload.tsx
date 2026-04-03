@@ -55,15 +55,19 @@ export function AvatarUpload({
         disabled={isPending}
         aria-label="Change avatar"
       >
-        <Avatar className="size-24">
+        <Avatar
+          className="size-24"
+          overlay={
+            <div className="flex h-full w-full items-center justify-center bg-black/40">
+              <Camera className="size-6 text-white" />
+            </div>
+          }
+        >
           {currentUrl && <AvatarImage src={currentUrl} alt={label} />}
           <AvatarFallback className="text-2xl">
             {label[0]?.toUpperCase() ?? "?"}
           </AvatarFallback>
         </Avatar>
-        <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-          <Camera className="size-6 text-white" />
-        </div>
       </button>
       <input
         ref={inputRef}

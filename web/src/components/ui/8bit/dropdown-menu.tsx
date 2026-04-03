@@ -45,7 +45,7 @@ function DropdownMenuSubTrigger({
   return (
     <ShadcnDropdownMenuSubTrigger
       className={cn(
-        "rounded-none border-y-[length:var(--viiibit-menu-sub-border-y)] border-dashed border-transparent bg-transparent hover:border-foreground hover:bg-transparent focus:border-foreground focus:bg-transparent active:bg-transparent data-[state=open]:border-foreground data-[state=open]:bg-transparent dark:focus:border-ring dark:data-[state=open]:border-ring",
+        "rounded-none border-0 bg-transparent",
         className
       )}
       {...props}
@@ -82,7 +82,7 @@ function DropdownMenuItem({
   return (
     <ShadcnDropdownMenuItem
       className={cn(
-        "rounded-none border-y-[length:var(--viiibit-menu-item-border-y)] border-dashed border-transparent bg-transparent hover:border-foreground hover:bg-transparent focus:border-foreground focus:bg-transparent active:bg-transparent dark:focus:border-ring",
+        "rounded-none border-0 bg-transparent",
         className
       )}
       {...props}
@@ -118,11 +118,11 @@ function DropdownMenuSubContent({
       {children}
 
       <div
-        className="pointer-events-none absolute inset-0 -mx-[var(--viiibit-frame-inset)] border-x-[length:var(--viiibit-frame-width)] border-foreground dark:border-ring"
+        className="pointer-events-none absolute inset-0 border-x-[0.125rem] border-foreground dark:border-ring"
         aria-hidden="true"
       />
       <div
-        className="pointer-events-none absolute inset-0 -my-[var(--viiibit-frame-inset)] border-y-[length:var(--viiibit-frame-width)] border-foreground dark:border-ring"
+        className="pointer-events-none absolute inset-0 border-y-[0.125rem] border-foreground dark:border-ring"
         aria-hidden="true"
       />
     </ShadcnDropdownMenuSubContent>
@@ -142,17 +142,17 @@ function DropdownMenuContent({
 }: BitDropownMenuContentProps) {
   return (
     <ShadcnDropdownMenuContent
-      className={cn("mt-1 py-2", font !== "normal" && "retro", className)}
+      className={cn("p-0", font !== "normal" && "retro", className)}
       {...props}
     >
       {children}
 
       <div
-        className="pointer-events-none absolute inset-0 -mx-[var(--viiibit-frame-inset)] mt-2.5 border-x-[length:var(--viiibit-frame-width)] border-foreground dark:border-ring"
+        className="pointer-events-none absolute inset-0 border-x-[0.125rem] border-foreground dark:border-ring"
         aria-hidden="true"
       />
       <div
-        className="pointer-events-none absolute inset-0 -my-[var(--viiibit-frame-inset)] mt-1 border-y-[length:var(--viiibit-frame-width)] border-foreground dark:border-ring"
+        className="pointer-events-none absolute inset-0 border-y-[0.125rem] border-foreground dark:border-ring"
         aria-hidden="true"
       />
     </ShadcnDropdownMenuContent>
