@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useRef, useState, useMemo, useEffect } from "react"
 import { X, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -19,18 +19,30 @@ export function ImageUpload({ blobs, urls, onBlobsChange, onUrlsChange }: Props)
   const maxBytes = appConstants.imageUploadMaxMb * 1024 * 1024
   const allowed = new Set(appConstants.allowedImageMimeTypes)
 
+  const blobUrls = useMemo(
+    () => blobs.map((f) => URL.createObjectURL(f)),
+    [blobs],
+  )
+
+  // Cleanup on unmount or when blobs change
+  useEffect(() => {
+    return () => {
+      blobUrls.forEach((url) => URL.revokeObjectURL(url))
+    }
+  }, [blobUrls])
+
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     setFileError(null)
     const incoming = Array.from(e.target.files ?? [])
     const valid: File[] = []
     for (const f of incoming) {
-      if (!allowed.has(f.type)) {
-        setFileError(`Unsupported file type: ${f.type}`)
+      if (f.size > maxBytes) {
+        setFileError(`"${f.name}" exceeds ${appConstants.imageUploadMaxMb} MB limit`)
         e.target.value = ""
         return
       }
-      if (f.size > maxBytes) {
-        setFileError(`"${f.name}" exceeds ${appConstants.imageUploadMaxMb} MB limit`)
+      if (!allowed.has(f.type)) {
+        setFileError(`Unsupported file type: ${f.type}`)
         e.target.value = ""
         return
       }
@@ -64,7 +76,7 @@ export function ImageUpload({ blobs, urls, onBlobsChange, onUrlsChange }: Props)
           {blobs.map((f, i) => (
             <div key={i} className="relative">
               <img
-                src={URL.createObjectURL(f)}
+                src={blobUrls[i]}
                 alt={f.name}
                 className="h-20 w-20 rounded-md object-cover"
               />
