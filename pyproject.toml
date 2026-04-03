@@ -1,0 +1,35 @@
+[project]
+name = "social-hub-backend"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "aiomysql",
+    "aioboto3",
+    "pydantic[email]",
+    "pydantic-settings",
+    "python-multipart",
+    "PyJWT",
+    "bcrypt",
+    "structlog",
+    "vanna>=2.0",
+]
+
+[dependency-groups]
+dev = [
+    "ruff",
+    "pytest",
+    "pytest-asyncio",
+    "httpx",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "ASYNC"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
