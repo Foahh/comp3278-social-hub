@@ -72,7 +72,15 @@ def init_vanna() -> Agent:
     """Create and return the Vanna Agent. Called once during app lifespan."""
     global _agent, _memory
 
-    llm = OpenAILlmService(model="gpt-4o-mini", api_key=settings.openai_api_key)
+    llm_kwargs: dict = {
+        "model": settings.openai_model,
+        "api_key": settings.openai_api_key,
+    }
+    if settings.openai_base_url:
+        llm_kwargs["base_url"] = settings.openai_base_url
+    if settings.openai_organization:
+        llm_kwargs["organization"] = settings.openai_organization
+    llm = OpenAILlmService(**llm_kwargs)
 
     mysql_runner = MySQLRunner(
         host=settings.mysql_host,

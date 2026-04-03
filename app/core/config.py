@@ -22,8 +22,11 @@ class Settings(BaseSettings):
     jwt_secret: str = "change-me-in-production"
     jwt_expire_hours: int = 72
 
-    # Vanna / OpenAI
+    # Vanna / OpenAI-compatible
     openai_api_key: str = ""
+    openai_model: str = ""
+    openai_base_url: str = ""
+    openai_organization: str = ""
 
     # App
     cors_origins: list[str] = ["http://localhost:5173"]
