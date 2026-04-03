@@ -4,22 +4,28 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "generate": "openapi-typescript http://localhost:8000/openapi.json -o src/lib/api/schema.d.ts",
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "oxlint",
     "lint:w": "oxlint --fix",
     "fmt": "oxfmt --check",
     "fmt:w": "oxfmt",
-    "tsc": "tsc --noEmit",
-    "preview": "vite preview"
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",
     "@tailwindcss/vite": "^4.2.2",
+    "@tanstack/react-query": "^5.96.2",
     "@tanstack/react-router": "^1.168.10",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "lucide-react": "^1.7.0",
+    "openapi-fetch": "^0.17.0",
     "radix-ui": "^1.4.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
@@ -32,14 +38,21 @@
   },
   "devDependencies": {
     "@tanstack/router-plugin": "^1.167.12",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^25.5.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/coverage-v8": "^4.1.2",
     "globals": "^17.4.0",
+    "happy-dom": "^20.8.9",
+    "msw": "^2.12.14",
+    "openapi-typescript": "^7.13.0",
     "oxfmt": "^0.43.0",
     "oxlint": "^1.58.0",
     "typescript": "^5.9.3",
-    "vite": "^8.0.3"
+    "vite": "^8.0.3",
+    "vitest": "^4.1.2"
   }
 }
