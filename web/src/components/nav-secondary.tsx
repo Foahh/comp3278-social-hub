@@ -1,19 +1,15 @@
 "use client"
 
-import * as React from "react"
-
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import type { NavSecondaryItem } from "@/lib/navigation"
+import { Link } from "@tanstack/react-router"
 
 export function NavSecondary({
   items,
   className,
 }: {
-  items: {
-    title: string
-    url: string
-    icon: React.ReactNode
-  }[]
+  items: NavSecondaryItem[]
   className?: string
 }) {
   return (
@@ -27,10 +23,10 @@ export function NavSecondary({
           asChild
           title={item.title}
         >
-          <a href={item.url}>
+          <Link to={item.to}>
             {item.icon}
             <span className="sr-only">{item.title}</span>
-          </a>
+          </Link>
         </Button>
       ))}
     </div>

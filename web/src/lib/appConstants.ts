@@ -1,4 +1,4 @@
-import raw from "./constants.json";
+import raw from "./constants.json"
 
 export const appConstants = {
   maxPostTextLength: raw.MAX_POST_TEXT_LENGTH,
@@ -7,4 +7,4 @@ export const appConstants = {
   allowedImageMimeTypes: raw.ALLOWED_IMAGE_MIME_TYPES,
   imageUploadMaxMb: raw.IMAGE_UPLOAD_MAX_MB,
   defaultImageMimeType: raw.DEFAULT_IMAGE_MIME_TYPE,
-} as const;
+} as const

@@ -1,7 +1,6 @@
 "use client"
 
-import type { ReactNode } from "react"
-
+import { Link } from "@tanstack/react-router"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -11,16 +10,13 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { MenuIcon } from "lucide-react"
+import type { NavMainItem } from "@/lib/navigation"
 
 export function NavMain({
   items,
   className,
 }: {
-  items: {
-    title: string
-    url: string
-    icon?: ReactNode
-  }[]
+  items: NavMainItem[]
   className?: string
 }) {
   return (
@@ -28,10 +24,10 @@ export function NavMain({
       <nav className="hidden items-center gap-1 lg:flex">
         {items.map((item) => (
           <Button key={item.title} variant="ghost" size="sm" asChild>
-            <a href={item.url} className="gap-2">
+            <Link to={item.to} className="gap-2">
               {item.icon}
               <span>{item.title}</span>
-            </a>
+            </Link>
           </Button>
         ))}
       </nav>
@@ -49,10 +45,10 @@ export function NavMain({
         <DropdownMenuContent align="end" className="w-48">
           {items.map((item) => (
             <DropdownMenuItem key={item.title} asChild>
-              <a href={item.url} className="gap-2">
+              <Link to={item.to} className="gap-2">
                 {item.icon}
-                {item.title}
-              </a>
+                <span>{item.title}</span>
+              </Link>
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
