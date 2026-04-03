@@ -104,3 +104,21 @@ async def test_create_comment_post_not_found(client):
 async def test_create_comment_unauthenticated(client):
     resp = await client.post("/api/posts/3/comments", json={"content": "Hi"})
     assert resp.status_code == 401
+
+
+@pytest.mark.asyncio
+async def test_create_comment_content_too_long(client):
+    from app.core import auth
+    from app.core.constants import APP_CONSTANTS
+    from app.main import app
+
+    app.dependency_overrides[auth.get_current_user] = lambda: 1
+    try:
+        resp = await client.post(
+            "/api/posts/3/comments",
+            json={"content": "x" * (APP_CONSTANTS.max_comment_length + 1)},
+        )
+    finally:
+        app.dependency_overrides.pop(auth.get_current_user, None)
+
+    assert resp.status_code == 422

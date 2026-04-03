@@ -62,6 +62,7 @@ app.add_middleware(
 )
 register_exception_handlers(app)
 
+
 @app.get("/")
 async def root() -> dict[str, str]:
     return {"service": "SocialHub API", "docs": "/docs", "health": "/api/health"}

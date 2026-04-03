@@ -2,9 +2,11 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field
 
+from app.core.constants import APP_CONSTANTS
+
 
 class CreateCommentRequest(BaseModel):
-    content: str = Field(min_length=1, max_length=1000)
+    content: str = Field(min_length=1, max_length=APP_CONSTANTS.max_comment_length)
 
 
 class CommentResponse(BaseModel):

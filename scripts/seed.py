@@ -24,6 +24,7 @@ from tqdm import tqdm
 
 from app.core.auth import hash_password
 from app.core.config import settings
+from app.core.constants import APP_CONSTANTS
 
 type UserRow = tuple[str, str, str]
 type PostRow = tuple[int, str]
@@ -197,25 +198,25 @@ async def _user_count(conn: aiomysql.Connection) -> int:
 
 
 def _random_post_text(fake: Faker) -> str:
-    """Variable-length post body (character-oriented, within Faker text limits)."""
-    max_chars = fake.random_int(min=25, max=2000)
+    """Variable-length post body; capped at constants.json max_post_text_length."""
+    max_chars = fake.random_int(min=25, max=APP_CONSTANTS.max_post_text_length)
     text = fake.text(max_nb_chars=max_chars).replace("\n", " ").strip()
     if len(text) < 10:
         text = fake.paragraph(nb_sentences=fake.random_int(min=1, max=5)).replace("\n", " ").strip()
-    return text
+    return text[: APP_CONSTANTS.max_post_text_length]
 
 
 def _random_comment_text(fake: Faker) -> str:
-    """Variable-length comment; capped at 140 characters (API limit)."""
+    """Variable-length comment; capped at constants.json max_comment_length."""
     if fake.boolean(chance_of_getting_true=55):
         words = fake.random_int(min=2, max=20)
         text = fake.sentence(nb_words=words).strip()
     else:
-        max_chars = fake.random_int(min=8, max=140)
+        max_chars = fake.random_int(min=8, max=APP_CONSTANTS.max_comment_length)
         text = fake.text(max_nb_chars=max_chars).replace("\n", " ").strip()
         if len(text) < 3:
             text = fake.sentence(nb_words=fake.random_int(min=3, max=8)).strip()
-    return text[:140]
+    return text[: APP_CONSTANTS.max_comment_length]
 
 
 def _random_image_url(fake: Faker) -> str:
@@ -395,9 +396,7 @@ async def _seed(
                 comment_count = _uniform_count(fake, config.max_comments_per_post)
                 for _ in range(comment_count):
                     commenter_id = int(fake.random_element(user_ids))
-                    comments_buffer.append(
-                        (commenter_id, int(post_id), _random_comment_text(fake))
-                    )
+                    comments_buffer.append((commenter_id, int(post_id), _random_comment_text(fake)))
                     if len(comments_buffer) >= _ENGAGEMENT_ROWS_PER_INSERT:
                         await flush_comments()
                 comments_pbar.update(1)
@@ -522,9 +521,7 @@ def _parse_args() -> argparse.Namespace:
         type=int,
         default=100,
         metavar="N",
-        help=(
-            "Cap on comments per post; uniform random count in [0, N] per post (default: 100)."
-        ),
+        help=("Cap on comments per post; uniform random count in [0, N] per post (default: 100)."),
     )
     parser.add_argument(
         "--no-progress",

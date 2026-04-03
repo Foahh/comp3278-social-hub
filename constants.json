@@ -1,0 +1,12 @@
+{
+  "MAX_POST_TEXT_LENGTH": 2000,
+  "MAX_COMMENT_LENGTH": 140,
+  "FEED_PAGE_SIZE": 20,
+  "ALLOWED_IMAGE_MIME_TYPES": [
+    "image/jpeg",
+    "image/png",
+    "image/webp"
+  ],
+  "IMAGE_UPLOAD_MAX_MB": 5,
+  "DEFAULT_IMAGE_MIME_TYPE": "image/jpeg"
+}

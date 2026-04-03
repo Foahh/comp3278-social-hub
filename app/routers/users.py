@@ -5,14 +5,12 @@ import structlog
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 
 from app.core import auth, db, queries, s3
+from app.core.constants import APP_CONSTANTS
 from app.exceptions import ForbiddenError, NotFoundError
 from app.schemas.auth import AuthResponse, UserProfileResponse
 
 router = APIRouter()
 log = structlog.get_logger()
-
-ALLOWED_MIME_TYPES = {"image/jpeg", "image/png", "image/webp"}
-MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
 
 
 @router.get("/{username}", response_model=UserProfileResponse)
@@ -47,18 +45,22 @@ async def upload_avatar(
     if user["user_id"] != current_user_id:
         raise ForbiddenError("You can only update your own avatar")
 
-    if avatar.content_type not in ALLOWED_MIME_TYPES:
+    if avatar.content_type not in APP_CONSTANTS.allowed_image_mime_types:
         raise HTTPException(
             status_code=422, detail=f"Unsupported image type: {avatar.content_type}"
         )
     data = await avatar.read()
-    if len(data) > MAX_FILE_SIZE:
-        raise HTTPException(status_code=422, detail="Avatar image exceeds 5 MB limit")
+    if len(data) > APP_CONSTANTS.max_image_upload_bytes:
+        raise HTTPException(
+            status_code=422,
+            detail=f"Avatar image exceeds {APP_CONSTANTS.image_upload_max_mb} MB limit",
+        )
 
     old_key = user.get("avatar_key")
     new_key = f"avatars/user_{current_user_id}_{uuid.uuid4()}.webp"
 
-    await s3.upload_file(new_key, data, avatar.content_type or "image/jpeg")
+    mime = avatar.content_type or APP_CONSTANTS.default_image_mime_type
+    await s3.upload_file(new_key, data, mime)
 
     async with db.transaction() as conn:
         await queries.update_avatar(conn, current_user_id, new_key)

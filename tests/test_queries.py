@@ -2,6 +2,8 @@ from unittest.mock import AsyncMock
 
 import pytest
 
+from app.core.constants import APP_CONSTANTS
+
 
 @pytest.mark.asyncio
 async def test_get_user_by_id_found(mock_conn):
@@ -51,7 +53,7 @@ async def test_list_posts_latest_no_cursor(mock_conn):
     conn, cursor = mock_conn
     cursor.fetchall = AsyncMock(return_value=[{"post_id": 5}, {"post_id": 3}])
 
-    result = await queries.list_posts_latest(conn, None, 20)
+    result = await queries.list_posts_latest(conn, None, APP_CONSTANTS.feed_page_size)
 
     assert len(result) == 2
     assert result[0]["post_id"] == 5
@@ -64,7 +66,7 @@ async def test_list_posts_latest_with_cursor(mock_conn):
     conn, cursor = mock_conn
     cursor.fetchall = AsyncMock(return_value=[{"post_id": 3}])
 
-    await queries.list_posts_latest(conn, 5, 20)
+    await queries.list_posts_latest(conn, 5, APP_CONSTANTS.feed_page_size)
 
     call_args = cursor.execute.call_args
     assert "%s" in call_args[0][0]

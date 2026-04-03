@@ -7,6 +7,7 @@ import structlog
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile
 
 from app.core import auth, db, queries, s3
+from app.core.constants import APP_CONSTANTS
 from app.exceptions import ForbiddenError, NotFoundError
 from app.schemas.post import (
     FeedSort,
@@ -18,10 +19,6 @@ from app.schemas.post import (
 
 router = APIRouter()
 log = structlog.get_logger()
-
-PAGE_LIMIT = 20
-ALLOWED_MIME_TYPES = {"image/jpeg", "image/png", "image/webp"}
-MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
 
 
 async def _resolve_images(conn, post_id: int) -> list[ImageResponse]:
@@ -67,7 +64,7 @@ async def list_posts(
 ) -> PostListResponse:
     async with db.get_conn() as conn:
         if sort == FeedSort.latest:
-            rows = await queries.list_posts_latest(conn, cursor, PAGE_LIMIT)
+            rows = await queries.list_posts_latest(conn, cursor, APP_CONSTANTS.feed_page_size)
         else:
             cursor_likes: int | None = None
             cursor_id: int | None = None
@@ -76,14 +73,16 @@ async def list_posts(
                 if last_post:
                     cursor_likes = last_post["like_count"]
                     cursor_id = last_post["post_id"]
-            rows = await queries.list_posts_popular(conn, cursor_likes, cursor_id, PAGE_LIMIT)
+            rows = await queries.list_posts_popular(
+                conn, cursor_likes, cursor_id, APP_CONSTANTS.feed_page_size
+            )
 
         posts = []
         for row in rows:
             posts.append(await _build_post_response(conn, row, current_user_id))
 
     next_cursor: int | None = None
-    if len(rows) == PAGE_LIMIT:
+    if len(rows) == APP_CONSTANTS.feed_page_size:
         next_cursor = rows[-1]["post_id"]
 
     return PostListResponse(posts=posts, next_cursor=next_cursor)
@@ -108,6 +107,12 @@ async def create_post(
 
     blob_files = images or []
 
+    if text_content is not None and len(text_content) > APP_CONSTANTS.max_post_text_length:
+        raise HTTPException(
+            status_code=422,
+            detail=f"text_content must be at most {APP_CONSTANTS.max_post_text_length} characters",
+        )
+
     if not text_content and not url_inputs and not blob_files:
         raise HTTPException(
             status_code=422,
@@ -115,15 +120,18 @@ async def create_post(
         )
 
     for f in blob_files:
-        if f.content_type not in ALLOWED_MIME_TYPES:
+        if f.content_type not in APP_CONSTANTS.allowed_image_mime_types:
             raise HTTPException(status_code=422, detail=f"Unsupported image type: {f.content_type}")
 
     blob_data: list[tuple[bytes, str]] = []
     for f in blob_files:
         data = await f.read()
-        if len(data) > MAX_FILE_SIZE:
-            raise HTTPException(status_code=422, detail="Image exceeds 5 MB limit")
-        blob_data.append((data, f.content_type or "image/jpeg"))
+        if len(data) > APP_CONSTANTS.max_image_upload_bytes:
+            raise HTTPException(
+                status_code=422,
+                detail=f"Image exceeds {APP_CONSTANTS.image_upload_max_mb} MB limit",
+            )
+        blob_data.append((data, f.content_type or APP_CONSTANTS.default_image_mime_type))
 
     uploaded_keys: list[str] = []
     try:

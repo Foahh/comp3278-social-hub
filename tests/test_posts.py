@@ -4,6 +4,8 @@ from unittest.mock import AsyncMock, patch
 import pytest
 from httpx import ASGITransport, AsyncClient
 
+from app.core.constants import APP_CONSTANTS
+
 
 @pytest.fixture
 async def client():
@@ -58,7 +60,7 @@ async def test_list_posts_latest(client):
 
 @pytest.mark.asyncio
 async def test_list_posts_returns_next_cursor(client):
-    posts = [make_post_row(post_id=i) for i in range(20, 0, -1)]
+    posts = [make_post_row(post_id=i) for i in range(APP_CONSTANTS.feed_page_size, 0, -1)]
     with (
         patch("app.routers.posts.queries") as mock_q,
         patch("app.routers.posts.db") as mock_db,
@@ -172,3 +174,22 @@ async def test_create_post_text_only(client):
 
     assert resp.status_code == 200
     assert resp.json()["post_id"] == 10
+
+
+@pytest.mark.asyncio
+async def test_create_post_text_too_long(client):
+    from app.core import auth
+    from app.core.constants import APP_CONSTANTS
+    from app.main import app
+
+    app.dependency_overrides[auth.get_current_user] = lambda: 1
+    try:
+        resp = await client.post(
+            "/api/posts",
+            data={"text_content": "x" * (APP_CONSTANTS.max_post_text_length + 1)},
+        )
+    finally:
+        app.dependency_overrides.pop(auth.get_current_user, None)
+
+    assert resp.status_code == 422
+    assert str(APP_CONSTANTS.max_post_text_length) in resp.json()["detail"]
