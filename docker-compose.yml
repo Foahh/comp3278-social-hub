@@ -82,7 +82,7 @@ services:
       - "80:80"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - ./frontend/dist:/srv:ro
+      - ./web/dist:/srv:ro
       - caddy_data:/data
     depends_on:
       - backend
