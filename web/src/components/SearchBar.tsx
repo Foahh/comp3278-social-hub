@@ -21,7 +21,7 @@ export function SearchBar() {
       <Input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Ask anything about posts…"
+        placeholder="…"
         className="h-8 w-48 text-sm lg:w-64"
       />
       <Button type="submit" variant="ghost" size="icon" className="h-8 w-8" aria-label="Search">

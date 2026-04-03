@@ -18,8 +18,8 @@ export function SiteHeader() {
   const { user, isLoading, logout } = useAuth()
 
   return (
-    <header className="sticky top-0 z-50 flex h-14 shrink-0 items-center border-b bg-background">
-      <div className="flex w-full items-center gap-3 px-4 lg:px-6">
+    <header className="sticky top-0 z-40 flex shrink-0 flex-col bg-background">
+      <div className="flex h-14 w-full items-center gap-3 px-4 lg:px-6">
         <Link
           to="/"
           className="flex shrink-0 items-center gap-2 font-semibold text-foreground"
@@ -27,8 +27,6 @@ export function SiteHeader() {
           <Rss className="size-5" />
           <span className="hidden sm:inline">SocialHub</span>
         </Link>
-
-        <Separator orientation="vertical" className="hidden h-6 sm:block" />
 
         <div className="flex flex-1 items-center justify-end gap-2">
           <SearchBar />
@@ -88,6 +86,7 @@ export function SiteHeader() {
           )}
         </div>
       </div>
+      <Separator orientation="horizontal" />
     </header>
   )
 }

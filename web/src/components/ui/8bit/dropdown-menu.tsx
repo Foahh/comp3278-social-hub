@@ -1,4 +1,5 @@
-import type * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
+import type * as React from "react";
+import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { type VariantProps, cva } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
@@ -11,7 +12,6 @@ import {
   DropdownMenuItem as ShadcnDropdownMenuItem,
   DropdownMenuLabel as ShadcnDropdownMenuLabel,
   DropdownMenuPortal as ShadcnDropdownMenuPortal,
-  DropdownMenuSeparator as ShadcnDropdownMenuSeparator,
   DropdownMenuShortcut as ShadcnDropdownMenuShortcut,
   DropdownMenuSub as ShadcnDropdownMenuSub,
   DropdownMenuSubContent as ShadcnDropdownMenuSubContent,
@@ -31,8 +31,6 @@ const DropdownMenuGroup = ShadcnDropdownMenuGroup;
 
 const DropdownMenuLabel = ShadcnDropdownMenuLabel;
 
-const DropdownMenuSeparator = ShadcnDropdownMenuSeparator;
-
 const DropdownMenuShortcut = ShadcnDropdownMenuShortcut;
 
 const DropdownMenuSub = ShadcnDropdownMenuSub;
@@ -47,13 +45,29 @@ function DropdownMenuSubTrigger({
   return (
     <ShadcnDropdownMenuSubTrigger
       className={cn(
-        "hover:bg-transparent active:bg-transparent focus:bg-transparent rounded-none border-dashed border-y-4 border-transparent focus:border-foreground hover:border-foreground dark:focus:border-ring bg-transparent data-[state=open]:bg-transparent data-[state=open]:border-foreground dark:data-[state=open]:border-ring",
+        "hover:bg-transparent active:bg-transparent focus:bg-transparent rounded-none border-dashed border-y-[length:var(--viiibit-menu-sub-border-y)] border-transparent focus:border-foreground hover:border-foreground dark:focus:border-ring bg-transparent data-[state=open]:bg-transparent data-[state=open]:border-foreground dark:data-[state=open]:border-ring",
         className
       )}
       {...props}
     >
       {children}
     </ShadcnDropdownMenuSubTrigger>
+  );
+}
+
+function DropdownMenuSeparator({
+  className,
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.DropdownMenuSeparator>) {
+  return (
+    <DropdownMenuPrimitive.DropdownMenuSeparator
+      data-slot="dropdown-menu-separator"
+      className={cn(
+        "-mx-1 my-1 h-0.5 shrink-0 bg-[length:16px_8px] bg-[linear-gradient(90deg,var(--foreground)_75%,transparent_75%)] dark:bg-[linear-gradient(90deg,var(--ring)_75%,transparent_75%)]",
+        className
+      )}
+      {...props}
+    />
   );
 }
 
@@ -68,7 +82,7 @@ function DropdownMenuItem({
   return (
     <ShadcnDropdownMenuItem
       className={cn(
-        "hover:bg-transparent active:bg-transparent focus:bg-transparent rounded-none border-dashed border-y-3 border-transparent focus:border-foreground hover:border-foreground dark:focus:border-ring bg-transparent",
+        "hover:bg-transparent active:bg-transparent focus:bg-transparent rounded-none border-dashed border-y-[length:var(--viiibit-menu-item-border-y)] border-transparent focus:border-foreground hover:border-foreground dark:focus:border-ring bg-transparent",
         className
       )}
       {...props}
@@ -104,11 +118,11 @@ function DropdownMenuSubContent({
       {children}
 
       <div
-        className="absolute inset-0 border-x-6 -mx-1.5 border-foreground dark:border-ring pointer-events-none"
+        className="absolute inset-0 border-x-[length:var(--viiibit-frame-width)] -mx-[var(--viiibit-frame-inset)] border-foreground dark:border-ring pointer-events-none"
         aria-hidden="true"
       />
       <div
-        className="absolute inset-0 border-y-6 -my-1.5 border-foreground dark:border-ring pointer-events-none"
+        className="absolute inset-0 border-y-[length:var(--viiibit-frame-width)] -my-[var(--viiibit-frame-inset)] border-foreground dark:border-ring pointer-events-none"
         aria-hidden="true"
       />
     </ShadcnDropdownMenuSubContent>
@@ -133,11 +147,11 @@ function DropdownMenuContent({
       {children}
 
       <div
-        className="mt-2.5 absolute inset-0 border-x-6 -mx-1.5 border-foreground dark:border-ring pointer-events-none"
+        className="mt-2.5 absolute inset-0 border-x-[length:var(--viiibit-frame-width)] -mx-[var(--viiibit-frame-inset)] border-foreground dark:border-ring pointer-events-none"
         aria-hidden="true"
       />
       <div
-        className="mt-1 absolute inset-0 border-y-6 -my-1.5 border-foreground dark:border-ring pointer-events-none"
+        className="mt-1 absolute inset-0 border-y-[length:var(--viiibit-frame-width)] -my-[var(--viiibit-frame-inset)] border-foreground dark:border-ring pointer-events-none"
         aria-hidden="true"
       />
     </ShadcnDropdownMenuContent>
