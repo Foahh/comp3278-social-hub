@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react"
 import { formatDistanceToNow } from "date-fns"
-import { CalendarIcon, HeartIcon, FileTextIcon } from "lucide-react"
+import { Calendar, FileText, Heart } from "pixelarticons/react"
 import { Card, CardContent } from "@/components/ui/8bit/card"
 import { Skeleton } from "@/components/ui/8bit/skeleton"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/8bit/avatar"
@@ -76,15 +76,15 @@ function UserProfilePage() {
             <p className="text-sm text-muted-foreground">@{profile.username}</p>
             <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground sm:justify-start">
               <span className="flex items-center gap-1">
-                <CalendarIcon className="size-4" />
+                <Calendar className="size-4" />
                 Joined {formatDistanceToNow(new Date(profile.created_at), { addSuffix: true })}
               </span>
               <span className="flex items-center gap-1">
-                <FileTextIcon className="size-4" />
+                <FileText className="size-4" />
                 {profile.post_count} posts
               </span>
               <span className="flex items-center gap-1">
-                <HeartIcon className="size-4" />
+                <Heart className="size-4" />
                 {profile.total_likes} likes received
               </span>
             </div>

@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "@tanstack/react-router"
 import { Input } from "@/components/ui/8bit/input"
 import { Button } from "@/components/ui/8bit/button"
-import { SearchIcon } from "lucide-react"
+import { Search } from "pixelarticons/react"
 
 export function SearchBar() {
   const [query, setQuery] = useState("")
@@ -25,7 +25,7 @@ export function SearchBar() {
         className="h-8 w-48 text-sm lg:w-64"
       />
       <Button type="submit" variant="ghost" size="icon" className="h-8 w-8" aria-label="Search">
-        <SearchIcon className="size-4" />
+        <Search className="size-4" />
       </Button>
     </form>
   )

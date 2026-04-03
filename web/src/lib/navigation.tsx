@@ -1,4 +1,4 @@
-import { Rss } from "lucide-react"
+import { Rss } from "pixelarticons/react"
 import type { ReactNode } from "react"
 import type { FileRoutesByTo } from "@/routeTree.gen"
 

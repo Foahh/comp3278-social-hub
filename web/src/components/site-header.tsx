@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/8bit/dropdown-menu"
 import { Separator } from "@/components/ui/8bit/separator"
-import { Rss, PenSquareIcon } from "lucide-react"
+import { PenSquare, Rss } from "pixelarticons/react"
 import { SearchBar } from "./SearchBar"
 import { useAuth } from "@/context/AuthContext"
 
@@ -36,7 +36,7 @@ export function SiteHeader() {
           {!isLoading && user && (
             <Button asChild variant="ghost" size="icon" className="h-8 w-8" aria-label="New post">
               <Link to="/create">
-                <PenSquareIcon className="size-4" />
+                <PenSquare className="size-4" />
               </Link>
             </Button>
           )}

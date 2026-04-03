@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router"
 import { formatDistanceToNow } from "date-fns"
-import { MessageCircle } from "lucide-react"
+import { Comment } from "pixelarticons/react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/8bit/avatar"
 import { Badge } from "@/components/ui/8bit/badge"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/8bit/card"
@@ -59,7 +59,7 @@ export function PostCard({ post }: { post: PostResponse }) {
         <LikeButton post={post} />
         <Link to="/post/$id" params={{ id: String(post.post_id) }}>
           <Badge variant="secondary" className="gap-1 px-2 py-0.5">
-            <MessageCircle className="size-3" />
+            <Comment className="size-3" />
             <span className="text-xs tabular-nums">{post.comment_count}</span>
           </Badge>
         </Link>

@@ -1,5 +1,5 @@
 import { useRef, useState, useMemo, useEffect } from "react"
-import { X, Plus } from "lucide-react"
+import { Cancel, Plus } from "pixelarticons/react"
 import { Button } from "@/components/ui/8bit/button"
 import { Input } from "@/components/ui/8bit/input"
 import { appConstants } from "@/lib/appConstants"
@@ -86,7 +86,7 @@ export function ImageUpload({ blobs, urls, onBlobsChange, onUrlsChange }: Props)
                 className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-destructive text-destructive-foreground"
                 aria-label="Remove image"
               >
-                <X className="size-3" />
+                <Cancel className="size-3" />
               </button>
             </div>
           ))}
@@ -99,7 +99,7 @@ export function ImageUpload({ blobs, urls, onBlobsChange, onUrlsChange }: Props)
                 className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-destructive text-destructive-foreground"
                 aria-label="Remove image"
               >
-                <X className="size-3" />
+                <Cancel className="size-3" />
               </button>
             </div>
           ))}
