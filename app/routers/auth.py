@@ -1,5 +1,5 @@
 import structlog
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, HTTPException, Response
 
 from app.core import auth, db, queries, s3
 from app.exceptions import ConflictError, NotFoundError
@@ -36,7 +36,7 @@ async def register(body: RegisterRequest, response: Response) -> AuthResponse:
         hashed = auth.hash_password(body.password)
         user_id = await queries.insert_user(conn, body.username, body.email, hashed)
 
-    async with db.transaction() as conn:
+    async with db.get_conn() as conn:
         result = await _build_auth_response(conn, user_id)
 
     token = auth.create_token(user_id)
@@ -50,7 +50,6 @@ async def login(body: LoginRequest, response: Response) -> AuthResponse:
     async with db.get_conn() as conn:
         user = await queries.get_user_by_email(conn, body.email)
     if not user or not auth.verify_password(body.password, user["password_hash"]):
-        from fastapi import HTTPException
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     avatar_url = None
@@ -81,5 +80,5 @@ async def logout(
 
 @router.get("/me", response_model=AuthResponse)
 async def me(user_id: int = Depends(auth.get_current_user)) -> AuthResponse:
-    async with db.transaction() as conn:
+    async with db.get_conn() as conn:
         return await _build_auth_response(conn, user_id)
