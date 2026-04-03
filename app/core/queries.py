@@ -55,7 +55,7 @@ async def list_posts_latest(
     conn: aiomysql.Connection, cursor: int | None, limit: int
 ) -> list[dict]:
     async with conn.cursor(aiomysql.DictCursor) as cur:
-        if cursor:
+        if cursor is not None:
             await cur.execute(
                 "SELECT p.*, u.username, u.avatar_key FROM posts p "
                 "JOIN users u ON p.user_id = u.user_id "

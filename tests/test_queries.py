@@ -4,16 +4,6 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import aiomysql
 
 
-@pytest.fixture
-def mock_conn():
-    conn = MagicMock()
-    cursor = AsyncMock()
-    cursor.__aenter__ = AsyncMock(return_value=cursor)
-    cursor.__aexit__ = AsyncMock(return_value=False)
-    conn.cursor.return_value = cursor
-    return conn, cursor
-
-
 @pytest.mark.asyncio
 async def test_get_user_by_id_found(mock_conn):
     from app.core import queries
