@@ -15,7 +15,12 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field"
-import { Input } from "@/components/ui/8bit/input"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/8bit/input-group"
+import { AtSign, Lock } from "pixelarticons/react"
 import { useLogin } from "@/lib/api/hooks/useAuth"
 import { appConstants } from "@/lib/appConstants"
 
@@ -56,7 +61,7 @@ function LoginPage() {
           <CardHeader>
             <CardTitle>Login to your account</CardTitle>
             <CardDescription>
-              Enter your email below to login to your account
+              Enter your user name below to login to your account
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -64,27 +69,37 @@ function LoginPage() {
               <FieldGroup>
                 <Field>
                   <FieldLabel htmlFor="username">Username</FieldLabel>
-                  <Input
-                    id="username"
-                    name="username"
-                    required
-                    minLength={appConstants.usernameMinLen}
-                    maxLength={appConstants.usernameMaxLen}
-                    pattern="^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*"
-                    title="Letters and numbers, hyphens between segments (e.g. alice-01)"
-                    autoComplete="username"
-                  />
+                  <InputGroup>
+                    <InputGroupAddon align="inline-start" aria-hidden>
+                      <AtSign className="size-4" />
+                    </InputGroupAddon>
+                    <InputGroupInput
+                      id="username"
+                      name="username"
+                      required
+                      minLength={appConstants.usernameMinLen}
+                      maxLength={appConstants.usernameMaxLen}
+                      pattern="^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*"
+                      title="Letters and numbers, hyphens between segments (e.g. alice-01)"
+                      autoComplete="username"
+                    />
+                  </InputGroup>
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <Input
-                    id="password"
-                    name="password"
-                    type="password"
-                    required
-                    minLength={1}
-                    autoComplete="current-password"
-                  />
+                  <InputGroup>
+                    <InputGroupAddon align="inline-start" aria-hidden>
+                      <Lock className="size-4" />
+                    </InputGroupAddon>
+                    <InputGroupInput
+                      id="password"
+                      name="password"
+                      type="password"
+                      required
+                      minLength={1}
+                      autoComplete="current-password"
+                    />
+                  </InputGroup>
                 </Field>
                 {error ? (
                   <Field data-invalid>

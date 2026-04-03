@@ -1,10 +1,6 @@
 import { Link } from "@tanstack/react-router"
 import { Button } from "@/components/ui/8bit/button"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/8bit/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/8bit/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,9 +49,7 @@ export function SiteHeader() {
           {!isLoading && !user && (
             <>
               <Button asChild variant="ghost" size="sm">
-                <Link to="/login" search={{}}>
-                  Sign in
-                </Link>
+                <Link to="/login" search={{}}>Sign in</Link>
               </Button>
               <Button asChild size="sm" bitBorder="thin">
                 <Link to="/register">Sign up</Link>
@@ -66,14 +60,12 @@ export function SiteHeader() {
           {!isLoading && user && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="rounded-full focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none">
+                <button className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                   <Avatar className="size-8">
                     {user.avatar_url && (
                       <AvatarImage src={user.avatar_url} alt={user.name} />
                     )}
-                    <AvatarFallback>
-                      {user.name[0]?.toUpperCase() ?? "?"}
-                    </AvatarFallback>
+                    <AvatarFallback>{user.name[0]?.toUpperCase() ?? "?"}</AvatarFallback>
                   </Avatar>
                 </button>
               </DropdownMenuTrigger>
@@ -81,17 +73,12 @@ export function SiteHeader() {
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col gap-0.5">
                     <span className="text-sm font-medium">{user.name}</span>
-                    <span className="text-xs text-muted-foreground">
-                      @{user.username}
-                    </span>
+                    <span className="text-xs text-muted-foreground">@{user.username}</span>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link
-                    to="/user/$username"
-                    params={{ username: user.username }}
-                  >
+                  <Link to="/user/$username" params={{ username: user.username }}>
                     Profile
                   </Link>
                 </DropdownMenuItem>

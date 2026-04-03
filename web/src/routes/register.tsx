@@ -15,7 +15,12 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field"
-import { Input } from "@/components/ui/8bit/input"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/8bit/input-group"
+import { AtSign, Lock, User } from "pixelarticons/react"
 import { useRegister } from "@/lib/api/hooks/useAuth"
 import { appConstants } from "@/lib/appConstants"
 
@@ -68,12 +73,17 @@ function RegisterPage() {
               <FieldGroup>
                 <Field>
                   <FieldLabel htmlFor="name">Name</FieldLabel>
-                  <Input
-                    id="name"
-                    name="name"
-                    maxLength={appConstants.nameMaxLength}
-                    autoComplete="name"
-                  />
+                  <InputGroup>
+                    <InputGroupAddon align="inline-start" aria-hidden>
+                      <User className="size-4" />
+                    </InputGroupAddon>
+                    <InputGroupInput
+                      id="name"
+                      name="name"
+                      maxLength={appConstants.nameMaxLength}
+                      autoComplete="name"
+                    />
+                  </InputGroup>
                   <FieldDescription>
                     Up to {appConstants.nameMaxLength} characters; leave blank
                     if you prefer.
@@ -81,28 +91,38 @@ function RegisterPage() {
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="username">Username</FieldLabel>
-                  <Input
-                    id="username"
-                    name="username"
-                    required
-                    minLength={appConstants.usernameMinLen}
-                    maxLength={appConstants.usernameMaxLen}
-                    pattern="^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*"
-                    title="Letters and numbers, hyphens between segments (e.g. alice-01)"
-                    autoComplete="username"
-                  />
+                  <InputGroup>
+                    <InputGroupAddon align="inline-start" aria-hidden>
+                      <AtSign className="size-4" />
+                    </InputGroupAddon>
+                    <InputGroupInput
+                      id="username"
+                      name="username"
+                      required
+                      minLength={appConstants.usernameMinLen}
+                      maxLength={appConstants.usernameMaxLen}
+                      pattern="^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*"
+                      title="Letters and numbers, hyphens between segments (e.g. alice-01)"
+                      autoComplete="username"
+                    />
+                  </InputGroup>
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <Input
-                    id="password"
-                    name="password"
-                    type="password"
-                    required
-                    minLength={appConstants.passwordMinLength}
-                    maxLength={appConstants.passwordMaxLength}
-                    autoComplete="new-password"
-                  />
+                  <InputGroup>
+                    <InputGroupAddon align="inline-start" aria-hidden>
+                      <Lock className="size-4" />
+                    </InputGroupAddon>
+                    <InputGroupInput
+                      id="password"
+                      name="password"
+                      type="password"
+                      required
+                      minLength={appConstants.passwordMinLength}
+                      maxLength={appConstants.passwordMaxLength}
+                      autoComplete="new-password"
+                    />
+                  </InputGroup>
                   <FieldDescription>
                     Must be at least {appConstants.passwordMinLength} characters
                     long.
@@ -110,16 +130,21 @@ function RegisterPage() {
                 </Field>
                 <Field data-invalid={!!passwordError}>
                   <FieldLabel htmlFor="confirm">Confirm password</FieldLabel>
-                  <Input
-                    id="confirm"
-                    name="confirm"
-                    type="password"
-                    required
-                    minLength={appConstants.passwordMinLength}
-                    maxLength={appConstants.passwordMaxLength}
-                    autoComplete="new-password"
-                    aria-invalid={!!passwordError}
-                  />
+                  <InputGroup>
+                    <InputGroupAddon align="inline-start" aria-hidden>
+                      <Lock className="size-4" />
+                    </InputGroupAddon>
+                    <InputGroupInput
+                      id="confirm"
+                      name="confirm"
+                      type="password"
+                      required
+                      minLength={appConstants.passwordMinLength}
+                      maxLength={appConstants.passwordMaxLength}
+                      autoComplete="new-password"
+                      aria-invalid={!!passwordError}
+                    />
+                  </InputGroup>
                   <FieldDescription>
                     Please confirm your password.
                   </FieldDescription>
