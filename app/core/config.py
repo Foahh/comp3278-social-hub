@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     openai_model: str = ""
     openai_base_url: str = ""
     openai_organization: str = ""
+    chroma_host: str = ""
+    chroma_port: int = 8000
+    chroma_ssl: bool = False
 
     # App
     cors_origins: list[str] = ["http://localhost:5173"]

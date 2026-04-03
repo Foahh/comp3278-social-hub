@@ -15,7 +15,7 @@ dependencies = [
     "bcrypt>=5.0.0",
     "structlog>=25.5.0",
     "vanna[openai]>=2.0.2",
-    "chromadb>=0.5.23",
+    "chromadb-client>=1.5.5",
 ]
 
 [dependency-groups]

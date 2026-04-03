@@ -1,15 +1,20 @@
 from __future__ import annotations
 
+import asyncio
+import json
+from datetime import datetime
 from pathlib import Path
 
+import chromadb
 import jwt
+from chromadb.config import Settings as ChromaSettings
 from vanna import Agent, AgentConfig
 from vanna.core.registry import ToolRegistry
-from vanna.core.tool.models import ToolContext
 from vanna.core.user.models import User
 from vanna.core.user.request_context import RequestContext
 from vanna.core.user.resolver import UserResolver
 from vanna.integrations.chromadb import ChromaAgentMemory
+from vanna.integrations.local import LocalFileSystem
 from vanna.integrations.mysql import MySQLRunner
 from vanna.integrations.openai import OpenAILlmService
 from vanna.servers.base import ChatHandler
@@ -23,8 +28,42 @@ from vanna.tools.agent_memory import (
 
 from app.core.config import settings
 
+VANNA_FS_ROOT = ".vanna"
+
 _agent: Agent | None = None
 _memory: ChromaAgentMemory | None = None
+
+
+class HttpChromaAgentMemory(ChromaAgentMemory):
+    """ChromaAgentMemory using only Chroma's HTTP API (no local persist directory)."""
+
+    def __init__(
+        self,
+        *,
+        host: str,
+        port: int = 8000,
+        ssl: bool = False,
+        collection_name: str = "socialhub_memory",
+        embedding_function=None,
+    ) -> None:
+        super().__init__(
+            persist_directory="",
+            collection_name=collection_name,
+            embedding_function=embedding_function,
+        )
+        self._http_host = host
+        self._http_port = port
+        self._http_ssl = ssl
+
+    def _get_client(self):
+        if self._client is None:
+            self._client = chromadb.HttpClient(
+                host=self._http_host,
+                port=self._http_port,
+                ssl=self._http_ssl,
+                settings=ChromaSettings(anonymized_telemetry=False),
+            )
+        return self._client
 
 
 class JwtUserResolver(UserResolver):
@@ -95,15 +134,27 @@ def init_vanna() -> Agent:
         port=settings.mysql_port,
     )
 
-    _memory = ChromaAgentMemory(
-        persist_directory="./chroma_data",
+    chroma_host = settings.chroma_host.strip()
+    if not chroma_host:
+        raise RuntimeError(
+            "CHROMA_HOST is required when OPENAI_API_KEY is set (Chroma HTTP API only)."
+        )
+    _memory = HttpChromaAgentMemory(
+        host=chroma_host,
+        port=settings.chroma_port,
+        ssl=settings.chroma_ssl,
         collection_name="socialhub_memory",
     )
 
+    vanna_fs = LocalFileSystem(working_directory=VANNA_FS_ROOT)
+
     registry = ToolRegistry()
     access = ["user", "public"]
-    registry.register_local_tool(RunSqlTool(sql_runner=mysql_runner), access_groups=access)
-    registry.register_local_tool(VisualizeDataTool(), access_groups=access)
+    registry.register_local_tool(
+        RunSqlTool(sql_runner=mysql_runner, file_system=vanna_fs),
+        access_groups=access,
+    )
+    registry.register_local_tool(VisualizeDataTool(file_system=vanna_fs), access_groups=access)
     registry.register_local_tool(SearchSavedCorrectToolUsesTool(), access_groups=access)
     registry.register_local_tool(SaveQuestionToolArgsTool(), access_groups=access)
     registry.register_local_tool(SaveTextMemoryTool(), access_groups=["user"])
@@ -120,25 +171,41 @@ def init_vanna() -> Agent:
 
 
 async def seed_memory() -> None:
-    """Pre-load DDL and question-SQL pairs into agent memory."""
+    """Upsert bootstrap DDL and training pairs; stable ids avoid duplicates on shared Chroma."""
     assert _memory is not None
-    ctx = ToolContext(
-        user=User(id="system", group_memberships=["user"]),
-        conversation_id="seed",
-        request_id="seed-init",
-        agent_memory=_memory,
-    )
+    ts = datetime.now().isoformat()
 
-    await _memory.save_text_memory(content=DDL, context=ctx)
-
-    for question, sql in TRAINING_PAIRS:
-        await _memory.save_tool_usage(
-            question=question,
-            tool_name="run_sql",
-            args={"sql": sql},
-            context=ctx,
-            success=True,
+    def _seed() -> None:
+        collection = _memory._get_collection()
+        collection.upsert(
+            ids=["socialhub-seed-ddl"],
+            documents=[DDL],
+            metadatas=[
+                {
+                    "content": DDL,
+                    "timestamp": ts,
+                    "is_text_memory": True,
+                }
+            ],
         )
+        for i, (question, sql) in enumerate(TRAINING_PAIRS):
+            collection.upsert(
+                ids=[f"socialhub-seed-sql-{i}"],
+                documents=[question],
+                metadatas=[
+                    {
+                        "question": question,
+                        "tool_name": "run_sql",
+                        "args_json": json.dumps({"sql": sql}),
+                        "timestamp": ts,
+                        "success": True,
+                        "metadata_json": json.dumps({}),
+                    }
+                ],
+            )
+
+    loop = asyncio.get_event_loop()
+    await loop.run_in_executor(_memory._executor, _seed)
 
 
 def mount_vanna_routes(app) -> None:

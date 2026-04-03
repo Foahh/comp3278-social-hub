@@ -5,3 +5,4 @@ __pycache__/
 !.env*.example
 
 chroma_data/
+.vanna/

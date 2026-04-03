@@ -62,6 +62,11 @@ app.add_middleware(
 )
 register_exception_handlers(app)
 
+@app.get("/")
+async def root() -> dict[str, str]:
+    return {"service": "SocialHub API", "docs": "/docs", "health": "/api/health"}
+
+
 from app.routers import auth, comments, likes, posts, users  # noqa: E402
 
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
