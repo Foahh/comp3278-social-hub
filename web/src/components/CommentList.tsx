@@ -22,7 +22,10 @@ export function CommentList({ postId }: { postId: number }) {
     create.mutate(
       { content: text.trim() },
       {
-        onSuccess: () => setText(""),
+        onSuccess: () => {
+          setText("")
+          setError(null)
+        },
         onError: (err) => setError(err.message),
       },
     )

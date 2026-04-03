@@ -13,11 +13,21 @@ export const Route = createFileRoute("/post/$id")({
 
 function PostDetailPage() {
   const { id } = Route.useParams()
-  const postId = Number(id)
+  const postId = parseInt(id, 10)
   const navigate = useNavigate()
   const { user } = useAuth()
   const { data: post, isLoading, isError } = usePost(postId)
   const deletePost = useDeletePost()
+
+  const handleDelete = () => {
+    deletePost.mutate(postId, {
+      onSuccess: () => {
+        toast.success("Post deleted")
+        void navigate({ to: "/" })
+      },
+      onError: (err) => toast.error(err.message),
+    })
+  }
 
   if (isLoading) {
     return (
@@ -28,16 +38,6 @@ function PostDetailPage() {
   }
   if (isError || !post) {
     return <p className="px-6 text-muted-foreground">Post not found.</p>
-  }
-
-  function handleDelete() {
-    deletePost.mutate(postId, {
-      onSuccess: () => {
-        toast.success("Post deleted")
-        void navigate({ to: "/" })
-      },
-      onError: (err) => toast.error(err.message),
-    })
   }
 
   return (
