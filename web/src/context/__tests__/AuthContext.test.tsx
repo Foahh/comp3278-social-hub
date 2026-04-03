@@ -1,4 +1,3 @@
-import React from "react"
 import { http, HttpResponse } from "msw"
 import { renderHook, waitFor } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
