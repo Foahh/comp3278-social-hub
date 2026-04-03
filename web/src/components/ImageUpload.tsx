@@ -11,7 +11,12 @@ interface Props {
   onUrlsChange: (urls: string[]) => void
 }
 
-export function ImageUpload({ blobs, urls, onBlobsChange, onUrlsChange }: Props) {
+export function ImageUpload({
+  blobs,
+  urls,
+  onBlobsChange,
+  onUrlsChange,
+}: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [urlInput, setUrlInput] = useState("")
   const [fileError, setFileError] = useState<string | null>(null)
@@ -21,7 +26,7 @@ export function ImageUpload({ blobs, urls, onBlobsChange, onUrlsChange }: Props)
 
   const blobUrls = useMemo(
     () => blobs.map((f) => URL.createObjectURL(f)),
-    [blobs],
+    [blobs]
   )
 
   // Cleanup on unmount or when blobs change
@@ -37,7 +42,9 @@ export function ImageUpload({ blobs, urls, onBlobsChange, onUrlsChange }: Props)
     const valid: File[] = []
     for (const f of incoming) {
       if (f.size > maxBytes) {
-        setFileError(`"${f.name}" exceeds ${appConstants.imageUploadMaxMb} MB limit`)
+        setFileError(
+          `"${f.name}" exceeds ${appConstants.imageUploadMaxMb} MB limit`
+        )
         e.target.value = ""
         return
       }
@@ -83,7 +90,7 @@ export function ImageUpload({ blobs, urls, onBlobsChange, onUrlsChange }: Props)
               <button
                 type="button"
                 onClick={() => onBlobsChange(blobs.filter((_, j) => j !== i))}
-                className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-destructive text-destructive-foreground"
+                className="text-destructive-foreground absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full bg-destructive"
                 aria-label="Remove image"
               >
                 <Cancel className="size-3" />
@@ -92,11 +99,15 @@ export function ImageUpload({ blobs, urls, onBlobsChange, onUrlsChange }: Props)
           ))}
           {urls.map((u, i) => (
             <div key={i} className="relative">
-              <img src={u} alt="URL image" className="h-20 w-20 rounded-md object-cover" />
+              <img
+                src={u}
+                alt="URL image"
+                className="h-20 w-20 rounded-md object-cover"
+              />
               <button
                 type="button"
                 onClick={() => onUrlsChange(urls.filter((_, j) => j !== i))}
-                className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-destructive text-destructive-foreground"
+                className="text-destructive-foreground absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full bg-destructive"
                 aria-label="Remove image"
               >
                 <Cancel className="size-3" />

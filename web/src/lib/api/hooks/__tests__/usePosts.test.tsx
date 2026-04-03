@@ -13,9 +13,17 @@ type PostResponse = components["schemas"]["PostResponse"]
 type PostListResponse = components["schemas"]["PostListResponse"]
 
 const mockPost: PostResponse = {
-  post_id: 1, user_id: 1, username: "alice", name: "Alice", avatar_url: null,
-  text_content: "Hello world", images: [], like_count: 5,
-  comment_count: 2, liked_by_me: false, created_at: "2026-04-04T00:00:00",
+  post_id: 1,
+  user_id: 1,
+  username: "alice",
+  name: "Alice",
+  avatar_url: null,
+  text_content: "Hello world",
+  images: [],
+  like_count: 5,
+  comment_count: 2,
+  liked_by_me: false,
+  created_at: "2026-04-04T00:00:00",
 }
 const mockPage: PostListResponse = { posts: [mockPost], next_cursor: null }
 

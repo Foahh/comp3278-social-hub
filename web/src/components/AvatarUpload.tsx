@@ -1,6 +1,10 @@
 import { useRef, useState } from "react"
 import { Camera } from "pixelarticons/react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/8bit/avatar"
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/8bit/avatar"
 import { appConstants } from "@/lib/appConstants"
 
 interface Props {
@@ -53,7 +57,9 @@ export function AvatarUpload({
       >
         <Avatar className="size-24">
           {currentUrl && <AvatarImage src={currentUrl} alt={label} />}
-          <AvatarFallback className="text-2xl">{label[0]?.toUpperCase() ?? "?"}</AvatarFallback>
+          <AvatarFallback className="text-2xl">
+            {label[0]?.toUpperCase() ?? "?"}
+          </AvatarFallback>
         </Avatar>
         <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
           <Camera className="size-6 text-white" />

@@ -27,7 +27,7 @@ export function CommentList({ postId }: { postId: number }) {
           setError(null)
         },
         onError: (err) => setError(err.message),
-      },
+      }
     )
   }
 

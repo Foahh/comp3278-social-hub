@@ -12,7 +12,10 @@ import type { ReactNode } from "react"
 type AuthResponse = components["schemas"]["AuthResponse"]
 
 const mockUser: AuthResponse = {
-  user_id: 2, username: "bob", name: "Bob", avatar_url: null,
+  user_id: 2,
+  username: "bob",
+  name: "Bob",
+  avatar_url: null,
 }
 
 function wrapper({ children }: { children: ReactNode }) {
@@ -24,7 +27,9 @@ describe("useLogin", () => {
   it("resolves with AuthResponse on 200", async () => {
     server.use(http.post("/api/auth/login", () => HttpResponse.json(mockUser)))
     const { result } = renderHook(() => useLogin(), { wrapper })
-    act(() => { result.current.mutate({ username: "bob", password: "password1" }) })
+    act(() => {
+      result.current.mutate({ username: "bob", password: "password1" })
+    })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual(mockUser)
   })
@@ -32,11 +37,13 @@ describe("useLogin", () => {
   it("is error on 401", async () => {
     server.use(
       http.post("/api/auth/login", () =>
-        HttpResponse.json({ detail: "Invalid credentials" }, { status: 401 }),
-      ),
+        HttpResponse.json({ detail: "Invalid credentials" }, { status: 401 })
+      )
     )
     const { result } = renderHook(() => useLogin(), { wrapper })
-    act(() => { result.current.mutate({ username: "bob", password: "wrong" }) })
+    act(() => {
+      result.current.mutate({ username: "bob", password: "wrong" })
+    })
     await waitFor(() => expect(result.current.isError).toBe(true))
     expect(result.current.error?.message).toContain("Invalid credentials")
   })
@@ -44,7 +51,9 @@ describe("useLogin", () => {
 
 describe("useRegister", () => {
   it("resolves with AuthResponse on 200", async () => {
-    server.use(http.post("/api/auth/register", () => HttpResponse.json(mockUser)))
+    server.use(
+      http.post("/api/auth/register", () => HttpResponse.json(mockUser))
+    )
     const { result } = renderHook(() => useRegister(), { wrapper })
     act(() => {
       result.current.mutate({

@@ -14,7 +14,8 @@ type FeedSort = components["schemas"]["FeedSort"]
 
 function FeedPage() {
   const [sort, setSort] = useState<FeedSort>("latest")
-  const { data, hasNextPage, isFetchingNextPage, fetchNextPage, isLoading } = useFeed(sort)
+  const { data, hasNextPage, isFetchingNextPage, fetchNextPage, isLoading } =
+    useFeed(sort)
 
   return (
     <div className="mx-auto max-w-2xl px-4">

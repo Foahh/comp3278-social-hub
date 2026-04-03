@@ -31,11 +31,14 @@ export function useToggleLike(postId: number) {
       return { previous }
     },
     onError: (_err, _vars, context) => {
-      if (context?.previous) queryClient.setQueryData(queryKey, context.previous)
+      if (context?.previous)
+        queryClient.setQueryData(queryKey, context.previous)
     },
     onSuccess: (data) => {
       queryClient.setQueryData<PostResponse>(queryKey, (old) =>
-        old ? { ...old, liked_by_me: data.liked, like_count: data.like_count } : old,
+        old
+          ? { ...old, liked_by_me: data.liked, like_count: data.like_count }
+          : old
       )
     },
   })

@@ -3,7 +3,12 @@ import { useState } from "react"
 import { Button } from "@/components/ui/8bit/button"
 import { Textarea } from "@/components/ui/8bit/textarea"
 import { Label } from "@/components/ui/8bit/label"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/8bit/card"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/8bit/card"
 import { ImageUpload } from "@/components/ImageUpload"
 import { useCreatePost } from "@/lib/api/hooks/usePosts"
 import { appConstants } from "@/lib/appConstants"
@@ -80,7 +85,11 @@ function CreatePostPage() {
               <p className="text-sm text-destructive">{contentError}</p>
             )}
 
-            <Button type="submit" className="w-full" disabled={createPost.isPending}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={createPost.isPending}
+            >
               {createPost.isPending ? "Publishing…" : "Publish"}
             </Button>
           </form>

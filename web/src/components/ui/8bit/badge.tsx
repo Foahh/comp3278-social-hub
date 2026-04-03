@@ -1,8 +1,8 @@
-import { type VariantProps, cva } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
-import { Badge as ShadcnBadge } from "@/components/ui/badge";
+import { Badge as ShadcnBadge } from "@/components/ui/badge"
 
 export const badgeVariants = cva("", {
   variants: {
@@ -20,12 +20,13 @@ export const badgeVariants = cva("", {
   defaultVariants: {
     variant: "default",
   },
-});
+})
 
 export interface BitButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof badgeVariants> {
-  asChild?: boolean;
+  asChild?: boolean
 }
 
 function Badge({
@@ -35,9 +36,9 @@ function Badge({
   variant,
   ...props
 }: BitButtonProps) {
-  const color = badgeVariants({ variant, font });
+  const color = badgeVariants({ variant, font })
 
-  const classes = className.split(" ");
+  const classes = className.split(" ")
 
   // visual classes for badge and sidebars
   const visualClasses = classes.filter(
@@ -46,7 +47,7 @@ function Badge({
       c.startsWith("border-") ||
       c.startsWith("text-") ||
       c.startsWith("rounded-")
-  );
+  )
 
   // Container should accept all non-visual utility classes (e.g., size, spacing, layout)
   const containerClasses = classes.filter(
@@ -57,7 +58,7 @@ function Badge({
         c.startsWith("text-") ||
         c.startsWith("rounded-")
       )
-  );
+  )
 
   return (
     <div className={cn("relative inline-flex items-stretch", containerClasses)}>
@@ -78,7 +79,7 @@ function Badge({
       {/* Left pixel bar */}
       <div
         className={cn(
-          "-left-1.5 absolute inset-y-[4px] w-1.5",
+          "absolute inset-y-[4px] -left-1.5 w-1.5",
           color,
           visualClasses
         )}
@@ -86,13 +87,13 @@ function Badge({
       {/* Right pixel bar */}
       <div
         className={cn(
-          "-right-1.5 absolute inset-y-[4px] w-1.5",
+          "absolute inset-y-[4px] -right-1.5 w-1.5",
           color,
           visualClasses
         )}
       />
     </div>
-  );
+  )
 }
 
-export { Badge };
+export { Badge }

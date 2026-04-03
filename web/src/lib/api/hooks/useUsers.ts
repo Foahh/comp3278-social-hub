@@ -21,14 +21,19 @@ export function useUpdateAvatar(username: string) {
     mutationFn: async (file: File) => {
       const formData = new FormData()
       formData.append("avatar", file)
-      const response = await fetch(`/api/users/${encodeURIComponent(username)}/avatar`, {
-        method: "PUT",
-        credentials: "include",
-        body: formData,
-      })
+      const response = await fetch(
+        `/api/users/${encodeURIComponent(username)}/avatar`,
+        {
+          method: "PUT",
+          credentials: "include",
+          body: formData,
+        }
+      )
       if (!response.ok) {
         const err = await response.json().catch(() => ({}))
-        throw new Error((err as { detail?: string }).detail ?? "Failed to update avatar")
+        throw new Error(
+          (err as { detail?: string }).detail ?? "Failed to update avatar"
+        )
       }
       return response.json() as Promise<components["schemas"]["AuthResponse"]>
     },

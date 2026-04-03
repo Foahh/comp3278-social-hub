@@ -1,9 +1,18 @@
 import { Link } from "@tanstack/react-router"
 import { formatDistanceToNow } from "date-fns"
 import { Comment } from "pixelarticons/react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/8bit/avatar"
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/8bit/avatar"
 import { Badge } from "@/components/ui/8bit/badge"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/8bit/card"
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/8bit/card"
 import { LikeButton } from "./LikeButton"
 import type { components } from "@/lib/api/schema"
 
@@ -18,7 +27,9 @@ export function PostCard({ post }: { post: PostResponse }) {
             {post.avatar_url && (
               <AvatarImage src={post.avatar_url} alt={post.name} />
             )}
-            <AvatarFallback>{post.name[0]?.toUpperCase() ?? "?"}</AvatarFallback>
+            <AvatarFallback>
+              {post.name[0]?.toUpperCase() ?? "?"}
+            </AvatarFallback>
           </Avatar>
         </Link>
         <div className="min-w-0">
@@ -28,17 +39,21 @@ export function PostCard({ post }: { post: PostResponse }) {
             className="truncate hover:underline"
           >
             <span className="font-medium">{post.name}</span>{" "}
-            <span className="font-normal text-muted-foreground">@{post.username}</span>
+            <span className="font-normal text-muted-foreground">
+              @{post.username}
+            </span>
           </Link>
           <p className="text-xs text-muted-foreground">
-            {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
+            {formatDistanceToNow(new Date(post.created_at), {
+              addSuffix: true,
+            })}
           </p>
         </div>
       </CardHeader>
 
       {post.text_content && (
-        <CardContent className="pb-2 pt-0">
-          <p className="whitespace-pre-wrap text-sm">{post.text_content}</p>
+        <CardContent className="pt-0 pb-2">
+          <p className="text-sm whitespace-pre-wrap">{post.text_content}</p>
         </CardContent>
       )}
 

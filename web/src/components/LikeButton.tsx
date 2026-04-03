@@ -26,7 +26,7 @@ export function LikeButton({ post }: { post: Post }) {
       <Heart
         className={cn(
           "size-4 transition-colors",
-          post.liked_by_me && "fill-rose-500 text-rose-500",
+          post.liked_by_me && "fill-rose-500 text-rose-500"
         )}
       />
       <span className="text-xs tabular-nums">{post.like_count}</span>

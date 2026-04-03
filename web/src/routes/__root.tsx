@@ -17,7 +17,9 @@ function RootErrorComponent({ error }: { error: unknown }) {
       <div className="flex min-h-svh flex-col items-center justify-center gap-4 px-4">
         <h1 className="text-2xl font-semibold">Something went wrong</h1>
         <p className="text-sm text-muted-foreground">
-          {error instanceof Error ? error.message : "An unexpected error occurred."}
+          {error instanceof Error
+            ? error.message
+            : "An unexpected error occurred."}
         </p>
         <Button onClick={() => router.navigate({ to: "/" })}>Go home</Button>
       </div>

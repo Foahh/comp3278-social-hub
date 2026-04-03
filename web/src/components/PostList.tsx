@@ -11,7 +11,13 @@ interface Props {
   isLoading?: boolean
 }
 
-export function PostList({ pages, hasNextPage, isFetchingNextPage, fetchNextPage, isLoading }: Props) {
+export function PostList({
+  pages,
+  hasNextPage,
+  isFetchingNextPage,
+  fetchNextPage,
+  isLoading,
+}: Props) {
   const posts = pages.flatMap((p) => p.posts)
 
   if (posts.length === 0 && !isFetchingNextPage && !isLoading) {

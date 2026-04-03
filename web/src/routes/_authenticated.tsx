@@ -1,4 +1,9 @@
-import { createFileRoute, Outlet, useNavigate, useRouterState } from "@tanstack/react-router"
+import {
+  createFileRoute,
+  Outlet,
+  useNavigate,
+  useRouterState,
+} from "@tanstack/react-router"
 import { useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
 

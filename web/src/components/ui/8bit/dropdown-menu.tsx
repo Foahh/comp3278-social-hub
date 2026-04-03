@@ -1,8 +1,8 @@
-import type * as React from "react";
-import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import { type VariantProps, cva } from "class-variance-authority";
+import type * as React from "react"
+import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
+import { type VariantProps, cva } from "class-variance-authority"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 import {
   DropdownMenu as ShadcnDropdownMenu,
@@ -17,25 +17,25 @@ import {
   DropdownMenuSubContent as ShadcnDropdownMenuSubContent,
   DropdownMenuSubTrigger as ShadcnDropdownMenuSubTrigger,
   DropdownMenuTrigger as ShadcnDropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu"
 
-import "@/components/ui/8bit/styles/retro.css";
+import "@/components/ui/8bit/styles/retro.css"
 
-const DropdownMenu = ShadcnDropdownMenu;
+const DropdownMenu = ShadcnDropdownMenu
 
-const DropdownMenuPortal = ShadcnDropdownMenuPortal;
+const DropdownMenuPortal = ShadcnDropdownMenuPortal
 
-const DropdownMenuTrigger = ShadcnDropdownMenuTrigger;
+const DropdownMenuTrigger = ShadcnDropdownMenuTrigger
 
-const DropdownMenuGroup = ShadcnDropdownMenuGroup;
+const DropdownMenuGroup = ShadcnDropdownMenuGroup
 
-const DropdownMenuLabel = ShadcnDropdownMenuLabel;
+const DropdownMenuLabel = ShadcnDropdownMenuLabel
 
-const DropdownMenuShortcut = ShadcnDropdownMenuShortcut;
+const DropdownMenuShortcut = ShadcnDropdownMenuShortcut
 
-const DropdownMenuSub = ShadcnDropdownMenuSub;
+const DropdownMenuSub = ShadcnDropdownMenuSub
 
-const DropdownMenuCheckboxItem = ShadcnDropdownMenuCheckboxItem;
+const DropdownMenuCheckboxItem = ShadcnDropdownMenuCheckboxItem
 
 function DropdownMenuSubTrigger({
   className,
@@ -45,14 +45,14 @@ function DropdownMenuSubTrigger({
   return (
     <ShadcnDropdownMenuSubTrigger
       className={cn(
-        "hover:bg-transparent active:bg-transparent focus:bg-transparent rounded-none border-dashed border-y-[length:var(--viiibit-menu-sub-border-y)] border-transparent focus:border-foreground hover:border-foreground dark:focus:border-ring bg-transparent data-[state=open]:bg-transparent data-[state=open]:border-foreground dark:data-[state=open]:border-ring",
+        "rounded-none border-y-[length:var(--viiibit-menu-sub-border-y)] border-dashed border-transparent bg-transparent hover:border-foreground hover:bg-transparent focus:border-foreground focus:bg-transparent active:bg-transparent data-[state=open]:border-foreground data-[state=open]:bg-transparent dark:focus:border-ring dark:data-[state=open]:border-ring",
         className
       )}
       {...props}
     >
       {children}
     </ShadcnDropdownMenuSubTrigger>
-  );
+  )
 }
 
 function DropdownMenuSeparator({
@@ -63,12 +63,12 @@ function DropdownMenuSeparator({
     <DropdownMenuPrimitive.DropdownMenuSeparator
       data-slot="dropdown-menu-separator"
       className={cn(
-        "-mx-1 my-1 h-0.5 shrink-0 bg-[length:16px_8px] bg-[linear-gradient(90deg,var(--foreground)_75%,transparent_75%)] dark:bg-[linear-gradient(90deg,var(--ring)_75%,transparent_75%)]",
+        "-mx-1 my-1 h-0.5 shrink-0 bg-[linear-gradient(90deg,var(--foreground)_75%,transparent_75%)] bg-[length:16px_8px] dark:bg-[linear-gradient(90deg,var(--ring)_75%,transparent_75%)]",
         className
       )}
       {...props}
     />
-  );
+  )
 }
 
 function DropdownMenuItem({
@@ -76,20 +76,20 @@ function DropdownMenuItem({
   children,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Item> & {
-  inset?: boolean;
-  variant?: "default" | "destructive";
+  inset?: boolean
+  variant?: "default" | "destructive"
 }) {
   return (
     <ShadcnDropdownMenuItem
       className={cn(
-        "hover:bg-transparent active:bg-transparent focus:bg-transparent rounded-none border-dashed border-y-[length:var(--viiibit-menu-item-border-y)] border-transparent focus:border-foreground hover:border-foreground dark:focus:border-ring bg-transparent",
+        "rounded-none border-y-[length:var(--viiibit-menu-item-border-y)] border-dashed border-transparent bg-transparent hover:border-foreground hover:bg-transparent focus:border-foreground focus:bg-transparent active:bg-transparent dark:focus:border-ring",
         className
       )}
       {...props}
     >
       {children}
     </ShadcnDropdownMenuItem>
-  );
+  )
 }
 
 export const dropDownVariants = cva("", {
@@ -102,7 +102,7 @@ export const dropDownVariants = cva("", {
   defaultVariants: {
     font: "retro",
   },
-});
+})
 
 function DropdownMenuSubContent({
   children,
@@ -118,19 +118,20 @@ function DropdownMenuSubContent({
       {children}
 
       <div
-        className="absolute inset-0 border-x-[length:var(--viiibit-frame-width)] -mx-[var(--viiibit-frame-inset)] border-foreground dark:border-ring pointer-events-none"
+        className="pointer-events-none absolute inset-0 -mx-[var(--viiibit-frame-inset)] border-x-[length:var(--viiibit-frame-width)] border-foreground dark:border-ring"
         aria-hidden="true"
       />
       <div
-        className="absolute inset-0 border-y-[length:var(--viiibit-frame-width)] -my-[var(--viiibit-frame-inset)] border-foreground dark:border-ring pointer-events-none"
+        className="pointer-events-none absolute inset-0 -my-[var(--viiibit-frame-inset)] border-y-[length:var(--viiibit-frame-width)] border-foreground dark:border-ring"
         aria-hidden="true"
       />
     </ShadcnDropdownMenuSubContent>
-  );
+  )
 }
 
 export interface BitDropownMenuContentProps
-  extends React.ComponentProps<typeof DropdownMenuPrimitive.Content>,
+  extends
+    React.ComponentProps<typeof DropdownMenuPrimitive.Content>,
     VariantProps<typeof dropDownVariants> {}
 
 function DropdownMenuContent({
@@ -147,15 +148,15 @@ function DropdownMenuContent({
       {children}
 
       <div
-        className="mt-2.5 absolute inset-0 border-x-[length:var(--viiibit-frame-width)] -mx-[var(--viiibit-frame-inset)] border-foreground dark:border-ring pointer-events-none"
+        className="pointer-events-none absolute inset-0 -mx-[var(--viiibit-frame-inset)] mt-2.5 border-x-[length:var(--viiibit-frame-width)] border-foreground dark:border-ring"
         aria-hidden="true"
       />
       <div
-        className="mt-1 absolute inset-0 border-y-[length:var(--viiibit-frame-width)] -my-[var(--viiibit-frame-inset)] border-foreground dark:border-ring pointer-events-none"
+        className="pointer-events-none absolute inset-0 -my-[var(--viiibit-frame-inset)] mt-1 border-y-[length:var(--viiibit-frame-width)] border-foreground dark:border-ring"
         aria-hidden="true"
       />
     </ShadcnDropdownMenuContent>
-  );
+  )
 }
 
 export {
@@ -172,4 +173,4 @@ export {
   DropdownMenuCheckboxItem,
   DropdownMenuShortcut,
   DropdownMenuSub,
-};
+}

@@ -10,10 +10,12 @@ export function useLogin() {
   return useMutation({
     mutationFn: async (body: LoginRequest) => {
       const { data, error } = await client.POST("/api/auth/login", { body })
-      if (error) throw new Error((error as { detail?: string }).detail ?? "Login failed")
+      if (error)
+        throw new Error((error as { detail?: string }).detail ?? "Login failed")
       return data!
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["auth", "me"] }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["auth", "me"] }),
   })
 }
 
@@ -22,9 +24,13 @@ export function useRegister() {
   return useMutation({
     mutationFn: async (body: RegisterRequest) => {
       const { data, error } = await client.POST("/api/auth/register", { body })
-      if (error) throw new Error((error as { detail?: string }).detail ?? "Registration failed")
+      if (error)
+        throw new Error(
+          (error as { detail?: string }).detail ?? "Registration failed"
+        )
       return data!
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["auth", "me"] }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["auth", "me"] }),
   })
 }

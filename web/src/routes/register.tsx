@@ -49,7 +49,7 @@ function RegisterPage() {
       {
         onSuccess: () => void navigate({ to: "/" }),
         onError: (err) => setError(err.message),
-      },
+      }
     )
   }
 
@@ -67,7 +67,7 @@ function RegisterPage() {
             <form onSubmit={handleSubmit}>
               <FieldGroup>
                 <Field>
-                  <FieldLabel htmlFor="name">Name (optional)</FieldLabel>
+                  <FieldLabel htmlFor="name">Name</FieldLabel>
                   <Input
                     id="name"
                     name="name"
@@ -75,7 +75,8 @@ function RegisterPage() {
                     autoComplete="name"
                   />
                   <FieldDescription>
-                    Up to {appConstants.nameMaxLength} characters; leave blank if you prefer.
+                    Up to {appConstants.nameMaxLength} characters; leave blank
+                    if you prefer.
                   </FieldDescription>
                 </Field>
                 <Field>
@@ -103,7 +104,8 @@ function RegisterPage() {
                     autoComplete="new-password"
                   />
                   <FieldDescription>
-                    Must be at least {appConstants.passwordMinLength} characters long.
+                    Must be at least {appConstants.passwordMinLength} characters
+                    long.
                   </FieldDescription>
                 </Field>
                 <Field data-invalid={!!passwordError}>
@@ -118,8 +120,12 @@ function RegisterPage() {
                     autoComplete="new-password"
                     aria-invalid={!!passwordError}
                   />
-                  <FieldDescription>Please confirm your password.</FieldDescription>
-                  {passwordError ? <FieldError>{passwordError}</FieldError> : null}
+                  <FieldDescription>
+                    Please confirm your password.
+                  </FieldDescription>
+                  {passwordError ? (
+                    <FieldError>{passwordError}</FieldError>
+                  ) : null}
                 </Field>
                 {error ? (
                   <Field data-invalid>
@@ -127,8 +133,14 @@ function RegisterPage() {
                   </Field>
                 ) : null}
                 <Field>
-                  <Button type="submit" className="w-full" disabled={register.isPending}>
-                    {register.isPending ? "Creating account…" : "Create account"}
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={register.isPending}
+                  >
+                    {register.isPending
+                      ? "Creating account…"
+                      : "Create account"}
                   </Button>
                   <FieldDescription className="px-6 text-center">
                     Already have an account?{" "}

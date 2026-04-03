@@ -1,15 +1,15 @@
-"use client";
+"use client"
 
-import type * as React from "react";
+import type * as React from "react"
 
-import type * as LabelPrimitive from "@radix-ui/react-label";
-import { type VariantProps, cva } from "class-variance-authority";
+import type * as LabelPrimitive from "@radix-ui/react-label"
+import { type VariantProps, cva } from "class-variance-authority"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
-import { Label as ShadcnLabel } from "@/components/ui/label";
+import { Label as ShadcnLabel } from "@/components/ui/label"
 
-import "@/components/ui/8bit/styles/retro.css";
+import "@/components/ui/8bit/styles/retro.css"
 
 export const inputVariants = cva("", {
   variants: {
@@ -21,12 +21,13 @@ export const inputVariants = cva("", {
   defaultVariants: {
     font: "retro",
   },
-});
+})
 
 interface BitLabelProps
-  extends React.ComponentProps<typeof LabelPrimitive.Root>,
+  extends
+    React.ComponentProps<typeof LabelPrimitive.Root>,
     VariantProps<typeof inputVariants> {
-  asChild?: boolean;
+  asChild?: boolean
 }
 
 function Label({ className, font, ...props }: BitLabelProps) {
@@ -35,7 +36,7 @@ function Label({ className, font, ...props }: BitLabelProps) {
       className={cn(className, font !== "normal" && "retro")}
       {...props}
     />
-  );
+  )
 }
 
-export { Label };
+export { Label }

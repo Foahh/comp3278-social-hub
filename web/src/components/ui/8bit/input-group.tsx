@@ -8,32 +8,147 @@ import { Textarea } from "@/components/ui/textarea"
 
 import "@/components/ui/8bit/styles/retro.css"
 
+function PixelRectOutline({
+  colorClass,
+  chunky,
+}: {
+  colorClass: string
+  chunky: boolean
+}) {
+  if (chunky) {
+    return (
+      <div className="absolute inset-0">
+        <div className={cn("absolute top-0 right-0 left-0 h-1.5", colorClass)} />
+        <div className={cn("absolute right-0 bottom-0 left-0 h-1.5", colorClass)} />
+        <div
+          className={cn(
+            "absolute top-1.5 left-0 w-1.5 h-[calc(100%-12px)]",
+            colorClass
+          )}
+        />
+        <div
+          className={cn(
+            "absolute top-1.5 right-0 w-1.5 h-[calc(100%-12px)]",
+            colorClass
+          )}
+        />
+      </div>
+    )
+  }
+
+  return (
+    <div className="absolute inset-0">
+      <div className={cn("absolute top-0 right-0 left-0 h-0.5", colorClass)} />
+      <div className={cn("absolute right-0 bottom-0 left-0 h-0.5", colorClass)} />
+      <div
+        className={cn(
+          "absolute top-0.5 left-0 w-0.5 h-[calc(100%-4px)]",
+          colorClass
+        )}
+      />
+      <div
+        className={cn(
+          "absolute top-0.5 right-0 w-0.5 h-[calc(100%-4px)]",
+          colorClass
+        )}
+      />
+    </div>
+  )
+}
+
+function InputGroupPixelRings({ variant }: { variant: "default" | "thin" }) {
+  const chunky = variant === "default"
+  const ringInset = chunky ? "-inset-2" : "-inset-[3px]"
+
+  return (
+    <>
+      <div
+        data-pixel-ring="focus"
+        className={cn(
+          "pointer-events-none absolute z-[2] opacity-0",
+          ringInset,
+          "group-has-[[data-slot=input-group-control]:focus-visible]/input-group:opacity-100",
+          "in-data-[slot=combobox-content]:opacity-0"
+        )}
+        aria-hidden
+      >
+        <PixelRectOutline colorClass="bg-ring" chunky={chunky} />
+      </div>
+      <div
+        data-pixel-ring="invalid"
+        className={cn(
+          "pointer-events-none absolute z-[3] opacity-0",
+          ringInset,
+          "group-has-[[data-slot=input-group-control][aria-invalid=true]]/input-group:opacity-100",
+          "in-data-[slot=combobox-content]:opacity-0"
+        )}
+        aria-hidden
+      >
+        <PixelRectOutline
+          colorClass="bg-destructive dark:bg-destructive/90"
+          chunky={chunky}
+        />
+      </div>
+    </>
+  )
+}
+
+const inputGroupVariants = cva(
+  [
+    "group/input-group relative flex h-9 w-full min-w-0 items-center border-foreground bg-input/30 !p-0 outline-none transition-colors dark:border-ring",
+    "in-data-[slot=combobox-content]:focus-within:border-inherit in-data-[slot=combobox-content]:focus-within:ring-0",
+    "has-[[data-slot][aria-invalid=true]]:border-destructive dark:has-[[data-slot][aria-invalid=true]]:border-destructive/50",
+    "has-[>textarea]:h-auto has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col",
+    "has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3",
+    "has-[>[data-align=inline-end]]:[&>input]:pr-1.5 has-[>[data-align=inline-start]]:[&>input]:pl-1.5",
+  ],
+  {
+    variants: {
+      variant: {
+        default: "border-y-6",
+        thin: "border-y-[0.25rem]",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+)
+
+const inputGroupSideBorderVariants = cva(
+  "pointer-events-none absolute inset-0 border-foreground dark:border-ring",
+  {
+    variants: {
+      variant: {
+        default: "-mx-1.5 border-x-6",
+        thin: "-mx-[0.25rem] border-x-[0.25rem]",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+)
+
 function InputGroup({
   className,
+  variant = "default",
   children,
   ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<"div"> & VariantProps<typeof inputGroupVariants>) {
   return (
     <div
       data-slot="input-group"
       role="group"
-      className={cn(
-        "group/input-group relative flex h-9 w-full min-w-0 items-center border-y-6 border-foreground bg-input/30 !p-0 outline-none transition-colors dark:border-ring",
-        "in-data-[slot=combobox-content]:focus-within:border-inherit in-data-[slot=combobox-content]:focus-within:ring-0",
-        "has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50",
-        "has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-2 has-[[data-slot][aria-invalid=true]]:ring-destructive/25 dark:has-[[data-slot][aria-invalid=true]]:border-destructive/50 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40",
-        "has-[>textarea]:h-auto has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col",
-        "has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3",
-        "has-[>[data-align=inline-end]]:[&>input]:pr-1.5 has-[>[data-align=inline-start]]:[&>input]:pl-1.5",
-        className
-      )}
+      className={cn(inputGroupVariants({ variant }), className)}
       {...props}
     >
       {children}
       <div
-        className="pointer-events-none absolute inset-0 -mx-1.5 border-x-6 border-foreground dark:border-ring"
+        className={inputGroupSideBorderVariants({ variant })}
         aria-hidden
       />
+      <InputGroupPixelRings variant={variant ?? "default"} />
     </div>
   )
 }
@@ -74,9 +189,10 @@ function InputGroupAddon({
         if ((e.target as HTMLElement).closest("button")) {
           return
         }
-        e.currentTarget.parentElement
-          ?.querySelector("[data-slot=input-group-control]")
-          ?.focus()
+        const control = e.currentTarget.parentElement?.querySelector(
+          "[data-slot=input-group-control]"
+        )
+        ;(control as HTMLElement | null | undefined)?.focus()
       }}
       {...props}
     />

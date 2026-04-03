@@ -8,7 +8,12 @@ describe("ImageUpload", () => {
     const user = userEvent.setup()
     const onBlobsChange = vi.fn()
     render(
-      <ImageUpload blobs={[]} urls={[]} onBlobsChange={onBlobsChange} onUrlsChange={vi.fn()} />,
+      <ImageUpload
+        blobs={[]}
+        urls={[]}
+        onBlobsChange={onBlobsChange}
+        onUrlsChange={vi.fn()}
+      />
     )
 
     const bigFile = new File(["x".repeat(6 * 1024 * 1024)], "big.jpg", {
@@ -26,7 +31,12 @@ describe("ImageUpload", () => {
     const user = userEvent.setup()
     const onBlobsChange = vi.fn()
     render(
-      <ImageUpload blobs={[]} urls={[]} onBlobsChange={onBlobsChange} onUrlsChange={vi.fn()} />,
+      <ImageUpload
+        blobs={[]}
+        urls={[]}
+        onBlobsChange={onBlobsChange}
+        onUrlsChange={vi.fn()}
+      />
     )
 
     const svgFile = new File(["<svg/>"], "logo.svg", { type: "image/svg+xml" })

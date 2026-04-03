@@ -1,4 +1,9 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query"
 import client from "@/lib/api/client"
 import type { components } from "@/lib/api/schema"
 
@@ -52,11 +57,14 @@ export function useCreatePost() {
       })
       if (!response.ok) {
         const err = await response.json().catch(() => ({}))
-        throw new Error((err as { detail?: string }).detail ?? "Failed to create post")
+        throw new Error(
+          (err as { detail?: string }).detail ?? "Failed to create post"
+        )
       }
       return response.json() as Promise<components["schemas"]["PostResponse"]>
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["posts", "feed"] }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["posts", "feed"] }),
   })
 }
 
