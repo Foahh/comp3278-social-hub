@@ -53,8 +53,8 @@ function UserProfilePage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 px-4">
-      <Card>
-        <CardContent className="flex flex-col items-center gap-4 pt-6 sm:flex-row sm:gap-6">
+      <Card className="py-0">
+        <CardContent className="flex flex-col items-center gap-4 p-6 sm:flex-row sm:gap-6">
           {isOwner ? (
             <AvatarUpload
               currentUrl={profile.avatar_url}
@@ -78,7 +78,7 @@ function UserProfilePage() {
           <div className="flex-1 space-y-2 text-center sm:text-left">
             <h1 className="text-2xl font-bold">{profile.name}</h1>
             <p className="text-sm text-muted-foreground">@{profile.username}</p>
-            <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground sm:justify-start">
+            <div className="flex flex-col items-center gap-2 text-sm text-muted-foreground sm:items-start">
               <span className="flex items-center gap-1">
                 <Calendar className="size-4" />
                 Joined{" "}
@@ -86,14 +86,16 @@ function UserProfilePage() {
                   addSuffix: true,
                 })}
               </span>
-              <span className="flex items-center gap-1">
-                <FileText className="size-4" />
-                {profile.post_count} posts
-              </span>
-              <span className="flex items-center gap-1">
-                <Heart className="size-4" />
-                {profile.total_likes} likes received
-              </span>
+              <div className="flex flex-nowrap items-center justify-center gap-4 sm:justify-start">
+                <span className="flex shrink-0 items-center gap-1">
+                  <FileText className="size-4" />
+                  {profile.post_count} posts
+                </span>
+                <span className="flex shrink-0 items-center gap-1">
+                  <Heart className="size-4" />
+                  {profile.total_likes} likes received
+                </span>
+              </div>
             </div>
           </div>
         </CardContent>

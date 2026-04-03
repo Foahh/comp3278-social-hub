@@ -152,20 +152,32 @@ const AvatarImage = forwardRef<
 });
 AvatarImage.displayName = AvatarPrimitive.Image.displayName;
 
+interface BitAvatarFallbackProps
+  extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback> {
+  font?: "normal" | "retro";
+  variant?: "default" | "retro" | "pixel";
+}
+
 const AvatarFallback = forwardRef<
   React.ComponentRef<typeof AvatarPrimitive.Fallback>,
-  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>
->(({ className, ...props }, ref) => (
-  <AvatarPrimitive.Fallback
-    ref={ref}
-    data-slot="avatar-fallback"
-    className={cn(
-      "flex h-full w-full items-center justify-center rounded-full bg-muted text-foreground",
-      className
-    )}
-    {...props}
-  />
-));
+  BitAvatarFallbackProps
+>(({ className, font, variant = "retro", ...props }, ref) => {
+  const isPixel = variant === "pixel";
+  return (
+    <AvatarPrimitive.Fallback
+      ref={ref}
+      data-slot="avatar-fallback"
+      className={cn(
+        "flex h-full w-full items-center justify-center bg-muted text-foreground",
+        isPixel ? "rounded-full" : "rounded-none",
+        font !== "normal" && "retro",
+        variant === "retro" && "image-rendering-pixelated",
+        className
+      )}
+      {...props}
+    />
+  );
+});
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
 
 export { Avatar, AvatarImage, AvatarFallback };

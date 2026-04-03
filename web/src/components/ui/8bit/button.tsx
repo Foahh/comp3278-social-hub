@@ -112,7 +112,7 @@ function Button({
     <ShadcnButton
       {...rest}
       className={cn(
-        "relative inline-flex items-center justify-center gap-1.5 rounded-none border-none transition-transform active:translate-y-1",
+        "relative inline-flex items-center justify-center gap-1.5 rounded-none border-none transition-transform hover:rounded-none focus-visible:rounded-none aria-expanded:rounded-none data-[state=open]:rounded-none active:translate-y-1",
         size === "icon" && "mx-1 my-0",
         font !== "normal" && "retro",
         className
