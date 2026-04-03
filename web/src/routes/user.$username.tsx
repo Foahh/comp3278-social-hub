@@ -26,7 +26,7 @@ function UserProfilePage() {
   const { data: profile, isLoading, isError } = useUserProfile(username)
   const updateAvatar = useUpdateAvatar(username)
   const [avatarError, setAvatarError] = useState<string | null>(null)
-  const feed = useFeed("latest")
+  const feed = useFeed("latest", username)
   const isOwner = currentUser?.username === username
 
   if (isLoading) {

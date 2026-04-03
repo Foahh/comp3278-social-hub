@@ -702,6 +702,7 @@ export interface operations {
       query?: {
         sort?: components["schemas"]["FeedSort"]
         cursor?: number | null
+        username?: string | null
       }
       header?: never
       path?: never

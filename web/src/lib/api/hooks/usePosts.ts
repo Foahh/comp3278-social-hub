@@ -9,14 +9,20 @@ import type { components } from "@/lib/api/schema"
 
 type FeedSort = components["schemas"]["FeedSort"]
 
-export function useFeed(sort: FeedSort) {
+export function useFeed(sort: FeedSort, filterUsername?: string | null) {
   return useInfiniteQuery({
-    queryKey: ["posts", "feed", sort],
+    queryKey:
+      filterUsername != null && filterUsername !== ""
+        ? ["posts", "feed", sort, filterUsername]
+        : ["posts", "feed", sort],
     queryFn: async ({ pageParam }) => {
       const { data, error } = await client.GET("/api/posts", {
         params: {
           query: {
             sort,
+            ...(filterUsername != null && filterUsername !== ""
+              ? { username: filterUsername }
+              : {}),
             ...(pageParam != null ? { cursor: pageParam as number } : {}),
           },
         },

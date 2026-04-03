@@ -74,6 +74,21 @@ async def test_list_posts_latest_with_cursor(mock_conn):
 
 
 @pytest.mark.asyncio
+async def test_list_posts_latest_for_user_no_cursor(mock_conn):
+    from app.core import queries
+
+    conn, cursor = mock_conn
+    cursor.fetchall = AsyncMock(return_value=[{"post_id": 2, "user_id": 1}])
+
+    result = await queries.list_posts_latest_for_user(conn, 1, None, APP_CONSTANTS.feed_page_size)
+
+    assert len(result) == 1
+    call_args = cursor.execute.call_args
+    assert "p.user_id = %s" in call_args[0][0]
+    assert 1 in call_args[0][1]
+
+
+@pytest.mark.asyncio
 async def test_get_like_found(mock_conn):
     from app.core import queries
 

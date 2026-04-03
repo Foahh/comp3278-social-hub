@@ -94,6 +94,55 @@ async def list_posts_popular(
         return await cur.fetchall()
 
 
+async def list_posts_latest_for_user(
+    conn: aiomysql.Connection, user_id: int, cursor: int | None, limit: int
+) -> list[dict]:
+    async with conn.cursor(aiomysql.DictCursor) as cur:
+        if cursor is not None:
+            await cur.execute(
+                "SELECT p.*, u.username, u.name, u.avatar_key FROM posts p "
+                "JOIN users u ON p.user_id = u.user_id "
+                "WHERE p.user_id = %s AND p.post_id < %s "
+                "ORDER BY p.post_id DESC LIMIT %s",
+                (user_id, cursor, limit),
+            )
+        else:
+            await cur.execute(
+                "SELECT p.*, u.username, u.name, u.avatar_key FROM posts p "
+                "JOIN users u ON p.user_id = u.user_id "
+                "WHERE p.user_id = %s ORDER BY p.post_id DESC LIMIT %s",
+                (user_id, limit),
+            )
+        return await cur.fetchall()
+
+
+async def list_posts_popular_for_user(
+    conn: aiomysql.Connection,
+    user_id: int,
+    cursor_likes: int | None,
+    cursor_id: int | None,
+    limit: int,
+) -> list[dict]:
+    async with conn.cursor(aiomysql.DictCursor) as cur:
+        if cursor_likes is not None and cursor_id is not None:
+            await cur.execute(
+                "SELECT p.*, u.username, u.name, u.avatar_key FROM posts p "
+                "JOIN users u ON p.user_id = u.user_id "
+                "WHERE p.user_id = %s AND (p.like_count, p.post_id) < (%s, %s) "
+                "ORDER BY p.like_count DESC, p.post_id DESC LIMIT %s",
+                (user_id, cursor_likes, cursor_id, limit),
+            )
+        else:
+            await cur.execute(
+                "SELECT p.*, u.username, u.name, u.avatar_key FROM posts p "
+                "JOIN users u ON p.user_id = u.user_id "
+                "WHERE p.user_id = %s "
+                "ORDER BY p.like_count DESC, p.post_id DESC LIMIT %s",
+                (user_id, limit),
+            )
+        return await cur.fetchall()
+
+
 async def insert_post(conn: aiomysql.Connection, user_id: int, text_content: str | None) -> int:
     async with conn.cursor() as cur:
         await cur.execute(

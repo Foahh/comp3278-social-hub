@@ -9,6 +9,7 @@ from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Upload
 from app.core import auth, db, queries, s3
 from app.core.constants import APP_CONSTANTS
 from app.exceptions import ForbiddenError, NotFoundError
+from app.schemas.auth import UsernameStr
 from app.schemas.post import (
     FeedSort,
     ImageInput,
@@ -61,11 +62,23 @@ async def _build_post_response(conn, row: dict, current_user_id: int | None) -> 
 async def list_posts(
     sort: Annotated[FeedSort, Query()] = FeedSort.latest,
     cursor: int | None = Query(None),
+    username: UsernameStr | None = Query(None),
     current_user_id: int | None = Depends(auth.get_optional_user),
 ) -> PostListResponse:
     async with db.get_conn() as conn:
+        user_row = await queries.get_user_by_username(conn, username) if username else None
+        if username and user_row is None:
+            return PostListResponse(posts=[], next_cursor=None)
+
+        user_id = user_row["user_id"] if user_row else None
+
         if sort == FeedSort.latest:
-            rows = await queries.list_posts_latest(conn, cursor, APP_CONSTANTS.feed_page_size)
+            if user_id is not None:
+                rows = await queries.list_posts_latest_for_user(
+                    conn, user_id, cursor, APP_CONSTANTS.feed_page_size
+                )
+            else:
+                rows = await queries.list_posts_latest(conn, cursor, APP_CONSTANTS.feed_page_size)
         else:
             cursor_likes: int | None = None
             cursor_id: int | None = None
@@ -74,9 +87,14 @@ async def list_posts(
                 if last_post:
                     cursor_likes = last_post["like_count"]
                     cursor_id = last_post["post_id"]
-            rows = await queries.list_posts_popular(
-                conn, cursor_likes, cursor_id, APP_CONSTANTS.feed_page_size
-            )
+            if user_id is not None:
+                rows = await queries.list_posts_popular_for_user(
+                    conn, user_id, cursor_likes, cursor_id, APP_CONSTANTS.feed_page_size
+                )
+            else:
+                rows = await queries.list_posts_popular(
+                    conn, cursor_likes, cursor_id, APP_CONSTANTS.feed_page_size
+                )
 
         posts = []
         for row in rows:

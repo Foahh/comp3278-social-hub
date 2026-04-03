@@ -82,6 +82,53 @@ async def test_list_posts_returns_next_cursor(client):
 
 
 @pytest.mark.asyncio
+async def test_list_posts_filter_by_username(client):
+    post = make_post_row(post_id=3, user_id=7)
+    with (
+        patch("app.routers.posts.queries") as mock_q,
+        patch("app.routers.posts.db") as mock_db,
+        patch("app.routers.posts.s3"),
+    ):
+        mock_conn = AsyncMock()
+        mock_db.get_conn.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
+        mock_db.get_conn.return_value.__aexit__ = AsyncMock(return_value=False)
+        mock_q.get_user_by_username = AsyncMock(return_value={"user_id": 7, "username": "bob"})
+        mock_q.list_posts_latest_for_user = AsyncMock(return_value=[post])
+        mock_q.get_images_for_post = AsyncMock(return_value=[])
+        mock_q.get_like = AsyncMock(return_value=None)
+
+        resp = await client.get("/api/posts?sort=latest&username=bob")
+
+    assert resp.status_code == 200
+    data = resp.json()
+    assert len(data["posts"]) == 1
+    assert data["posts"][0]["post_id"] == 3
+    mock_q.list_posts_latest_for_user.assert_awaited_once()
+    mock_q.list_posts_latest.assert_not_called()
+
+
+@pytest.mark.asyncio
+async def test_list_posts_unknown_username_returns_empty(client):
+    with (
+        patch("app.routers.posts.queries") as mock_q,
+        patch("app.routers.posts.db") as mock_db,
+        patch("app.routers.posts.s3"),
+    ):
+        mock_conn = AsyncMock()
+        mock_db.get_conn.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
+        mock_db.get_conn.return_value.__aexit__ = AsyncMock(return_value=False)
+        mock_q.get_user_by_username = AsyncMock(return_value=None)
+
+        resp = await client.get("/api/posts?sort=latest&username=nobody-here")
+
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["posts"] == []
+    assert data["next_cursor"] is None
+    mock_q.list_posts_latest.assert_not_called()
+
+
+@pytest.mark.asyncio
 async def test_get_single_post(client):
     post = make_post_row(post_id=5)
     with (
