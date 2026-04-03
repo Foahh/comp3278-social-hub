@@ -182,6 +182,20 @@ async def insert_comment(
         return cur.lastrowid
 
 
+async def recompute_post_engagement_counts(conn: aiomysql.Connection) -> None:
+    """Set posts.like_count and posts.comment_count from likes/comments tables."""
+    async with conn.cursor() as cur:
+        await cur.execute(
+            "UPDATE posts p "
+            "LEFT JOIN (SELECT post_id, COUNT(*) AS cnt FROM likes GROUP BY post_id) lk "
+            "ON lk.post_id = p.post_id "
+            "LEFT JOIN (SELECT post_id, COUNT(*) AS cnt FROM comments GROUP BY post_id) cm "
+            "ON cm.post_id = p.post_id "
+            "SET p.like_count = COALESCE(lk.cnt, 0), "
+            "p.comment_count = COALESCE(cm.cnt, 0)"
+        )
+
+
 # --- Users profile (aggregated) ---
 
 

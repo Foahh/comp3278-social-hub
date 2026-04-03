@@ -3,3 +3,6 @@ line-length = 100
 
 [lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "ASYNC"]
+
+[lint.per-file-ignores]
+"scripts/seed.py" = ["E402"]
