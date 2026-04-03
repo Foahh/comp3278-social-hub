@@ -1,10 +1,10 @@
 import { Link } from "@tanstack/react-router"
+import { CommandIcon } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
 import { Separator } from "@/components/ui/separator"
-import { NavData, CommandIcon } from "@/lib/navigation"
+import { NavData } from "@/lib/navigation"
 
 export function SiteHeader({ title = "Documents" }: { title?: string }) {
   return (
@@ -23,7 +23,6 @@ export function SiteHeader({ title = "Documents" }: { title?: string }) {
         </h1>
         <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
           <NavMain items={NavData.navMain} />
-          <NavSecondary items={NavData.navSecondary} />
           <NavUser
             user={{
               name: "John Doe",

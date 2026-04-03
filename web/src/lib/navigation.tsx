@@ -1,30 +1,13 @@
-import { CommandIcon, LayoutDashboardIcon } from "lucide-react"
+import { Rss } from "lucide-react"
 import type { ReactNode } from "react"
-import type { FileRoutesByPath } from "@tanstack/react-router"
+import type { FileRoutesByTo } from "@/routeTree.gen"
 
-export type AppRouteTo = keyof FileRoutesByPath
+export type AppRouteTo = keyof FileRoutesByTo
 
-export type NavDestination = { to: AppRouteTo; href?: never }
+export type NavMainItem = { title: string; icon?: ReactNode; to: AppRouteTo }
 
-export type NavMainItem = { title: string; icon?: ReactNode } & NavDestination
-
-export type NavSecondaryItem = {
-  title: string
-  icon: ReactNode
-} & NavDestination
-
-export const NavData: {
-  navMain: NavMainItem[]
-  navSecondary: NavSecondaryItem[]
-} = {
+export const NavData: { navMain: NavMainItem[] } = {
   navMain: [
-    {
-      title: "Home",
-      to: "/",
-      icon: <LayoutDashboardIcon />,
-    },
+    { title: "Home", to: "/", icon: <Rss className="size-4" /> },
   ],
-  navSecondary: [],
 }
-
-export { CommandIcon }

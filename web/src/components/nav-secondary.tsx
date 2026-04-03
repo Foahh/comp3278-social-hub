@@ -2,7 +2,10 @@
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import type { NavSecondaryItem } from "@/lib/navigation"
+import type { AppRouteTo } from "@/lib/navigation"
+import type { ReactNode } from "react"
+
+type NavSecondaryItem = { title: string; icon: ReactNode; to: AppRouteTo }
 import { Link } from "@tanstack/react-router"
 
 export function NavSecondary({
