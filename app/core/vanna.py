@@ -5,9 +5,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 
-import chromadb
 import jwt
-from chromadb.config import Settings as ChromaSettings
 from vanna import Agent, AgentConfig
 from vanna.core.registry import ToolRegistry
 from vanna.core.user.models import User
@@ -32,38 +30,6 @@ VANNA_FS_ROOT = ".vanna"
 
 _agent: Agent | None = None
 _memory: ChromaAgentMemory | None = None
-
-
-class HttpChromaAgentMemory(ChromaAgentMemory):
-    """ChromaAgentMemory using only Chroma's HTTP API (no local persist directory)."""
-
-    def __init__(
-        self,
-        *,
-        host: str,
-        port: int = 8000,
-        ssl: bool = False,
-        collection_name: str = "socialhub_memory",
-        embedding_function=None,
-    ) -> None:
-        super().__init__(
-            persist_directory="",
-            collection_name=collection_name,
-            embedding_function=embedding_function,
-        )
-        self._http_host = host
-        self._http_port = port
-        self._http_ssl = ssl
-
-    def _get_client(self):
-        if self._client is None:
-            self._client = chromadb.HttpClient(
-                host=self._http_host,
-                port=self._http_port,
-                ssl=self._http_ssl,
-                settings=ChromaSettings(anonymized_telemetry=False),
-            )
-        return self._client
 
 
 class JwtUserResolver(UserResolver):
@@ -134,15 +100,10 @@ def init_vanna() -> Agent:
         port=settings.mysql_port,
     )
 
-    chroma_host = settings.chroma_host.strip()
-    if not chroma_host:
-        raise RuntimeError(
-            "CHROMA_HOST is required when OPENAI_API_KEY is set (Chroma HTTP API only)."
-        )
-    _memory = HttpChromaAgentMemory(
-        host=chroma_host,
-        port=settings.chroma_port,
-        ssl=settings.chroma_ssl,
+    persist = Path(settings.chroma_persist_directory).expanduser().resolve()
+    persist.mkdir(parents=True, exist_ok=True)
+    _memory = ChromaAgentMemory(
+        persist_directory=str(persist),
         collection_name="socialhub_memory",
     )
 
@@ -171,7 +132,7 @@ def init_vanna() -> Agent:
 
 
 async def seed_memory() -> None:
-    """Upsert bootstrap DDL and training pairs; stable ids avoid duplicates on shared Chroma."""
+    """Upsert bootstrap DDL and training pairs; stable ids avoid duplicates across restarts."""
     assert _memory is not None
     ts = datetime.now().isoformat()
 

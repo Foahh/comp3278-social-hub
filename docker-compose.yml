@@ -32,19 +32,6 @@ services:
       timeout: 5s
       retries: 5
 
-  chroma:
-    image: chromadb/chroma:latest
-    ports:
-      - "8001:8000"
-    volumes:
-      - chroma_data:/data
-    healthcheck:
-      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8000"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 15s
-
   backend:
     profiles: ["deploy"]
     build:
@@ -63,16 +50,15 @@ services:
       S3_SECRET_KEY: minioadmin
       S3_BUCKET: social-media
       JWT_SECRET: dev-secret-change-in-prod
-      CHROMA_HOST: chroma
-      CHROMA_PORT: "8000"
+      CHROMA_PERSIST_DIRECTORY: /app/chroma_data
+    volumes:
+      - chroma_data:/app/chroma_data
     expose:
       - "8000"
     depends_on:
       mysql:
         condition: service_healthy
       minio:
-        condition: service_healthy
-      chroma:
         condition: service_healthy
 
   caddy:

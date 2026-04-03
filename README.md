@@ -6,7 +6,7 @@ Install these first:
 
 - **uv** — manages the Python environment and runs commands
 - **Bun.js** — needed for the `web/` frontend
-- **Docker + Docker Compose** — runs MySQL, MinIO, Chroma, and optional full deployment
+- **Docker + Docker Compose** — runs MySQL, MinIO, and optional full deployment
 
 ---
 
@@ -26,7 +26,6 @@ Install these first:
 - Services run on:
   - MySQL: `localhost:3306`
   - MinIO: `localhost:9000`
-  - Chroma: `localhost:8001` on host → `8000` in container
 
 Important environment variables:
 
@@ -34,7 +33,7 @@ Important environment variables:
 - **MinIO / S3**: `S3_ENDPOINT_URL`, `S3_PUBLIC_URL`, `S3_*`
 - **Auth**: `JWT_SECRET`
 - **OpenAI / Vanna features**: `OPENAI_API_KEY`, `OPENAI_MODEL`, `OPENAI_BASE_URL`
-- **Chroma**: `CHROMA_HOST`, `CHROMA_PORT`
+- **Chroma (Vanna memory)**: `CHROMA_PERSIST_DIRECTORY` — on-disk path for embedded ChromaDB (default `chroma_data`; ignored by git)
 - **CORS**: `CORS_ORIGINS` (example: `["http://localhost:5173"]`)
 
 ---
@@ -49,7 +48,7 @@ Run the supporting services:
 docker compose up
 ```
 
-This starts MySQL, MinIO, and Chroma.
+This starts MySQL and MinIO.
 
 Useful URLs:
 

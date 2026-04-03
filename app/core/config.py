@@ -2,7 +2,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
 
     # MySQL
     mysql_host: str = "localhost"
@@ -27,9 +31,7 @@ class Settings(BaseSettings):
     openai_model: str = ""
     openai_base_url: str = ""
     openai_organization: str = ""
-    chroma_host: str = ""
-    chroma_port: int = 8000
-    chroma_ssl: bool = False
+    chroma_persist_directory: str = ".chroma"
 
     # App
     cors_origins: list[str] = ["http://localhost:5173"]
