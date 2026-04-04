@@ -8,6 +8,7 @@ import client from "@/lib/api/client"
 import type { components } from "@/lib/api/schema"
 
 type FeedSort = components["schemas"]["FeedSort"]
+type FeedPageParam = { cursor: number; cursor_likes?: number } | undefined
 
 export function useFeed(sort: FeedSort, filterUsername?: string | null) {
   return useInfiniteQuery({
@@ -15,7 +16,7 @@ export function useFeed(sort: FeedSort, filterUsername?: string | null) {
       filterUsername != null && filterUsername !== ""
         ? ["posts", "feed", sort, filterUsername]
         : ["posts", "feed", sort],
-    queryFn: async ({ pageParam }) => {
+    queryFn: async ({ pageParam }: { pageParam: FeedPageParam }) => {
       const { data, error } = await client.GET("/api/posts", {
         params: {
           query: {
@@ -23,15 +24,26 @@ export function useFeed(sort: FeedSort, filterUsername?: string | null) {
             ...(filterUsername != null && filterUsername !== ""
               ? { username: filterUsername }
               : {}),
-            ...(pageParam != null ? { cursor: pageParam as number } : {}),
+            ...(pageParam != null ? { cursor: pageParam.cursor } : {}),
+            ...(pageParam?.cursor_likes != null
+              ? { cursor_likes: pageParam.cursor_likes }
+              : {}),
           },
         },
       })
       if (error) throw new Error("Failed to fetch feed")
       return data!
     },
-    initialPageParam: undefined as number | undefined,
-    getNextPageParam: (lastPage) => lastPage.next_cursor ?? undefined,
+    initialPageParam: undefined as FeedPageParam,
+    getNextPageParam: (lastPage) =>
+      lastPage.next_cursor != null
+        ? {
+            cursor: lastPage.next_cursor,
+            ...(lastPage.next_cursor_likes != null
+              ? { cursor_likes: lastPage.next_cursor_likes }
+              : {}),
+          }
+        : undefined,
     staleTime: 1000 * 15,
   })
 }

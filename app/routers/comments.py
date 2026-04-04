@@ -1,14 +1,17 @@
 from datetime import UTC, datetime
+from typing import Annotated
 
 import structlog
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 
 from app.core import auth, db, queries, s3
 from app.exceptions import NotFoundError
-from app.schemas.comment import CommentResponse, CreateCommentRequest
+from app.schemas.comment import CommentListResponse, CommentResponse, CreateCommentRequest
 
 router = APIRouter()
 log = structlog.get_logger()
+
+_COMMENT_PAGE_SIZE = 50
 
 
 async def _build_comment_response(
@@ -29,10 +32,14 @@ async def _build_comment_response(
     )
 
 
-@router.get("/{post_id}/comments", response_model=list[CommentResponse])
-async def list_comments(post_id: int) -> list[CommentResponse]:
+@router.get("/{post_id}/comments", response_model=CommentListResponse)
+async def list_comments(
+    post_id: int,
+    cursor: int | None = Query(None),
+    limit: Annotated[int, Query(ge=1, le=100)] = _COMMENT_PAGE_SIZE,
+) -> CommentListResponse:
     async with db.get_conn() as conn:
-        rows = await queries.list_comments(conn, post_id)
+        rows = await queries.list_comments(conn, post_id, cursor, limit)
     result = []
     for row in rows:
         avatar_url = None
@@ -49,7 +56,8 @@ async def list_comments(post_id: int) -> list[CommentResponse]:
                 created_at=row["created_at"],
             )
         )
-    return result
+    next_cursor = rows[-1]["comment_id"] if len(rows) == limit else None
+    return CommentListResponse(comments=result, next_cursor=next_cursor)
 
 
 @router.post("/{post_id}/comments", response_model=CommentResponse)

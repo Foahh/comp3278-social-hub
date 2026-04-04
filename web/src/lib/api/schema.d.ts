@@ -509,12 +509,21 @@ export interface components {
       /** Password */
       password: string
     }
+    /** CommentListResponse */
+    CommentListResponse: {
+      /** Comments */
+      comments: components["schemas"]["CommentResponse"][]
+      /** Next Cursor */
+      next_cursor: number | null
+    }
     /** PostListResponse */
     PostListResponse: {
       /** Posts */
       posts: components["schemas"]["PostResponse"][]
       /** Next Cursor */
       next_cursor: number | null
+      /** Next Cursor Likes */
+      next_cursor_likes: number | null
     }
     /** PostResponse */
     PostResponse: {
@@ -804,6 +813,7 @@ export interface operations {
       query?: {
         sort?: components["schemas"]["FeedSort"]
         cursor?: number | null
+        cursor_likes?: number | null
         username?: string | null
       }
       header?: never
@@ -962,7 +972,10 @@ export interface operations {
   }
   list_comments_api_posts__post_id__comments_get: {
     parameters: {
-      query?: never
+      query?: {
+        cursor?: number | null
+        limit?: number | null
+      }
       header?: never
       path: {
         post_id: number
@@ -977,7 +990,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          "application/json": components["schemas"]["CommentResponse"][]
+          "application/json": components["schemas"]["CommentListResponse"]
         }
       }
       /** @description Validation Error */

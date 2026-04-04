@@ -1,23 +1,34 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import client from "@/lib/api/client"
 import type { components } from "@/lib/api/schema"
 
 type CommentResponse = components["schemas"]["CommentResponse"]
+type CommentListResponse = components["schemas"]["CommentListResponse"]
 type CreateCommentRequest = components["schemas"]["CreateCommentRequest"]
 
+const COMMENT_LIMIT = 50
+
 export function useComments(postId: number) {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ["comments", postId],
-    queryFn: async () => {
+    queryFn: async ({ pageParam }: { pageParam: number | undefined }) => {
       const { data, error } = await client.GET(
         "/api/posts/{post_id}/comments",
         {
-          params: { path: { post_id: postId } },
+          params: {
+            path: { post_id: postId },
+            query: {
+              limit: COMMENT_LIMIT,
+              ...(pageParam != null ? { cursor: pageParam } : {}),
+            },
+          },
         }
       )
       if (error) throw new Error("Failed to fetch comments")
       return data!
     },
+    initialPageParam: undefined as number | undefined,
+    getNextPageParam: (lastPage) => lastPage.next_cursor ?? undefined,
   })
 }
 
@@ -38,9 +49,19 @@ export function useCreateComment(postId: number) {
         )
       return data!
     },
-    onSuccess: (newComment) => {
-      queryClient.setQueryData<CommentResponse[]>(["comments", postId], (old) =>
-        old ? [...old, newComment] : [newComment]
+    onSuccess: (newComment: CommentResponse) => {
+      queryClient.setQueryData<{ pages: CommentListResponse[] }>(
+        ["comments", postId],
+        (old) => {
+          if (!old) return { pages: [{ comments: [newComment], next_cursor: null }], pageParams: [undefined] }
+          const pages = [...old.pages]
+          const last = pages[pages.length - 1]
+          pages[pages.length - 1] = {
+            ...last,
+            comments: [...last.comments, newComment],
+          }
+          return { ...old, pages }
+        }
       )
       queryClient.setQueryData<components["schemas"]["PostResponse"]>(
         ["posts", postId],

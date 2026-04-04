@@ -22,11 +22,12 @@ async def toggle_like(
         if existing:
             await queries.delete_like(conn, current_user_id, post_id)
             liked = False
-            like_count = post["like_count"] - 1
         else:
             await queries.insert_like(conn, current_user_id, post_id)
             liked = True
-            like_count = post["like_count"] + 1
+
+    async with db.get_conn() as conn:
+        like_count = await queries.get_post_like_count(conn, post_id)
 
     log.info("like_toggled", post_id=post_id, user_id=current_user_id, liked=liked)
-    return LikeToggleResponse(liked=liked, like_count=max(0, like_count))
+    return LikeToggleResponse(liked=liked, like_count=like_count)

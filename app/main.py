@@ -35,7 +35,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     )
 
     log.info("initializing S3")
-    s3.init_s3()
+    await s3.init_s3()
     await s3.ensure_bucket()
 
     if settings.openai_api_key:
@@ -50,6 +50,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
 
     log.info("shutting down")
     await db.close_pool()
+    await s3.close_s3()
 
 
 app = FastAPI(title="SocialHub API", lifespan=lifespan)

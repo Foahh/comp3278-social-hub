@@ -38,3 +38,4 @@ class PostResponse(BaseModel):
 class PostListResponse(BaseModel):
     posts: list[PostResponse]
     next_cursor: int | None
+    next_cursor_likes: int | None

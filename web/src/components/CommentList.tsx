@@ -17,10 +17,18 @@ export function CommentList({
   commentCount?: number
 }) {
   const { user } = useAuth()
-  const { data: comments, isLoading } = useComments(postId)
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useComments(postId)
   const create = useCreateComment(postId)
   const [text, setText] = useState("")
   const [error, setError] = useState<string | null>(null)
+
+  const comments = data?.pages.flatMap((p) => p.comments) ?? []
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -57,13 +65,25 @@ export function CommentList({
         </div>
       )}
 
-      {!isLoading &&
-        comments?.map((c) => <CommentItem key={c.comment_id} comment={c} />)}
+      {!isLoading && comments.map((c) => <CommentItem key={c.comment_id} comment={c} />)}
 
-      {!isLoading && comments?.length === 0 && (
+      {!isLoading && comments.length === 0 && (
         <p className="py-4 text-center text-sm text-muted-foreground">
           No comments yet. Be the first to join the conversation.
         </p>
+      )}
+
+      {hasNextPage && (
+        <div className="mt-4 flex justify-center">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
+          >
+            {isFetchingNextPage ? "Loading…" : "Load more comments"}
+          </Button>
+        </div>
       )}
 
       {user && (

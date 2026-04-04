@@ -61,13 +61,14 @@ async def _build_post_response(conn, row: dict, current_user_id: int | None) -> 
 async def list_posts(
     sort: Annotated[FeedSort, Query()] = FeedSort.latest,
     cursor: int | None = Query(None),
+    cursor_likes: int | None = Query(None),
     username: UsernameStr | None = Query(None),
     current_user_id: int | None = Depends(auth.get_optional_user),
 ) -> PostListResponse:
     async with db.get_conn() as conn:
         user_row = await queries.get_user_by_username(conn, username) if username else None
         if username and user_row is None:
-            return PostListResponse(posts=[], next_cursor=None)
+            return PostListResponse(posts=[], next_cursor=None, next_cursor_likes=None)
 
         user_id = user_row["user_id"] if user_row else None
 
@@ -79,31 +80,71 @@ async def list_posts(
             else:
                 rows = await queries.list_posts_latest(conn, cursor, APP_CONSTANTS.feed_page_size)
         else:
-            cursor_likes: int | None = None
-            cursor_id: int | None = None
-            if cursor is not None:
+            cl = cursor_likes
+            ci = cursor
+            if cursor is not None and cl is None:
                 last_post = await queries.get_post(conn, cursor)
                 if last_post:
-                    cursor_likes = last_post["like_count"]
-                    cursor_id = last_post["post_id"]
+                    cl = last_post["like_count"]
+                    ci = last_post["post_id"]
             if user_id is not None:
                 rows = await queries.list_posts_popular_for_user(
-                    conn, user_id, cursor_likes, cursor_id, APP_CONSTANTS.feed_page_size
+                    conn, user_id, cl, ci, APP_CONSTANTS.feed_page_size
                 )
             else:
                 rows = await queries.list_posts_popular(
-                    conn, cursor_likes, cursor_id, APP_CONSTANTS.feed_page_size
+                    conn, cl, ci, APP_CONSTANTS.feed_page_size
                 )
+
+        if rows:
+            post_ids = [row["post_id"] for row in rows]
+            images_by_post = await queries.get_images_for_posts(conn, post_ids)
+            liked_ids: set[int] = set()
+            if current_user_id is not None:
+                liked_ids = await queries.get_liked_post_ids(conn, current_user_id, post_ids)
+        else:
+            images_by_post = {}
+            liked_ids = set()
 
         posts = []
         for row in rows:
-            posts.append(await _build_post_response(conn, row, current_user_id))
+            pid = row["post_id"]
+            images = []
+            for img_row in images_by_post.get(pid, []):
+                url = await s3.resolve_avatar_url(img_row["value"])
+                if url:
+                    images.append(
+                        ImageResponse(
+                            image_id=img_row["image_id"], url=url, position=img_row["position"]
+                        )
+                    )
+            avatar_url = None
+            if row.get("avatar_key"):
+                avatar_url = await s3.resolve_avatar_url(row["avatar_key"])
+            posts.append(
+                PostResponse(
+                    post_id=row["post_id"],
+                    user_id=row["user_id"],
+                    username=row["username"],
+                    name=row["name"],
+                    avatar_url=avatar_url,
+                    text_content=row.get("text_content"),
+                    images=images,
+                    like_count=row["like_count"],
+                    comment_count=row["comment_count"],
+                    liked_by_me=pid in liked_ids,
+                    created_at=row["created_at"],
+                )
+            )
 
     next_cursor: int | None = None
+    next_cursor_likes: int | None = None
     if len(rows) == APP_CONSTANTS.feed_page_size:
         next_cursor = rows[-1]["post_id"]
+        if sort == FeedSort.popular:
+            next_cursor_likes = rows[-1]["like_count"]
 
-    return PostListResponse(posts=posts, next_cursor=next_cursor)
+    return PostListResponse(posts=posts, next_cursor=next_cursor, next_cursor_likes=next_cursor_likes)
 
 
 @router.post("", response_model=PostResponse)

@@ -168,6 +168,49 @@ async def get_images_for_post(conn: aiomysql.Connection, post_id: int) -> list[d
         return await cur.fetchall()
 
 
+async def get_images_for_posts(
+    conn: aiomysql.Connection, post_ids: list[int]
+) -> dict[int, list[dict]]:
+    """Batch fetch images for multiple posts. Returns dict keyed by post_id."""
+    if not post_ids:
+        return {}
+    placeholders = ",".join(["%s"] * len(post_ids))
+    async with conn.cursor(aiomysql.DictCursor) as cur:
+        await cur.execute(
+            f"SELECT * FROM images WHERE post_id IN ({placeholders}) ORDER BY post_id ASC, position ASC",
+            post_ids,
+        )
+        rows = await cur.fetchall()
+    result: dict[int, list[dict]] = {pid: [] for pid in post_ids}
+    for row in rows:
+        result[row["post_id"]].append(row)
+    return result
+
+
+async def get_liked_post_ids(
+    conn: aiomysql.Connection, user_id: int, post_ids: list[int]
+) -> set[int]:
+    """Batch check which posts in post_ids are liked by user_id."""
+    if not post_ids:
+        return set()
+    placeholders = ",".join(["%s"] * len(post_ids))
+    async with conn.cursor() as cur:
+        await cur.execute(
+            f"SELECT post_id FROM likes WHERE user_id = %s AND post_id IN ({placeholders})",
+            [user_id, *post_ids],
+        )
+        rows = await cur.fetchall()
+    return {row[0] for row in rows}
+
+
+async def get_post_like_count(conn: aiomysql.Connection, post_id: int) -> int:
+    """Fetch the current like_count for a post."""
+    async with conn.cursor() as cur:
+        await cur.execute("SELECT like_count FROM posts WHERE post_id = %s", (post_id,))
+        row = await cur.fetchone()
+    return row[0] if row else 0
+
+
 async def insert_image(
     conn: aiomysql.Connection, post_id: int, value: str, position: int
 ) -> None:
@@ -206,14 +249,24 @@ async def delete_like(conn: aiomysql.Connection, user_id: int, post_id: int) -> 
 # --- Comments ---
 
 
-async def list_comments(conn: aiomysql.Connection, post_id: int) -> list[dict]:
+async def list_comments(
+    conn: aiomysql.Connection, post_id: int, cursor: int | None, limit: int
+) -> list[dict]:
     async with conn.cursor(aiomysql.DictCursor) as cur:
-        await cur.execute(
-            "SELECT c.*, u.username, u.name, u.avatar_key FROM comments c "
-            "JOIN users u ON c.user_id = u.user_id "
-            "WHERE c.post_id = %s ORDER BY c.created_at ASC",
-            (post_id,),
-        )
+        if cursor is not None:
+            await cur.execute(
+                "SELECT c.*, u.username, u.name, u.avatar_key FROM comments c "
+                "JOIN users u ON c.user_id = u.user_id "
+                "WHERE c.post_id = %s AND c.comment_id > %s ORDER BY c.comment_id ASC LIMIT %s",
+                (post_id, cursor, limit),
+            )
+        else:
+            await cur.execute(
+                "SELECT c.*, u.username, u.name, u.avatar_key FROM comments c "
+                "JOIN users u ON c.user_id = u.user_id "
+                "WHERE c.post_id = %s ORDER BY c.comment_id ASC LIMIT %s",
+                (post_id, limit),
+            )
         return await cur.fetchall()
 
 

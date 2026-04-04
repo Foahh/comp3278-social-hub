@@ -1,42 +1,46 @@
-from collections.abc import AsyncGenerator
-from contextlib import asynccontextmanager
+from typing import Any
 
 import aioboto3
 from botocore.config import Config as BotoConfig
 
 _session: aioboto3.Session | None = None
+_s3_ctx: Any | None = None
+_s3_client: Any | None = None
 
 
-def init_s3() -> None:
-    global _session
-    _session = aioboto3.Session()
-
-
-@asynccontextmanager
-async def _client() -> AsyncGenerator:
+async def init_s3() -> None:
+    global _session, _s3_ctx, _s3_client
     from app.core.config import settings
 
-    assert _session is not None
-    async with _session.client(
+    _session = aioboto3.Session()
+    _s3_ctx = _session.client(
         "s3",
         endpoint_url=settings.s3_endpoint_url,
         aws_access_key_id=settings.s3_access_key,
         aws_secret_access_key=settings.s3_secret_key,
         config=BotoConfig(signature_version="s3v4"),
-    ) as client:
-        yield client
+    )
+    _s3_client = await _s3_ctx.__aenter__()
+
+
+async def close_s3() -> None:
+    global _s3_ctx, _s3_client
+    if _s3_ctx is not None:
+        await _s3_ctx.__aexit__(None, None, None)
+        _s3_ctx = None
+        _s3_client = None
 
 
 async def upload_file(key: str, data: bytes, content_type: str) -> None:
     from app.core.config import settings
 
-    async with _client() as client:
-        await client.put_object(
-            Bucket=settings.s3_bucket,
-            Key=key,
-            Body=data,
-            ContentType=content_type,
-        )
+    assert _s3_client is not None
+    await _s3_client.put_object(
+        Bucket=settings.s3_bucket,
+        Key=key,
+        Body=data,
+        ContentType=content_type,
+    )
 
 
 S3_OBJECT_PREFIX = "s3://"
@@ -45,12 +49,12 @@ S3_OBJECT_PREFIX = "s3://"
 async def generate_presigned_url(key: str, expires_in: int = 3600) -> str:
     from app.core.config import settings
 
-    async with _client() as client:
-        return await client.generate_presigned_url(
-            "get_object",
-            Params={"Bucket": settings.s3_bucket, "Key": key},
-            ExpiresIn=expires_in,
-        )
+    assert _s3_client is not None
+    return await _s3_client.generate_presigned_url(
+        "get_object",
+        Params={"Bucket": settings.s3_bucket, "Key": key},
+        ExpiresIn=expires_in,
+    )
 
 
 def s3_object_key_for_avatar_delete(avatar_ref: str) -> str | None:
@@ -86,8 +90,8 @@ async def resolve_avatar_url(avatar_ref: str | None) -> str | None:
 async def delete_file(key: str) -> None:
     from app.core.config import settings
 
-    async with _client() as client:
-        await client.delete_object(Bucket=settings.s3_bucket, Key=key)
+    assert _s3_client is not None
+    await _s3_client.delete_object(Bucket=settings.s3_bucket, Key=key)
 
 
 async def ensure_bucket() -> None:
@@ -96,11 +100,11 @@ async def ensure_bucket() -> None:
 
     from app.core.config import settings
 
-    async with _client() as client:
-        try:
-            await client.head_bucket(Bucket=settings.s3_bucket)
-        except ClientError as e:
-            if e.response["Error"]["Code"] in ("404", "NoSuchBucket"):
-                await client.create_bucket(Bucket=settings.s3_bucket)
-            else:
-                raise
+    assert _s3_client is not None
+    try:
+        await _s3_client.head_bucket(Bucket=settings.s3_bucket)
+    except ClientError as e:
+        if e.response["Error"]["Code"] in ("404", "NoSuchBucket"):
+            await _s3_client.create_bucket(Bucket=settings.s3_bucket)
+        else:
+            raise

@@ -17,3 +17,8 @@ class CommentResponse(BaseModel):
     avatar_url: str | None
     content: str
     created_at: datetime
+
+
+class CommentListResponse(BaseModel):
+    comments: list[CommentResponse]
+    next_cursor: int | None
