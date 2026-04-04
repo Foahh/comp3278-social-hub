@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { Link } from "@tanstack/react-router"
 import { formatDistanceToNow } from "date-fns"
 import { ChevronLeft, ChevronRight } from "pixelarticons/react"
@@ -68,7 +68,9 @@ function PostCarouselImage({
       <div
         className={cn(
           carouselImageFrame,
-          "relative flex min-h-48 w-max max-w-full min-w-[12rem] items-center justify-center"
+          "relative flex min-h-48 w-max max-w-full items-center justify-center",
+          // Avoid wider frame than the image once loaded; min width only stabilizes the spinner slot.
+          !loaded && "min-w-[12rem]"
         )}
       >
         {!loaded && (
@@ -153,6 +155,71 @@ function PostImagesCarousel({
     api?.reInit()
   }, [api])
 
+  const progressBarRef = useRef<HTMLDivElement>(null)
+  const isDraggingRef = useRef(false)
+  const [isDragging, setIsDragging] = useState(false)
+
+  const seekToFraction = useCallback(
+    (clientX: number) => {
+      if (!api || !progressBarRef.current) return
+      const rect = progressBarRef.current.getBoundingClientRect()
+      const fraction = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
+      const snaps = api.scrollSnapList()
+      if (snaps.length <= 1) return
+      const index = Math.round(fraction * (snaps.length - 1))
+      api.scrollTo(index)
+    },
+    [api]
+  )
+
+  const handleProgressMouseDown = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      e.preventDefault()
+      isDraggingRef.current = true
+      setIsDragging(true)
+      seekToFraction(e.clientX)
+
+      const onMouseMove = (ev: MouseEvent) => {
+        if (!isDraggingRef.current) return
+        seekToFraction(ev.clientX)
+      }
+      const onMouseUp = () => {
+        isDraggingRef.current = false
+        setIsDragging(false)
+        window.removeEventListener("mousemove", onMouseMove)
+        window.removeEventListener("mouseup", onMouseUp)
+      }
+      window.addEventListener("mousemove", onMouseMove)
+      window.addEventListener("mouseup", onMouseUp)
+    },
+    [seekToFraction]
+  )
+
+  const handleProgressTouchStart = useCallback(
+    (e: React.TouchEvent<HTMLDivElement>) => {
+      const touch = e.touches[0]
+      if (!touch) return
+      isDraggingRef.current = true
+      setIsDragging(true)
+      seekToFraction(touch.clientX)
+
+      const onTouchMove = (ev: TouchEvent) => {
+        if (!isDraggingRef.current) return
+        const t = ev.touches[0]
+        if (t) seekToFraction(t.clientX)
+      }
+      const onTouchEnd = () => {
+        isDraggingRef.current = false
+        setIsDragging(false)
+        window.removeEventListener("touchmove", onTouchMove)
+        window.removeEventListener("touchend", onTouchEnd)
+      }
+      window.addEventListener("touchmove", onTouchMove, { passive: true })
+      window.addEventListener("touchend", onTouchEnd)
+    },
+    [seekToFraction]
+  )
+
   const progressLabel =
     snapCount > 0
       ? `${Math.round(Math.max(0, Math.min(scrollProgressPercent, 100)))}%`
@@ -214,18 +281,50 @@ function PostImagesCarousel({
             <ChevronRight className="size-4" />
           </Button>
         </div>
-        <Progress
-          variant="retro"
-          value={scrollProgressPercent}
-          max={100}
-          className="h-3 min-w-0 flex-1"
+        <div
+          ref={progressBarRef}
+          className={cn(
+            "min-w-0 flex-1 touch-none select-none",
+            snapCount > 1
+              ? isDragging
+                ? "cursor-grabbing"
+                : "cursor-pointer"
+              : "cursor-default"
+          )}
+          onMouseDown={snapCount > 1 ? handleProgressMouseDown : undefined}
+          onTouchStart={snapCount > 1 ? handleProgressTouchStart : undefined}
+          role="slider"
           aria-label={
             snapCount > 0
-              ? `Carousel scroll progress, ${progressLabel}`
-              : "Carousel scroll progress"
+              ? `Carousel scroll position, ${progressLabel}`
+              : "Carousel scroll position"
           }
+          aria-valuenow={Math.round(Math.max(0, Math.min(scrollProgressPercent, 100)))}
+          aria-valuemin={0}
+          aria-valuemax={100}
           aria-valuetext={snapCount > 0 ? progressLabel : undefined}
-        />
+          tabIndex={snapCount > 1 ? 0 : undefined}
+          onKeyDown={
+            snapCount > 1
+              ? (e) => {
+                  if (e.key === "ArrowLeft") {
+                    e.preventDefault()
+                    api?.scrollPrev()
+                  } else if (e.key === "ArrowRight") {
+                    e.preventDefault()
+                    api?.scrollNext()
+                  }
+                }
+              : undefined
+          }
+        >
+          <Progress
+            variant="retro"
+            value={scrollProgressPercent}
+            max={100}
+            className="pointer-events-none h-3"
+          />
+        </div>
         <span className="w-10 shrink-0 text-right text-sm text-muted-foreground tabular-nums">
           {progressLabel}
         </span>
