@@ -669,7 +669,7 @@ export interface operations {
       }
     }
   }
-    website_config_api_config_get: {
+  website_config_api_config_get: {
     parameters: {
       query?: never
       header?: never

@@ -9,9 +9,15 @@ import "@/components/ui/8bit/styles/retro.css"
 
 export type SuggestionsProps = ComponentProps<typeof ScrollArea>
 
-export const Suggestions = ({ className, children, ...props }: SuggestionsProps) => (
+export const Suggestions = ({
+  className,
+  children,
+  ...props
+}: SuggestionsProps) => (
   <ScrollArea className="w-full overflow-x-auto whitespace-nowrap" {...props}>
-    <div className={cn("flex w-max flex-nowrap items-center gap-2", className)}>{children}</div>
+    <div className={cn("flex w-max flex-nowrap items-center gap-2", className)}>
+      {children}
+    </div>
     <ScrollBar className="hidden" orientation="horizontal" />
   </ScrollArea>
 )
@@ -60,10 +66,10 @@ export default function SuggestionDemo() {
   return (
     <div className="p-6">
       <Suggestions>
-        {suggestions.map(suggestion => (
+        {suggestions.map((suggestion) => (
           <Suggestion
             key={suggestion}
-            onClick={s => console.log("Selected:", s)}
+            onClick={(s) => console.log("Selected:", s)}
             suggestion={suggestion}
           />
         ))}
