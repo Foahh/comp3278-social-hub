@@ -13,7 +13,7 @@ from vanna.core.user.request_context import RequestContext
 from vanna.core.user.resolver import UserResolver
 from vanna.integrations.chromadb import ChromaAgentMemory
 from vanna.integrations.local import LocalFileSystem
-from vanna.integrations.mysql import MySQLRunner
+from app.core.async_mysql_runner import AsyncMySQLRunner
 from vanna.servers.fastapi.routes import register_chat_routes
 from vanna.tools import VisualizeDataTool
 from vanna.tools.agent_memory import (
@@ -95,7 +95,7 @@ def init_vanna() -> Agent:
         llm_kwargs["organization"] = settings.openai_organization
     llm = MetadataOpenAILlmService(**llm_kwargs)
 
-    mysql_runner = MySQLRunner(
+    mysql_runner = AsyncMySQLRunner(
         host=settings.mysql_host,
         database=settings.mysql_database,
         user=settings.mysql_user,
