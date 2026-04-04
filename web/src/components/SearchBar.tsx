@@ -26,8 +26,7 @@ export function SearchBar() {
         <InputGroupInput
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search anything…"
-          aria-label="Search anything"
+          aria-label="AI Search"
           name="q"
           className="h-full min-h-0 min-w-0 py-0"
         />
