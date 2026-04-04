@@ -17,6 +17,7 @@ import {
   CardHeader,
 } from "@/components/ui/8bit/card"
 import { Progress } from "@/components/ui/8bit/progress"
+import { Spinner } from "@/components/ui/8bit/spinner"
 import { LikeButton } from "./LikeButton"
 import {
   Carousel,
@@ -24,11 +25,85 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/components/ui/carousel"
+import { cn } from "@/lib/utils"
 import type { components } from "@/lib/api/schema"
 
 type PostResponse = components["schemas"]["PostResponse"]
 
-function PostImagesCarousel({ images }: { images: PostResponse["images"] }) {
+/** Muted pad around the retro frame (matches non-fallback carousel chrome). */
+const carouselImageOuter =
+  "flex w-max max-w-full items-center justify-center bg-muted/40 p-1"
+
+/** Same border / shadow as post images; inner box sizes to content (text or image). */
+const carouselImageFrame =
+  "box-border border-2 border-foreground/20 bg-card shadow-[3px_3px_0_0_var(--foreground)] dark:border-ring/40 dark:shadow-[3px_3px_0_0_var(--ring)]"
+
+function PostCarouselImage({
+  url,
+  onLoaded,
+}: {
+  url: string
+  onLoaded: () => void
+}) {
+  const [loaded, setLoaded] = useState(false)
+  const [failed, setFailed] = useState(false)
+
+  if (failed) {
+    return (
+      <div className={carouselImageOuter}>
+        <div
+          className={cn(
+            carouselImageFrame,
+            "flex w-max max-w-full items-center justify-center px-3 py-2.5"
+          )}
+        >
+          <p className="text-sm text-muted-foreground">Image unavailable</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className={carouselImageOuter}>
+      <div
+        className={cn(
+          carouselImageFrame,
+          "relative flex min-h-48 w-max max-w-full min-w-[12rem] items-center justify-center"
+        )}
+      >
+        {!loaded && (
+          <div className="absolute inset-2 z-0 flex items-center justify-center bg-card">
+            <Spinner
+              variant="diamond"
+              className="size-10 text-muted-foreground"
+            />
+          </div>
+        )}
+        <img
+          src={url}
+          alt=""
+          className={cn(
+            "relative z-10 block max-h-72 w-auto max-w-full object-contain transition-opacity duration-150",
+            loaded ? "opacity-100" : "opacity-0"
+          )}
+          onLoad={() => {
+            setLoaded(true)
+            onLoaded()
+          }}
+          onError={() => setFailed(true)}
+        />
+      </div>
+    </div>
+  )
+}
+
+function PostImagesCarousel({
+  images,
+  imageLoadFallback,
+}: {
+  images: PostResponse["images"]
+  imageLoadFallback: boolean
+}) {
   const [api, setApi] = useState<CarouselApi>()
   const [snapCount, setSnapCount] = useState(images.length)
   const [canScrollPrev, setCanScrollPrev] = useState(false)
@@ -92,14 +167,25 @@ function PostImagesCarousel({ images }: { images: PostResponse["images"] }) {
               key={img.image_id}
               className="max-w-full shrink-0 grow-0 basis-auto pl-2"
             >
-              <div className="flex min-h-48 w-max max-w-full items-center justify-center bg-muted/40 p-1">
-                <img
-                  src={img.url}
-                  alt=""
-                  className="block max-h-72 w-auto max-w-full border-2 border-foreground/20 bg-card object-contain shadow-[3px_3px_0_0_var(--foreground)] dark:border-ring/40 dark:shadow-[3px_3px_0_0_var(--ring)]"
-                  onLoad={onImageLoad}
-                />
-              </div>
+              {imageLoadFallback ? (
+                <PostCarouselImage url={img.url} onLoaded={onImageLoad} />
+              ) : (
+                <div className={carouselImageOuter}>
+                  <div
+                    className={cn(
+                      carouselImageFrame,
+                      "flex w-max max-w-full items-center justify-center"
+                    )}
+                  >
+                    <img
+                      src={img.url}
+                      alt=""
+                      className="block max-h-72 w-auto max-w-full object-contain"
+                      onLoad={onImageLoad}
+                    />
+                  </div>
+                </div>
+              )}
             </CarouselItem>
           ))}
         </CarouselContent>
@@ -151,10 +237,13 @@ function PostImagesCarousel({ images }: { images: PostResponse["images"] }) {
 export function PostCard({
   post,
   hidePostLink = false,
+  imageLoadFallback = true,
 }: {
   post: PostResponse
   /** When true, hides the comment-count link to the post (e.g. on the post detail page). */
   hidePostLink?: boolean
+  /** Diamond spinner while loading and a message if the image fails. */
+  imageLoadFallback?: boolean
 }) {
   const createdAt = new Date(post.created_at)
   const commentLabel =
@@ -213,7 +302,10 @@ export function PostCard({
 
       {post.images.length > 0 && (
         <div className="px-6 pb-2">
-          <PostImagesCarousel images={post.images} />
+          <PostImagesCarousel
+            images={post.images}
+            imageLoadFallback={imageLoadFallback}
+          />
         </div>
       )}
 
