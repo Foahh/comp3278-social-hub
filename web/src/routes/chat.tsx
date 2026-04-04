@@ -34,7 +34,7 @@ function ChatPage() {
     providerHeadings,
   } = useChatModels()
 
-  const { messages, status, sendMessage, handleCopy, abortRef } = useChat({
+  const { messages, status, sendMessage, retryMessage, handleCopy, abortRef } = useChat({
     initialQuery: q,
     chatMetadata,
   })
@@ -74,7 +74,7 @@ function ChatPage() {
             <ChatMessageList
               messages={messages}
               onCopy={handleCopy}
-              onRetry={sendMessage}
+              onRetry={retryMessage}
               actionsClassName="-translate-x-[2px]"
             />
           )}

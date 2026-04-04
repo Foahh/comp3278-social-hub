@@ -43,6 +43,8 @@ export function useChat({ initialQuery, chatMetadata }: UseChatOptions) {
       setMessages((prev) => [...prev, userMsg, assistantMsg])
       setStatus("streaming")
 
+      abortRef.current?.abort()
+
       const ctrl = new AbortController()
       abortRef.current = ctrl
 
@@ -234,6 +236,14 @@ export function useChat({ initialQuery, chatMetadata }: UseChatOptions) {
     })
   }, [])
 
+  const retryMessage = useCallback(
+    (assistantMsgId: string, content: string) => {
+      setMessages((prev) => prev.filter((m) => m.id !== assistantMsgId))
+      void sendMessage(content)
+    },
+    [sendMessage]
+  )
+
   const abort = useCallback(() => {
     abortRef.current?.abort()
   }, [])
@@ -242,6 +252,7 @@ export function useChat({ initialQuery, chatMetadata }: UseChatOptions) {
     messages,
     status,
     sendMessage,
+    retryMessage,
     handleCopy,
     abort,
     abortRef,

@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils"
 interface ChatMessageListProps {
   messages: ChatMsg[]
   onCopy: (msg: AssistantMsg) => void
-  onRetry: (content: string) => void
+  onRetry: (assistantMsgId: string, content: string) => void
   actionsClassName?: string
 }
 
@@ -59,7 +59,7 @@ interface AssistantMessageProps {
   msg: AssistantMsg
   messages: ChatMsg[]
   onCopy: (msg: AssistantMsg) => void
-  onRetry: (content: string) => void
+  onRetry: (assistantMsgId: string, content: string) => void
   actionsClassName?: string
 }
 
@@ -79,7 +79,7 @@ function AssistantMessage({
         break
       }
     }
-    if (prev) onRetry(prev.content)
+    if (prev) onRetry(msg.id, prev.content)
   }
 
   return (
