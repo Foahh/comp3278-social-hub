@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import "@/components/ui/8bit/styles/retro.css"
 
 const inputGroupClassName = cn(
-  "group/input-group relative flex h-9 w-full min-w-0 items-center border-y-[0.125rem] border-foreground bg-input/30 !p-0 transition-[color,border-color] outline-none dark:border-ring",
+  "group/input-group relative isolate flex h-9 w-full min-w-0 items-center border-y-[0.125rem] border-foreground bg-input/30 !p-0 transition-[color,border-color] outline-none dark:border-ring",
   "in-data-[slot=combobox-content]:focus-within:border-inherit",
   "has-[[data-slot=input-group-control]:focus-visible]:border-primary dark:has-[[data-slot=input-group-control]:focus-visible]:border-primary",
   "has-[[data-slot=input-group-control][aria-invalid=true]]:border-destructive dark:has-[[data-slot=input-group-control][aria-invalid=true]]:border-destructive",
@@ -21,7 +21,7 @@ const inputGroupClassName = cn(
 )
 
 const inputGroupSideBorderClassName = cn(
-  "pointer-events-none absolute inset-0 -mx-[0.125rem] border-x-[0.125rem] border-foreground transition-[border-color] dark:border-ring",
+  "pointer-events-none absolute inset-0 z-0 -mx-[0.125rem] border-x-[0.125rem] border-foreground transition-[border-color] dark:border-ring",
   "group-has-[[data-slot=input-group-control]:focus-visible]/input-group:border-primary",
   "dark:group-has-[[data-slot=input-group-control]:focus-visible]/input-group:border-primary",
   "group-has-[[data-slot=input-group-control][aria-invalid=true]]/input-group:border-destructive",
@@ -94,7 +94,7 @@ function InputGroupAddon({
 }
 
 const inputGroupButtonVariants = cva(
-  "flex items-center gap-2 rounded-none text-sm shadow-none",
+  "flex items-center gap-2 rounded-none text-sm shadow-none ring-0 focus-visible:ring-0 focus-visible:ring-offset-0",
   {
     variants: {
       size: {
