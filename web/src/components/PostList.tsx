@@ -1,7 +1,10 @@
+import { useRef } from "react"
+import { useWindowVirtualizer } from "@tanstack/react-virtual"
 import { ChevronDown } from "pixelarticons/react"
 import { Button } from "@/components/ui/8bit/button"
 import { Skeleton } from "@/components/ui/8bit/skeleton"
 import { PostCard } from "./PostCard"
+import { estimatePostHeight } from "@/lib/estimatePostHeight"
 import type { components } from "@/lib/api/schema"
 
 interface Props {
@@ -13,6 +16,8 @@ interface Props {
   emptyMessage?: string
 }
 
+const OVERSCAN = 5
+
 export function PostList({
   pages,
   hasNextPage,
@@ -22,6 +27,14 @@ export function PostList({
   emptyMessage,
 }: Props) {
   const posts = pages.flatMap((p) => p.posts)
+  const listRef = useRef<HTMLDivElement>(null)
+
+  const virtualizer = useWindowVirtualizer({
+    count: posts.length,
+    estimateSize: (index) => estimatePostHeight(posts[index]),
+    overscan: OVERSCAN,
+    scrollMargin: listRef.current?.offsetTop ?? 0,
+  })
 
   const defaultEmpty =
     "Nothing here yet. When people post, you'll see it here—or share something to get started."
@@ -34,11 +47,35 @@ export function PostList({
     )
   }
 
+  const virtualItems = virtualizer.getVirtualItems()
+
   return (
-    <div className="space-y-4">
-      {posts.map((post) => (
-        <PostCard key={post.post_id} post={post} />
-      ))}
+    <div ref={listRef}>
+      <div
+        style={{
+          height: virtualizer.getTotalSize(),
+          position: "relative",
+        }}
+      >
+        {virtualItems.map((virtualRow) => (
+          <div
+            key={virtualRow.key}
+            data-index={virtualRow.index}
+            ref={virtualizer.measureElement}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              transform: `translateY(${virtualRow.start - virtualizer.options.scrollMargin}px)`,
+            }}
+          >
+            <div className="pb-4">
+              <PostCard post={posts[virtualRow.index]} />
+            </div>
+          </div>
+        ))}
+      </div>
 
       {isFetchingNextPage && (
         <div className="space-y-4">
