@@ -10,6 +10,7 @@ interface Props {
   isFetchingNextPage: boolean
   fetchNextPage: () => void
   isLoading?: boolean
+  emptyMessage?: string
 }
 
 export function PostList({
@@ -18,13 +19,17 @@ export function PostList({
   isFetchingNextPage,
   fetchNextPage,
   isLoading,
+  emptyMessage,
 }: Props) {
   const posts = pages.flatMap((p) => p.posts)
+
+  const defaultEmpty =
+    "Nothing here yet. When people post, you'll see it here—or share something to get started."
 
   if (posts.length === 0 && !isFetchingNextPage && !isLoading) {
     return (
       <p className="py-12 text-center text-sm text-muted-foreground">
-        No posts yet. Be the first!
+        {emptyMessage ?? defaultEmpty}
       </p>
     )
   }
@@ -47,7 +52,7 @@ export function PostList({
         <div className="flex justify-center py-4">
           <Button variant="outline" onClick={fetchNextPage}>
             <ChevronDown className="size-4 shrink-0" aria-hidden />
-            Load more
+            Load more posts
           </Button>
         </div>
       )}

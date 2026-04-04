@@ -51,12 +51,14 @@ export function ImageUpload({
       for (const f of incoming) {
         if (f.size > maxBytes) {
           setFileError(
-            `"${f.name}" exceeds ${appConstants.imageUploadMaxMb} MB limit`
+            `"${f.name}" exceeds ${appConstants.imageUploadMaxMb} MB limit.`
           )
           return
         }
         if (!allowed.has(f.type)) {
-          setFileError(`Unsupported file type: ${f.type}`)
+          setFileError(
+            `Unsupported file type (${f.type}).`
+          )
           return
         }
         valid.push(f)
@@ -117,14 +119,14 @@ export function ImageUpload({
                   <div
                     className="flex h-24 w-24 flex-col items-center justify-center gap-1 border-2 border-dashed border-destructive/80 bg-destructive/10 px-1 text-center"
                     role="img"
-                    aria-label="Image failed to load"
+                    aria-label="Image could not be loaded"
                   >
                     <ImageIcon
                       className="size-6 shrink-0 text-destructive"
                       aria-hidden
                     />
                     <span className="retro text-[0.65rem] leading-tight font-bold text-destructive">
-                      Bad link
+                      Link didn't work
                     </span>
                   </div>
                 ) : (

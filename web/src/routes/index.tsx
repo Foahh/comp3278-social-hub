@@ -21,7 +21,7 @@ function FeedPage() {
   return (
     <div className="mx-auto max-w-2xl px-4">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Feed</h1>
+        <h1 className="text-2xl font-semibold">Your feed</h1>
         <Tabs value={sort} onValueChange={(v) => setSort(v as FeedSort)}>
           <TabsList>
             <TabsTrigger value="latest">

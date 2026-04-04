@@ -30,7 +30,7 @@ function CreatePostPage() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!text.trim() && blobs.length === 0 && urls.length === 0) {
-      setContentError("Add some text or at least one image.")
+      setContentError("Write something or add at least one photo.")
       return
     }
     setContentError(null)
@@ -42,7 +42,7 @@ function CreatePostPage() {
 
     createPost.mutate(fd, {
       onSuccess: (post) => {
-        toast.success("Post published!")
+        toast.success("Your post is live.")
         void navigate({
           to: "/post/$id",
           params: { id: String(post.post_id) },
@@ -59,7 +59,7 @@ function CreatePostPage() {
           <CardHeader>
             <div className="flex items-center gap-2">
               <PenSquare className="size-6" />
-              <CardTitle className="text-xl">Create a New Post</CardTitle>
+              <CardTitle className="text-xl">New post</CardTitle>
             </div>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -70,7 +70,7 @@ function CreatePostPage() {
                 onChange={(e) => setText(e.target.value)}
                 maxLength={appConstants.maxPostTextLength}
                 rows={5}
-                placeholder="What's on your mind?"
+                placeholder="What do you want to share?"
                 className="resize-none text-lg"
               />
               <div className="flex justify-end">
@@ -82,7 +82,7 @@ function CreatePostPage() {
 
             <div className="rounded-none border-2 border-muted-foreground bg-muted/30 p-4">
               <h3 className="mb-3 text-sm font-bold tracking-wider uppercase">
-                Attachments
+                Photos
               </h3>
               <ImageUpload
                 blobs={blobs}
@@ -106,7 +106,7 @@ function CreatePostPage() {
               disabled={createPost.isPending}
             >
               <Send className="size-4 shrink-0" aria-hidden />
-              {createPost.isPending ? "Publishing…" : "Publish Post"}
+              {createPost.isPending ? "Publishing…" : "Publish"}
             </Button>
           </CardFooter>
         </Card>

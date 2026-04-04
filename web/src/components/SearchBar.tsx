@@ -27,7 +27,7 @@ export function SearchBar() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search anything…"
-          aria-label="Search"
+          aria-label="Search anything"
           name="q"
           className="min-h-0 h-full min-w-0 py-0"
         />
@@ -38,7 +38,7 @@ export function SearchBar() {
           <InputGroupButton
             type="submit"
             size="icon-sm"
-            aria-label="Search"
+            aria-label="Submit search"
             title="Search"
             className="!h-full !min-h-0 !w-8 shrink-0 rounded-none border-l border-foreground/30 bg-muted text-foreground transition-colors hover:bg-accent hover:text-accent-foreground dark:border-ring/50"
           >

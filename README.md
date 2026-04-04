@@ -48,7 +48,7 @@ Run the supporting services:
 docker compose up
 ```
 
-This starts MySQL and MinIO.
+This starts MySQL and MinIO. On the **first** MySQL container start, `schema.sql` is applied automatically.
 
 Useful URLs:
 
@@ -57,7 +57,20 @@ Useful URLs:
 
 ---
 
-### 2. Start backend
+### 2. Seed the database (optional)
+
+With MySQL running and `.env` configured, load generated demo users, posts, images, likes, and comments:
+
+```bash
+uv sync --all-groups
+uv run python scripts/seed.py
+```
+
+See `uv run python scripts/seed.py --help` other options.
+
+---
+
+### 3. Start backend
 
 ```bash
 uv sync --all-groups
@@ -72,7 +85,7 @@ Backend URLs:
 
 ---
 
-### 3. Start frontend
+### 4. Start frontend
 
 ```bash
 cd web
@@ -88,7 +101,7 @@ It proxies `/api` to the backend during development.
 
 ---
 
-### 4. Regenerate API types (optional)
+### 5. Regenerate API types (optional)
 
 If the backend is running:
 

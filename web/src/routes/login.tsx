@@ -62,9 +62,9 @@ function LoginPage() {
         <form onSubmit={handleSubmit}>
           <Card>
             <CardHeader>
-              <CardTitle>Login to your account</CardTitle>
+              <CardTitle>Sign in</CardTitle>
               <CardDescription>
-                Enter your user name below to login to your account
+                Enter your username and password to continue.
               </CardDescription>
             </CardHeader>
 
@@ -83,7 +83,7 @@ function LoginPage() {
                       minLength={appConstants.usernameMinLen}
                       maxLength={appConstants.usernameMaxLen}
                       pattern="^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*"
-                      title="Letters and numbers, hyphens between segments (e.g. alice-01)"
+                      title="Letters and numbers only. Use hyphens between parts (e.g. alice-01)."
                       autoComplete="username"
                     />
                   </InputGroup>
@@ -118,10 +118,10 @@ function LoginPage() {
                 disabled={login.isPending}
               >
                 <Login className="size-4 shrink-0" aria-hidden />
-                {login.isPending ? "Signing in…" : "Login"}
+                {login.isPending ? "Signing in…" : "Sign in"}
               </Button>
               <FieldDescription className="text-center">
-                Don&apos;t have an account?
+                Don't have an account?
                 <br />
                 <LinkButton
                   to="/register"

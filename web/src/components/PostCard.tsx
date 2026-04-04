@@ -158,7 +158,11 @@ export function PostCard({
 }) {
   const createdAt = new Date(post.created_at)
   const commentLabel =
-    post.comment_count === 1 ? "1 comment" : `${post.comment_count} comments`
+    post.comment_count === 0
+      ? "View post and comments"
+      : post.comment_count === 1
+        ? "View post (1 comment)"
+        : `View post (${post.comment_count} comments)`
 
   return (
     <Card className="overflow-hidden">

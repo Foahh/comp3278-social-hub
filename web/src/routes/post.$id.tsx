@@ -23,7 +23,7 @@ function PostDetailPage() {
   const handleDelete = () => {
     deletePost.mutate(postId, {
       onSuccess: () => {
-        toast.success("Post deleted")
+        toast.success("Post removed.")
         void navigate({ to: "/" })
       },
       onError: (err) => toast.error(err.message),
@@ -31,7 +31,11 @@ function PostDetailPage() {
   }
 
   if (!Number.isInteger(postId)) {
-    return <p className="px-6 text-muted-foreground">Invalid post ID.</p>
+    return (
+      <p className="px-6 text-muted-foreground">
+        This link doesn't point to a valid post.
+      </p>
+    )
   }
 
   if (isLoading) {
@@ -42,7 +46,11 @@ function PostDetailPage() {
     )
   }
   if (isError || !post) {
-    return <p className="px-6 text-muted-foreground">Post not found.</p>
+    return (
+      <p className="px-6 text-muted-foreground">
+        We couldn't find that post. It may have been deleted.
+      </p>
+    )
   }
 
   return (
@@ -58,7 +66,7 @@ function PostDetailPage() {
             disabled={deletePost.isPending}
           >
             <Delete className="size-4 shrink-0" aria-hidden />
-            {deletePost.isPending ? "Deleting…" : "Delete post"}
+            {deletePost.isPending ? "Removing…" : "Delete post"}
           </Button>
         </div>
       )}

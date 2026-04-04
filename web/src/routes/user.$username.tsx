@@ -37,13 +37,17 @@ function UserProfilePage() {
     )
   }
   if (isError || !profile) {
-    return <p className="px-6 text-muted-foreground">User not found.</p>
+    return (
+      <p className="px-6 text-muted-foreground">
+        We couldn't find that account. Check the username and try again.
+      </p>
+    )
   }
 
   function handleAvatarSelected(file: File) {
     setAvatarError(null)
     updateAvatar.mutate(file, {
-      onSuccess: () => toast.success("Avatar updated"),
+      onSuccess: () => toast.success("Profile photo updated."),
       onError: (err) => {
         setAvatarError(err.message)
         toast.error(err.message)
@@ -93,7 +97,7 @@ function UserProfilePage() {
                 </span>
                 <span className="flex shrink-0 items-center gap-2">
                   <Heart className="size-4" />
-                  {profile.total_likes} likes received
+                  {profile.total_likes} likes across posts
                 </span>
               </div>
             </div>
@@ -108,6 +112,11 @@ function UserProfilePage() {
         isFetchingNextPage={feed.isFetchingNextPage}
         fetchNextPage={feed.fetchNextPage}
         isLoading={feed.isLoading}
+        emptyMessage={
+          isOwner
+            ? "You haven't posted yet. Share something to fill this space."
+            : "No posts here yet."
+        }
       />
     </div>
   )

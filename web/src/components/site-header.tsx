@@ -48,7 +48,7 @@ export function SiteHeader() {
               variant="ghost"
               size="icon"
               className="h-8 w-8"
-              aria-label="New post"
+              aria-label="Create a new post"
             >
               <PenSquare className="size-4" />
             </LinkButton>

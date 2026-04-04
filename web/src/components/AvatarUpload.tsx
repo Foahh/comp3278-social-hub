@@ -33,12 +33,14 @@ export function AvatarUpload({
     const file = e.target.files?.[0]
     if (!file) return
     if (!appConstants.allowedImageMimeTypes.includes(file.type)) {
-      setLocalError("Unsupported file type.")
+      setLocalError(`Unsupported file type (${file.type}).`)
       e.target.value = ""
       return
     }
     if (file.size > appConstants.imageUploadMaxMb * 1024 * 1024) {
-      setLocalError(`File exceeds ${appConstants.imageUploadMaxMb} MB limit.`)
+      setLocalError(
+        `That file is too large. Max size is ${appConstants.imageUploadMaxMb} MB.`
+      )
       e.target.value = ""
       return
     }
@@ -53,7 +55,7 @@ export function AvatarUpload({
         className="group relative disabled:opacity-50"
         onClick={() => inputRef.current?.click()}
         disabled={isPending}
-        aria-label="Change avatar"
+        aria-label="Change profile photo"
       >
         <Avatar
           className="size-24"

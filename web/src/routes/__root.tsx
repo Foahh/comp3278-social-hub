@@ -19,11 +19,11 @@ function RootErrorComponent({ error }: { error: unknown }) {
         <p className="text-sm text-muted-foreground">
           {error instanceof Error
             ? error.message
-            : "An unexpected error occurred."}
+            : "An unexpected error occurred. Try refreshing the page."}
         </p>
         <LinkButton to="/" className="gap-2">
           <Home className="size-4 shrink-0" aria-hidden />
-          Go home
+          Back to home
         </LinkButton>
       </div>
     </ThemeProvider>
@@ -38,7 +38,7 @@ function RootComponent() {
         <main className="flex-1 py-6">
           <Outlet />
         </main>
-        <Toaster />
+        <Toaster position="bottom-center" />
       </div>
     </ThemeProvider>
   )

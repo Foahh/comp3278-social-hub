@@ -11,7 +11,10 @@ export function useLogin() {
     mutationFn: async (body: LoginRequest) => {
       const { data, error } = await client.POST("/api/auth/login", { body })
       if (error)
-        throw new Error((error as { detail?: string }).detail ?? "Login failed")
+        throw new Error(
+          (error as { detail?: string }).detail ??
+            "Couldn't sign you in. Check your username and password."
+        )
       return data!
     },
     onSuccess: () =>
@@ -26,7 +29,8 @@ export function useRegister() {
       const { data, error } = await client.POST("/api/auth/register", { body })
       if (error)
         throw new Error(
-          (error as { detail?: string }).detail ?? "Registration failed"
+          (error as { detail?: string }).detail ??
+            "Couldn't create your account. Please try again."
         )
       return data!
     },

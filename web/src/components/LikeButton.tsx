@@ -21,7 +21,11 @@ export function LikeButton({ post }: { post: Post }) {
       className="w-16"
       disabled={!user || toggle.isPending}
       onClick={() => toggle.mutate()}
-      aria-label={post.liked_by_me ? "Unlike" : "Like"}
+      aria-label={
+        post.liked_by_me
+          ? `Unlike this post (${post.like_count} likes)`
+          : `Like this post (${post.like_count} likes)`
+      }
     >
       <Heart
         className={cn(

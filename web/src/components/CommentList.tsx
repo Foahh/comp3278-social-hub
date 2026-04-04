@@ -57,7 +57,7 @@ export function CommentList({
 
       {!isLoading && comments?.length === 0 && (
         <p className="py-4 text-center text-sm text-muted-foreground">
-          No comments yet.
+          No comments yet. Be the first to join the conversation.
         </p>
       )}
 
@@ -67,7 +67,7 @@ export function CommentList({
             <Textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="Write a comment…"
+              placeholder="Share your thoughts…"
               maxLength={appConstants.maxCommentLength}
               rows={2}
             />
@@ -81,7 +81,7 @@ export function CommentList({
                 disabled={create.isPending || !text.trim()}
               >
                 <Send className="size-4 shrink-0" aria-hidden />
-                {create.isPending ? "Posting…" : "Post"}
+                {create.isPending ? "Sending…" : "Comment"}
               </Button>
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}

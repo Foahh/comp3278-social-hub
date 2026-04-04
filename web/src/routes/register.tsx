@@ -44,7 +44,7 @@ function RegisterPage() {
     const password = fd.get("password") as string
     const confirm = fd.get("confirm") as string
     if (password !== confirm) {
-      setPasswordError("Passwords do not match")
+      setPasswordError("Those passwords don't match.")
       return
     }
     register.mutate(
@@ -66,15 +66,15 @@ function RegisterPage() {
         <form onSubmit={handleSubmit}>
           <Card>
             <CardHeader>
-              <CardTitle>Create an account</CardTitle>
+              <CardTitle>Create your account</CardTitle>
               <CardDescription>
-                Enter your information below to create your account
+                Pick a display name and username, then choose a password.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <FieldGroup>
                 <Field>
-                  <FieldLabel htmlFor="name">Name</FieldLabel>
+                  <FieldLabel htmlFor="name">Display name</FieldLabel>
                   <InputGroup>
                     <InputGroupAddon align="inline-start" aria-hidden>
                       <User className="size-4" />
@@ -86,9 +86,6 @@ function RegisterPage() {
                       autoComplete="name"
                     />
                   </InputGroup>
-                  <FieldDescription>
-                    Up to {appConstants.nameMaxLength} characters.
-                  </FieldDescription>
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="username">Username</FieldLabel>
@@ -103,7 +100,7 @@ function RegisterPage() {
                       minLength={appConstants.usernameMinLen}
                       maxLength={appConstants.usernameMaxLen}
                       pattern="^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*"
-                      title="Letters and numbers, hyphens between segments (e.g. alice-01)"
+                      title="Letters and numbers only. Use hyphens between parts (e.g. alice-01)."
                       autoComplete="username"
                     />
                   </InputGroup>
@@ -124,10 +121,6 @@ function RegisterPage() {
                       autoComplete="new-password"
                     />
                   </InputGroup>
-                  <FieldDescription>
-                    Must be at least {appConstants.passwordMinLength} characters
-                    long.
-                  </FieldDescription>
                 </Field>
                 <Field data-invalid={!!passwordError}>
                   <FieldLabel htmlFor="confirm">Confirm password</FieldLabel>
@@ -146,9 +139,6 @@ function RegisterPage() {
                       aria-invalid={!!passwordError}
                     />
                   </InputGroup>
-                  <FieldDescription>
-                    Please confirm your password.
-                  </FieldDescription>
                   {passwordError ? (
                     <FieldError>{passwordError}</FieldError>
                   ) : null}
