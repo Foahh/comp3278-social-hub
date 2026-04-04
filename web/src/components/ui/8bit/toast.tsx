@@ -36,15 +36,17 @@ function Toast(props: ToastProps) {
     <div className="retro relative">
       <div
         className={cn(
-          "flex w-full items-center rounded-lg p-4 shadow-lg ring-1 ring-black/5 md:max-w-[364px]",
-          variant === "default" && "bg-background text-foreground",
+          "flex w-full items-center rounded-lg border p-4 shadow-lg md:max-w-[364px]",
+          variant === "default" &&
+            "border-border bg-popover text-popover-foreground",
           variant === "success" &&
-            "bg-green-500/10 text-green-700 dark:text-green-400",
-          variant === "error" && "bg-destructive/10 text-destructive",
+            "border-green-200 bg-green-100 text-green-900 dark:border-green-800 dark:bg-green-950 dark:text-green-300",
+          variant === "error" &&
+            "border-red-200 bg-red-100 text-red-900 dark:border-red-900 dark:bg-red-950 dark:text-red-200",
           variant === "warning" &&
-            "bg-amber-500/10 text-amber-700 dark:text-amber-400",
+            "border-amber-200 bg-amber-100 text-amber-950 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-200",
           variant === "info" &&
-            "bg-blue-500/10 text-blue-700 dark:text-blue-400"
+            "border-blue-200 bg-blue-100 text-blue-900 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-200"
         )}
       >
         <div className="flex flex-1 items-center">

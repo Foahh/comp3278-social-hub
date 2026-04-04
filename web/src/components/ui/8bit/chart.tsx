@@ -192,12 +192,12 @@ function ChartTooltipContent({
   return (
     <div
       className={cn(
-        "relative grid min-w-[8rem] items-start gap-1.5 border-y-6 border-foreground bg-background px-2.5 py-1.5 text-xs shadow-xl dark:border-ring",
+        "relative grid min-w-[8rem] items-start gap-1.5 border-y-[0.125em] border-foreground bg-background px-2.5 py-1.5 text-xs shadow-xl dark:border-ring",
         className
       )}
     >
       <div
-        className="pointer-events-none absolute inset-0 -mx-1.5 border-x-6 border-foreground dark:border-ring"
+        className="pointer-events-none absolute inset-0 -mx-[0.125em] border-x-[0.125em] border-foreground dark:border-ring"
         aria-hidden="true"
       />
       {!nestLabel ? tooltipLabel : null}
@@ -213,8 +213,8 @@ function ChartTooltipContent({
               <div
                 key={index}
                 className={cn(
-                  "flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground",
-                  indicator === "dot" && "items-center"
+                  "flex w-full items-start gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground",
+                  indicator === "dot" && "pt-0.5"
                 )}
               >
                 {formatter && item?.value !== undefined && item.name ? (
@@ -245,20 +245,12 @@ function ChartTooltipContent({
                         />
                       )
                     )}
-                    <div
-                      className={cn(
-                        "flex flex-1 justify-between leading-none",
-                        nestLabel ? "items-end" : "items-center"
-                      )}
-                    >
-                      <div className="grid gap-1.5">
-                        {nestLabel ? tooltipLabel : null}
-                        <span className="text-muted-foreground">
-                          {itemConfig?.label ?? item.name}
-                        </span>
-                      </div>
+                    <div className="flex min-w-0 flex-1 flex-col leading-none text-right">
+                      <span className="mb-2 text-muted-foreground text-right">
+                        {itemConfig?.label ?? item.name}
+                      </span>
                       {item.value != null && (
-                        <span className="font-medium text-foreground tabular-nums">
+                        <span className="text-right font-medium text-foreground tabular-nums">
                           {typeof item.value === "number"
                             ? item.value.toLocaleString()
                             : String(item.value)}

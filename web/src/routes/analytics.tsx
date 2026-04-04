@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
+import { Analytics as AnalyticsIcon } from "pixelarticons/react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts"
 import {
   ChartContainer,
@@ -40,7 +41,10 @@ function AnalyticsPage() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 px-4">
-      <h1 className="text-2xl font-semibold">Analytics</h1>
+      <h1 className="flex items-center gap-2 text-2xl font-semibold">
+        <AnalyticsIcon className="size-7 shrink-0" aria-hidden />
+        Analytics
+      </h1>
 
       {/* Top 10 Most Liked Posts */}
       <Card>

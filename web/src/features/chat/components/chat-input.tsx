@@ -59,7 +59,7 @@ export function ChatInput({
               onChange={(e) => onTextChange(e.target.value)}
             />
           </PromptInputBody>
-          <PromptInputFooter>
+          <PromptInputFooter className="justify-end">
             <PromptInputTools>
               {chatModels.length > 0 && selectedModel && (
                 <ModelSelector
@@ -110,11 +110,11 @@ export function ChatInput({
                   </ModelSelectorContent>
                 </ModelSelector>
               )}
+              <PromptInputSubmit
+                disabled={status === "ready" && !text.trim()}
+                status={status}
+              />
             </PromptInputTools>
-            <PromptInputSubmit
-              disabled={status === "ready" && !text.trim()}
-              status={status}
-            />
           </PromptInputFooter>
         </PromptInput>
       </div>

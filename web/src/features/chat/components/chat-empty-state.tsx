@@ -22,7 +22,7 @@ export function ChatEmptyState({
             I can analyze trends, and answer questions.
           </p>
         </div>
-        <Suggestions className="justify-center gap-2 pt-2">
+        <Suggestions wrap className="gap-2 pt-2">
           {SUGGESTIONS.map((s) => (
             <Suggestion
               key={s}

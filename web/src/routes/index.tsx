@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react"
-import { Clock, Fire } from "pixelarticons/react"
+import { Clock, Fire, Rss } from "pixelarticons/react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/8bit/tabs"
 import { Skeleton } from "@/components/ui/8bit/skeleton"
 import { PostList } from "@/components/PostList"
@@ -21,7 +21,10 @@ function FeedPage() {
   return (
     <div className="mx-auto max-w-2xl px-4">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Your feed</h1>
+        <h1 className="flex items-center gap-2 text-2xl font-semibold">
+          <Rss className="size-7 shrink-0" aria-hidden />
+          Feed
+        </h1>
         <Tabs value={sort} onValueChange={(v) => setSort(v as FeedSort)}>
           <TabsList>
             <TabsTrigger value="latest">

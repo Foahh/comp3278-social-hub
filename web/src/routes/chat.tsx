@@ -62,7 +62,7 @@ function ChatPage() {
   )
 
   return (
-    <div className="flex h-[calc(100svh-3.5rem-1px-3rem)] flex-col">
+    <div className="flex h-[calc(100svh-3.5rem-1px-3rem)] flex-col rounded-none">
       <Conversation className="min-h-0 flex-1">
         <ConversationContent className="mx-auto max-w-3xl">
           {messages.length === 0 ? (
@@ -75,6 +75,7 @@ function ChatPage() {
               messages={messages}
               onCopy={handleCopy}
               onRetry={sendMessage}
+              actionsClassName="-translate-x-[2px]"
             />
           )}
         </ConversationContent>

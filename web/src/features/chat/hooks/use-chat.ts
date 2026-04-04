@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useNavigate } from "@tanstack/react-router"
 import { nanoid } from "nanoid"
-import { toast } from "sonner"
+import { toast } from "@/components/ui/8bit/toast"
 import type { AssistantMsg, ChatMsg, UserMsg } from "../types"
 import { streamSSE } from "../api/stream-sse"
 

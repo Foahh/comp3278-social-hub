@@ -12,17 +12,20 @@ import { DataTable } from "./data-table"
 import { NotificationBanner } from "./notification-banner"
 import { CardDisplay } from "./card-display"
 import { TaskList } from "./task-list"
+import { cn } from "@/lib/utils"
 
 interface ChatMessageListProps {
   messages: ChatMsg[]
   onCopy: (msg: AssistantMsg) => void
   onRetry: (content: string) => void
+  actionsClassName?: string
 }
 
 export function ChatMessageList({
   messages,
   onCopy,
   onRetry,
+  actionsClassName,
 }: ChatMessageListProps) {
   return (
     <>
@@ -36,6 +39,7 @@ export function ChatMessageList({
             messages={messages}
             onCopy={onCopy}
             onRetry={onRetry}
+            actionsClassName={actionsClassName}
           />
         )
       )}
@@ -56,6 +60,7 @@ interface AssistantMessageProps {
   messages: ChatMsg[]
   onCopy: (msg: AssistantMsg) => void
   onRetry: (content: string) => void
+  actionsClassName?: string
 }
 
 function AssistantMessage({
@@ -63,6 +68,7 @@ function AssistantMessage({
   messages,
   onCopy,
   onRetry,
+  actionsClassName,
 }: AssistantMessageProps) {
   const handleRetry = () => {
     const msgIdx = messages.indexOf(msg)
@@ -125,7 +131,7 @@ function AssistantMessage({
 
       {/* Actions (copy / retry) — only when done streaming */}
       {!msg.isStreaming && msg.text && (
-        <Actions>
+        <Actions className={cn(actionsClassName, "mt-2")}>
           <Action tooltip="Copy" onClick={() => onCopy(msg)}>
             <Copy className="size-4" />
           </Action>
