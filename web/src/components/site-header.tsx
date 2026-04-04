@@ -1,9 +1,9 @@
-import { LinkButton } from "@/components/ui/8bit/link-button"
+import { LinkButton } from "@/components/ui/8bit/link-button";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@/components/ui/8bit/avatar"
+} from "@/components/ui/8bit/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,8 +11,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/8bit/dropdown-menu"
-import { Separator } from "@/components/ui/8bit/separator"
+} from "@/components/ui/8bit/dropdown-menu";
+import { Separator } from "@/components/ui/8bit/separator";
 import {
   Analytics,
   Login,
@@ -21,12 +21,12 @@ import {
   Rss,
   User,
   UserPlus,
-} from "pixelarticons/react"
-import { SearchBar } from "./SearchBar"
-import { useAuth } from "@/context/AuthContext"
+} from "pixelarticons/react";
+import { SearchBar } from "./SearchBar";
+import { useAuth } from "@/context/AuthContext";
 
 export function SiteHeader() {
-  const { user, isLoading, logout } = useAuth()
+  const { user, isLoading, logout } = useAuth();
 
   return (
     <header className="sticky top-0 z-40 flex shrink-0 flex-col bg-background">
@@ -38,16 +38,6 @@ export function SiteHeader() {
         >
           <Rss className="size-5" />
           <span className="hidden sm:inline">SocialHub</span>
-        </LinkButton>
-
-        <LinkButton
-          to="/analytics"
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 shrink-0"
-          aria-label="Analytics"
-        >
-          <Analytics className="size-4" aria-hidden />
         </LinkButton>
 
         <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
@@ -88,6 +78,16 @@ export function SiteHeader() {
               </LinkButton>
             </>
           )}
+
+          <LinkButton
+            to="/analytics"
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 shrink-0"
+            aria-label="Analytics"
+          >
+            <Analytics className="size-4" aria-hidden />
+          </LinkButton>
 
           {!isLoading && user && (
             <DropdownMenu>
@@ -139,5 +139,5 @@ export function SiteHeader() {
       </div>
       <Separator orientation="horizontal" />
     </header>
-  )
+  );
 }
