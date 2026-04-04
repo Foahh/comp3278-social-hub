@@ -97,7 +97,7 @@ export function SiteHeader() {
                     params={{ username: user.username }}
                     variant="ghost"
                     size="sm"
-                    className="h-auto min-h-0 w-full cursor-default justify-start gap-2 rounded-none px-2 py-1.5 font-normal"
+                    className="h-auto min-h-0 w-full cursor-default justify-start gap-2.5 rounded-none px-3 py-2 font-normal"
                   >
                     <User className="size-4" />
                     Profile

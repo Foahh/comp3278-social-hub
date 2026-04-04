@@ -79,7 +79,7 @@ function UserProfilePage() {
             <h1 className="text-2xl font-bold">{profile.name}</h1>
             <p className="text-sm text-muted-foreground">@{profile.username}</p>
             <div className="flex flex-col items-center gap-2 text-sm text-muted-foreground sm:items-start">
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-2">
                 <Calendar className="size-4" />
                 Joined{" "}
                 {formatDistanceToNow(new Date(profile.created_at), {
@@ -87,11 +87,11 @@ function UserProfilePage() {
                 })}
               </span>
               <div className="flex flex-nowrap items-center justify-center gap-4 sm:justify-start">
-                <span className="flex shrink-0 items-center gap-1">
+                <span className="flex shrink-0 items-center gap-2">
                   <FileText className="size-4" />
                   {profile.post_count} posts
                 </span>
-                <span className="flex shrink-0 items-center gap-1">
+                <span className="flex shrink-0 items-center gap-2">
                   <Heart className="size-4" />
                   {profile.total_likes} likes received
                 </span>
