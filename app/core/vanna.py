@@ -14,8 +14,6 @@ from vanna.core.user.resolver import UserResolver
 from vanna.integrations.chromadb import ChromaAgentMemory
 from vanna.integrations.local import LocalFileSystem
 from vanna.integrations.mysql import MySQLRunner
-from vanna.integrations.openai import OpenAILlmService
-from vanna.servers.base import ChatHandler
 from vanna.servers.fastapi.routes import register_chat_routes
 from vanna.tools import RunSqlTool, VisualizeDataTool
 from vanna.tools.agent_memory import (
@@ -25,6 +23,11 @@ from vanna.tools.agent_memory import (
 )
 
 from app.core.config import settings
+from app.core.vanna_chat_model import (
+    InjectRequestModelMiddleware,
+    MetadataOpenAILlmService,
+    ValidatedModelChatHandler,
+)
 
 VANNA_FS_ROOT = ".vanna"
 
@@ -83,14 +86,13 @@ def init_vanna() -> Agent:
     global _agent, _memory
 
     llm_kwargs: dict = {
-        "model": settings.openai_model,
         "api_key": settings.openai_api_key,
     }
     if settings.openai_base_url:
         llm_kwargs["base_url"] = settings.openai_base_url
     if settings.openai_organization:
         llm_kwargs["organization"] = settings.openai_organization
-    llm = OpenAILlmService(**llm_kwargs)
+    llm = MetadataOpenAILlmService(**llm_kwargs)
 
     mysql_runner = MySQLRunner(
         host=settings.mysql_host,
@@ -126,6 +128,7 @@ def init_vanna() -> Agent:
         user_resolver=JwtUserResolver(),
         agent_memory=_memory,
         config=AgentConfig(stream_responses=True, temperature=0.3),
+        llm_middlewares=[InjectRequestModelMiddleware()],
     )
 
     return _agent
@@ -172,5 +175,5 @@ async def seed_memory() -> None:
 def mount_vanna_routes(app) -> None:
     """Register Vanna's chat endpoints on the FastAPI app."""
     assert _agent is not None
-    chat_handler = ChatHandler(_agent)
+    chat_handler = ValidatedModelChatHandler(_agent)
     register_chat_routes(app, chat_handler, config={"dev_mode": False})

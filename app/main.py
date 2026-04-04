@@ -68,8 +68,9 @@ async def root() -> dict[str, str]:
     return {"service": "SocialHub API", "docs": "/docs", "health": "/api/health"}
 
 
-from app.routers import analytics, auth, comments, likes, posts, users  # noqa: E402
+from app.routers import analytics, auth, comments, likes, posts, users, website_config  # noqa: E402
 
+app.include_router(website_config.router)
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(posts.router, prefix="/api/posts", tags=["posts"])
 app.include_router(likes.router, prefix="/api/posts", tags=["likes"])

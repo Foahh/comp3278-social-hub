@@ -32,7 +32,7 @@ Important environment variables:
 - **MySQL**: `MYSQL_*`
 - **MinIO / S3**: `S3_ENDPOINT_URL`, `S3_PUBLIC_URL`, `S3_*`
 - **Auth**: `JWT_SECRET`
-- **OpenAI / Vanna features**: `OPENAI_API_KEY`, `OPENAI_MODEL`, `OPENAI_BASE_URL`
+- **OpenAI / Vanna features**: `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `VANNA_CHAT_MODELS` (optional JSON model list for the chat UI and `/api/config`)
 - **Chroma (Vanna memory)**: `CHROMA_PERSIST_DIRECTORY` — on-disk path for embedded ChromaDB (default `chroma_data`; ignored by git)
 - **CORS**: `CORS_ORIGINS` (example: `["http://localhost:5173"]`)
 
