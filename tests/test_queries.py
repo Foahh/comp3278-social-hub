@@ -89,6 +89,34 @@ async def test_list_posts_latest_for_user_no_cursor(mock_conn):
 
 
 @pytest.mark.asyncio
+async def test_get_images_for_posts_uses_single_sql_statement(mock_conn):
+    from app.core import queries
+
+    conn, cursor = mock_conn
+    cursor.fetchall = AsyncMock(
+        return_value=[
+            {"image_id": 11, "post_id": 2, "value": "a", "position": 0},
+            {"image_id": 12, "post_id": 2, "value": "b", "position": 1},
+            {"image_id": 13, "post_id": 5, "value": "c", "position": 0},
+        ]
+    )
+
+    result = await queries.get_images_for_posts(conn, [2, 5])
+
+    cursor.execute.assert_called_once_with(
+        "SELECT * FROM images WHERE post_id IN (%s,%s) ORDER BY post_id ASC, position ASC",
+        [2, 5],
+    )
+    assert result == {
+        2: [
+            {"image_id": 11, "post_id": 2, "value": "a", "position": 0},
+            {"image_id": 12, "post_id": 2, "value": "b", "position": 1},
+        ],
+        5: [{"image_id": 13, "post_id": 5, "value": "c", "position": 0}],
+    }
+
+
+@pytest.mark.asyncio
 async def test_get_like_found(mock_conn):
     from app.core import queries
 

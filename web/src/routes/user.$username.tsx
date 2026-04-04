@@ -15,6 +15,7 @@ import { useUserProfile, useUpdateAvatar } from "@/lib/api/hooks/useUsers"
 import { useFeed } from "@/lib/api/hooks/usePosts"
 import { useAuth } from "@/context/AuthContext"
 import { toast } from "@/components/ui/8bit/toast"
+import { parseApiDate } from "@/lib/datetime"
 
 export const Route = createFileRoute("/user/$username")({
   component: UserProfilePage,
@@ -83,7 +84,7 @@ function UserProfilePage() {
               <span className="flex items-center gap-2">
                 <Calendar className="size-4" />
                 Joined{" "}
-                {formatDistanceToNow(new Date(profile.created_at), {
+                {formatDistanceToNow(parseApiDate(profile.created_at), {
                   addSuffix: true,
                 })}
               </span>

@@ -177,7 +177,7 @@ async def get_images_for_posts(
     placeholders = ",".join(["%s"] * len(post_ids))
     async with conn.cursor(aiomysql.DictCursor) as cur:
         await cur.execute(
-            f"SELECT * FROM images WHERE post_id IN ({placeholders})",
+            f"SELECT * FROM images WHERE post_id IN ({placeholders}) "
             "ORDER BY post_id ASC, position ASC",
             post_ids,
         )

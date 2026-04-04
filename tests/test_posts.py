@@ -47,8 +47,8 @@ async def test_list_posts_latest(client):
         mock_db.get_conn.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
         mock_db.get_conn.return_value.__aexit__ = AsyncMock(return_value=False)
         mock_q.list_posts_latest = AsyncMock(return_value=[post])
-        mock_q.get_images_for_post = AsyncMock(return_value=[])
-        mock_q.get_like = AsyncMock(return_value=None)
+        mock_q.get_images_for_posts = AsyncMock(return_value={1: []})
+        mock_q.get_liked_post_ids = AsyncMock(return_value=set())
 
         resp = await client.get("/api/posts?sort=latest")
 
@@ -71,8 +71,10 @@ async def test_list_posts_returns_next_cursor(client):
         mock_db.get_conn.return_value.__aenter__ = AsyncMock(return_value=mock_conn)
         mock_db.get_conn.return_value.__aexit__ = AsyncMock(return_value=False)
         mock_q.list_posts_latest = AsyncMock(return_value=posts)
-        mock_q.get_images_for_post = AsyncMock(return_value=[])
-        mock_q.get_like = AsyncMock(return_value=None)
+        mock_q.get_images_for_posts = AsyncMock(
+            return_value={post["post_id"]: [] for post in posts}
+        )
+        mock_q.get_liked_post_ids = AsyncMock(return_value=set())
 
         resp = await client.get("/api/posts?sort=latest")
 
@@ -94,8 +96,8 @@ async def test_list_posts_filter_by_username(client):
         mock_db.get_conn.return_value.__aexit__ = AsyncMock(return_value=False)
         mock_q.get_user_by_username = AsyncMock(return_value={"user_id": 7, "username": "bob"})
         mock_q.list_posts_latest_for_user = AsyncMock(return_value=[post])
-        mock_q.get_images_for_post = AsyncMock(return_value=[])
-        mock_q.get_like = AsyncMock(return_value=None)
+        mock_q.get_images_for_posts = AsyncMock(return_value={3: []})
+        mock_q.get_liked_post_ids = AsyncMock(return_value=set())
 
         resp = await client.get("/api/posts?sort=latest&username=bob")
 

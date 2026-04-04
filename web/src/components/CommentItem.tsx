@@ -6,6 +6,7 @@ import {
   AvatarImage,
 } from "@/components/ui/8bit/avatar"
 import type { components } from "@/lib/api/schema"
+import { parseApiDate } from "@/lib/datetime"
 
 type CommentResponse = components["schemas"]["CommentResponse"]
 
@@ -41,7 +42,7 @@ export function CommentItem({ comment }: { comment: CommentResponse }) {
             </span>
           </Link>
           <span className="text-xs text-muted-foreground">
-            {formatDistanceToNow(new Date(comment.created_at), {
+            {formatDistanceToNow(parseApiDate(comment.created_at), {
               addSuffix: true,
             })}
           </span>

@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/carousel"
 import { cn } from "@/lib/utils"
 import type { components } from "@/lib/api/schema"
+import { parseApiDate } from "@/lib/datetime"
 
 type PostResponse = components["schemas"]["PostResponse"]
 
@@ -353,7 +354,7 @@ export function PostCard({
   /** When true, avatar and author line are not links (e.g. on `/user/$username`). */
   disableLink?: boolean
 }) {
-  const createdAt = new Date(post.created_at)
+  const createdAt = parseApiDate(post.created_at)
   const commentLabel =
     post.comment_count === 0
       ? "View post and comments"
