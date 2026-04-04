@@ -21,8 +21,11 @@ export function SearchBar() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center">
-      <InputGroup className="h-8 w-48 items-stretch text-sm lg:w-64">
+    <form
+      onSubmit={handleSubmit}
+      className="flex w-full max-w-48 min-w-0 justify-end lg:max-w-64"
+    >
+      <InputGroup className="h-8 w-full min-w-0 items-stretch text-sm">
         <InputGroupInput
           value={query}
           onChange={(e) => setQuery(e.target.value)}

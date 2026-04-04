@@ -39,7 +39,7 @@ export function SiteHeader() {
           <span className="hidden sm:inline">SocialHub</span>
         </LinkButton>
 
-        <div className="flex flex-1 items-center justify-end gap-2">
+        <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
           <SearchBar />
 
           {!isLoading && user && (
@@ -56,13 +56,24 @@ export function SiteHeader() {
 
           {!isLoading && !user && (
             <>
-              <LinkButton to="/login" variant="ghost" size="sm">
+              <LinkButton
+                to="/login"
+                variant="ghost"
+                size="sm"
+                aria-label="Sign in"
+                className="max-sm:w-8 max-sm:min-w-8 max-sm:gap-0 max-sm:px-0"
+              >
                 <Login className="size-4 shrink-0" aria-hidden />
-                Sign in
+                <span className="hidden sm:inline">Sign in</span>
               </LinkButton>
-              <LinkButton to="/register" size="sm">
+              <LinkButton
+                to="/register"
+                size="sm"
+                aria-label="Sign up"
+                className="max-sm:w-8 max-sm:min-w-8 max-sm:gap-0 max-sm:px-0"
+              >
                 <UserPlus className="size-4 shrink-0" aria-hidden />
-                Sign up
+                <span className="hidden sm:inline">Sign up</span>
               </LinkButton>
             </>
           )}

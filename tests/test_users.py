@@ -1,6 +1,6 @@
 import io
 from datetime import UTC, datetime
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import jwt
 import pytest
@@ -9,6 +9,13 @@ from httpx import ASGITransport, AsyncClient
 from app.core.config import settings
 
 TOKEN = jwt.encode({"user_id": 1, "exp": 9999999999}, settings.jwt_secret, algorithm="HS256")
+
+
+def _patch_users_s3():
+    m = MagicMock()
+    m.avatar_url_from_key = AsyncMock(return_value=None)
+    m.generate_presigned_url = AsyncMock(return_value="https://test/presigned")
+    return patch("app.routers.users.s3", m)
 
 
 @pytest.fixture
@@ -30,7 +37,7 @@ async def test_get_user_profile(client):
     with (
         patch("app.routers.users.queries") as mock_q,
         patch("app.routers.users.db") as mock_db,
-        patch("app.routers.users.s3"),
+        _patch_users_s3(),
     ):
         mock_conn = AsyncMock()
         mock_db.get_conn.return_value.__aenter__ = AsyncMock(return_value=mock_conn)

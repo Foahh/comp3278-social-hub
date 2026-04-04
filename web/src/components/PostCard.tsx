@@ -57,7 +57,9 @@ function PostCarouselImage({
             "flex w-max max-w-full items-center justify-center px-3 py-2.5"
           )}
         >
-          <p className="text-sm text-muted-foreground">Image unavailable</p>
+          <p aria-label={url} className="text-sm text-muted-foreground">
+            Image unavailable
+          </p>
         </div>
       </div>
     )
@@ -69,8 +71,7 @@ function PostCarouselImage({
         className={cn(
           carouselImageFrame,
           "relative flex min-h-48 w-max max-w-full items-center justify-center",
-          // Avoid wider frame than the image once loaded; min width only stabilizes the spinner slot.
-          !loaded && "min-w-[12rem]"
+          !loaded && "min-w-0"
         )}
       >
         {!loaded && (
@@ -413,21 +414,23 @@ export function PostCard({
         </div>
       )}
 
-      <CardFooter className="flex flex-wrap items-center gap-2 border-t">
-        <LikeButton post={post} />
-        {!hidePostLink && (
-          <LinkButton
-            to="/post/$id"
-            params={{ id: String(post.post_id) }}
-            variant="secondary"
-            size="sm"
-            className="min-w-16 whitespace-nowrap"
-            aria-label={commentLabel}
-          >
-            <Comment className="size-4 shrink-0" aria-hidden />
-            <span className="text-xs tabular-nums">{post.comment_count}</span>
-          </LinkButton>
-        )}
+      <CardFooter className="border-t">
+        <div className="flex flex-wrap items-center gap-2 mt-2">
+          <LikeButton post={post} />
+          {!hidePostLink && (
+            <LinkButton
+              to="/post/$id"
+              params={{ id: String(post.post_id) }}
+              variant="secondary"
+              size="sm"
+              className="min-w-16 whitespace-nowrap"
+              aria-label={commentLabel}
+            >
+              <Comment className="size-4 shrink-0" aria-hidden />
+              <span className="text-xs tabular-nums">{post.comment_count}</span>
+            </LinkButton>
+          )}
+        </div>
       </CardFooter>
     </Card>
   )

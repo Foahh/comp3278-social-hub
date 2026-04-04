@@ -10,7 +10,13 @@ type Post = Pick<
   "post_id" | "liked_by_me" | "like_count"
 >
 
-export function LikeButton({ post }: { post: Post }) {
+export function LikeButton({
+  post,
+  className,
+}: {
+  post: Post
+  className?: string
+}) {
   const { user } = useAuth()
   const toggle = useToggleLike(post.post_id)
 
@@ -18,7 +24,7 @@ export function LikeButton({ post }: { post: Post }) {
     <Button
       variant="secondary"
       size="sm"
-      className="w-16"
+      className={cn("w-16", className)}
       disabled={!user || toggle.isPending}
       onClick={() => toggle.mutate()}
       aria-label={
