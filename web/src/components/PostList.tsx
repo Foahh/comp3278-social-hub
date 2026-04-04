@@ -14,6 +14,8 @@ interface Props {
   fetchNextPage: () => void
   isLoading?: boolean
   emptyMessage?: string
+  /** When true, post author is not linked to `/user/$username` (e.g. on a user profile). */
+  disableLink?: boolean
 }
 
 const OVERSCAN = 5
@@ -25,6 +27,7 @@ export function PostList({
   fetchNextPage,
   isLoading,
   emptyMessage,
+  disableLink,
 }: Props) {
   const posts = pages.flatMap((p) => p.posts)
   const listRef = useRef<HTMLDivElement>(null)
@@ -71,7 +74,10 @@ export function PostList({
             }}
           >
             <div className="pb-4">
-              <PostCard post={posts[virtualRow.index]} />
+              <PostCard
+                post={posts[virtualRow.index]}
+                disableLink={disableLink}
+              />
             </div>
           </div>
         ))}

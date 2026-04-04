@@ -343,12 +343,15 @@ export function PostCard({
   post,
   hidePostLink = false,
   imageLoadFallback = true,
+  disableLink = false,
 }: {
   post: PostResponse
   /** When true, hides the comment-count link to the post (e.g. on the post detail page). */
   hidePostLink?: boolean
   /** Diamond spinner while loading and a message if the image fails. */
   imageLoadFallback?: boolean
+  /** When true, avatar and author line are not links (e.g. on `/user/$username`). */
+  disableLink?: boolean
 }) {
   const createdAt = new Date(post.created_at)
   const commentLabel =
@@ -358,34 +361,50 @@ export function PostCard({
         ? "View post (1 comment)"
         : `View post (${post.comment_count} comments)`
 
+  const avatar = (
+    <Avatar className="size-10">
+      {post.avatar_url && (
+        <AvatarImage src={post.avatar_url} alt={post.name} />
+      )}
+      <AvatarFallback>{post.name[0]?.toUpperCase() ?? "?"}</AvatarFallback>
+    </Avatar>
+  )
+
+  const authorLine = (
+    <>
+      <span className="font-medium">{post.name}</span>{" "}
+      <span className="font-normal text-muted-foreground">
+        @{post.username}
+      </span>
+    </>
+  )
+
   return (
     <Card className="overflow-hidden">
       <CardHeader className="flex flex-row items-center gap-3 border-b border-border pb-4">
-        <Link
-          to="/user/$username"
-          params={{ username: post.username }}
-          className="shrink-0 rounded-sm ring-offset-background outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-        >
-          <Avatar className="size-10">
-            {post.avatar_url && (
-              <AvatarImage src={post.avatar_url} alt={post.name} />
-            )}
-            <AvatarFallback>
-              {post.name[0]?.toUpperCase() ?? "?"}
-            </AvatarFallback>
-          </Avatar>
-        </Link>
-        <div className="min-w-0 flex-1">
+        {disableLink ? (
+          <div className="shrink-0">{avatar}</div>
+        ) : (
           <Link
             to="/user/$username"
             params={{ username: post.username }}
-            className="block truncate rounded-sm text-left ring-offset-background transition-colors outline-none hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="shrink-0 rounded-sm ring-offset-background outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
-            <span className="font-medium">{post.name}</span>{" "}
-            <span className="font-normal text-muted-foreground">
-              @{post.username}
-            </span>
+            {avatar}
           </Link>
+        )}
+        <div className="min-w-0 flex-1">
+          {disableLink ? (
+            <div className="block truncate text-left">{authorLine}</div>
+          ) : (
+            <Link
+              to="/user/$username"
+              params={{ username: post.username }}
+              className="block truncate rounded-sm text-left ring-offset-background transition-colors outline-none hover:text-primary hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            >
+              {authorLine}
+            </Link>
+          )}
           <p
             className="text-xs text-muted-foreground"
             title={createdAt.toLocaleString()}

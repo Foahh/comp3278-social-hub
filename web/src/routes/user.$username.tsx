@@ -109,6 +109,7 @@ function UserProfilePage() {
         isFetchingNextPage={feed.isFetchingNextPage}
         fetchNextPage={feed.fetchNextPage}
         isLoading={feed.isLoading}
+        disableLink
         emptyMessage={
           isOwner
             ? "You haven't posted yet. Share something to fill this space."
