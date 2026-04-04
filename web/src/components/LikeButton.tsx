@@ -18,7 +18,7 @@ export function LikeButton({ post }: { post: Post }) {
     <Button
       variant="secondary"
       size="sm"
-      className="w-16 gap-1.5"
+      className="w-16"
       disabled={!user || toggle.isPending}
       onClick={() => toggle.mutate()}
       aria-label={post.liked_by_me ? "Unlike" : "Like"}

@@ -221,7 +221,7 @@ export function PostCard({
             params={{ id: String(post.post_id) }}
             variant="secondary"
             size="sm"
-            className="min-w-16 gap-1.5 whitespace-nowrap"
+            className="min-w-16 whitespace-nowrap"
             aria-label={commentLabel}
           >
             <Comment className="size-4 shrink-0" aria-hidden />
