@@ -1,23 +1,24 @@
-"use client";
+"use client"
 
-import type * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
+import type * as CollapsiblePrimitive from "@radix-ui/react-collapsible"
 import {
   Collapsible as ShadcnCollapsible,
   CollapsibleContent as ShadcnCollapsibleContent,
   CollapsibleTrigger as ShadcnCollapsibleTrigger,
-} from "@radix-ui/react-collapsible";
+} from "@radix-ui/react-collapsible"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
-import "@/components/ui/8bit/styles/retro.css";
+import "@/components/ui/8bit/styles/retro.css"
 
-export interface BitCollapsibleProps
-  extends React.ComponentProps<typeof CollapsiblePrimitive.Root> {
-  asChild?: boolean;
+export interface BitCollapsibleProps extends React.ComponentProps<
+  typeof CollapsiblePrimitive.Root
+> {
+  asChild?: boolean
 }
 
 function Collapsible({ children, ...props }: BitCollapsibleProps) {
-  const { className } = props;
+  const { className } = props
 
   return (
     <div className={cn("relative", className)}>
@@ -25,14 +26,14 @@ function Collapsible({ children, ...props }: BitCollapsibleProps) {
         {children}
       </ShadcnCollapsible>
     </div>
-  );
+  )
 }
 
 function CollapsibleTrigger({
   children,
   ...props
 }: React.ComponentProps<typeof CollapsiblePrimitive.CollapsibleTrigger>) {
-  const { className } = props;
+  const { className } = props
   return (
     <ShadcnCollapsibleTrigger
       data-slot="collapsible-trigger"
@@ -41,14 +42,14 @@ function CollapsibleTrigger({
     >
       {children}
     </ShadcnCollapsibleTrigger>
-  );
+  )
 }
 
 function CollapsibleContent({
   children,
   ...props
 }: React.ComponentProps<typeof CollapsiblePrimitive.CollapsibleContent>) {
-  const { className } = props;
+  const { className } = props
   return (
     <ShadcnCollapsibleContent
       data-slot="collapsible-content"
@@ -57,7 +58,7 @@ function CollapsibleContent({
     >
       {children}
     </ShadcnCollapsibleContent>
-  );
+  )
 }
 
-export { Collapsible, CollapsibleTrigger, CollapsibleContent };
+export { Collapsible, CollapsibleTrigger, CollapsibleContent }

@@ -5,7 +5,11 @@ import { ChevronDown, Lightbulb } from "pixelarticons/react"
 import type { ComponentProps, ReactNode } from "react"
 import { createContext, memo, useContext, useEffect, useState } from "react"
 import { Streamdown } from "streamdown"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 import { cn } from "@/lib/utils"
 import { Shimmer } from "@/components/ai/shimmer"
 
@@ -93,11 +97,13 @@ export const Reasoning = memo(
     }
 
     return (
-      <ReasoningContext.Provider value={{ isStreaming, isOpen, setIsOpen, duration }}>
+      <ReasoningContext.Provider
+        value={{ isStreaming, isOpen, setIsOpen, duration }}
+      >
         <Collapsible
           className={cn(
             "not-prose mb-4 rounded-none border-[0.125rem] border-foreground bg-muted/20 p-3 dark:border-ring",
-            className,
+            className
           )}
           onOpenChange={handleOpenChange}
           open={isOpen}
@@ -107,10 +113,12 @@ export const Reasoning = memo(
         </Collapsible>
       </ReasoningContext.Provider>
     )
-  },
+  }
 )
 
-export type ReasoningTriggerProps = ComponentProps<typeof CollapsibleTrigger> & {
+export type ReasoningTriggerProps = ComponentProps<
+  typeof CollapsibleTrigger
+> & {
   getThinkingMessage?: (isStreaming: boolean, duration?: number) => ReactNode
 }
 
@@ -121,11 +129,7 @@ const defaultGetThinkingMessage = (isStreaming: boolean, duration?: number) => {
   if (duration === undefined) {
     return <p className="retro m-0">Thought for a few seconds</p>
   }
-  return (
-    <p className="retro m-0">
-      Thought for {duration} seconds
-    </p>
-  )
+  return <p className="retro m-0">Thought for {duration} seconds</p>
 }
 
 export const ReasoningTrigger = memo(
@@ -140,8 +144,8 @@ export const ReasoningTrigger = memo(
     return (
       <CollapsibleTrigger
         className={cn(
-          "retro flex w-full items-center gap-2 text-left text-muted-foreground text-sm transition-colors hover:text-foreground",
-          className,
+          "retro flex w-full items-center gap-2 text-left text-sm text-muted-foreground transition-colors hover:text-foreground",
+          className
         )}
         {...props}
       >
@@ -150,31 +154,38 @@ export const ReasoningTrigger = memo(
             <Lightbulb className="size-4" />
             {getThinkingMessage(isStreaming, duration)}
             <ChevronDown
-              className={cn("size-4 transition-transform", isOpen ? "rotate-180" : "rotate-0")}
+              className={cn(
+                "size-4 transition-transform",
+                isOpen ? "rotate-180" : "rotate-0"
+              )}
             />
           </>
         )}
       </CollapsibleTrigger>
     )
-  },
+  }
 )
 
-export type ReasoningContentProps = ComponentProps<typeof CollapsibleContent> & {
+export type ReasoningContentProps = ComponentProps<
+  typeof CollapsibleContent
+> & {
   children: string
 }
 
-export const ReasoningContent = memo(({ className, children, ...props }: ReasoningContentProps) => (
-  <CollapsibleContent
-    className={cn(
-      "retro mt-4 border-border border-t pt-4 text-sm",
-      "data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 text-muted-foreground outline-none data-[state=closed]:animate-out data-[state=open]:animate-in",
-      className,
-    )}
-    {...props}
-  >
-    <Streamdown className="retro">{children}</Streamdown>
-  </CollapsibleContent>
-))
+export const ReasoningContent = memo(
+  ({ className, children, ...props }: ReasoningContentProps) => (
+    <CollapsibleContent
+      className={cn(
+        "retro mt-4 border-t border-border pt-4 text-sm",
+        "text-muted-foreground outline-none data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:animate-in data-[state=open]:slide-in-from-top-2",
+        className
+      )}
+      {...props}
+    >
+      <Streamdown className="retro">{children}</Streamdown>
+    </CollapsibleContent>
+  )
+)
 
 Reasoning.displayName = "Reasoning"
 ReasoningTrigger.displayName = "ReasoningTrigger"
@@ -187,13 +198,14 @@ export default function ReasoningDemo() {
       <Reasoning defaultOpen={true} duration={12}>
         <ReasoningTrigger />
         <ReasoningContent>
-          Let me think through this step by step... First, I need to consider the user's
-          requirements. They want a solution that is both efficient and maintainable. Looking at the
-          codebase, I can see several potential approaches: 1. **Refactor the existing module** -
-          This would minimize disruption 2. **Create a new abstraction layer** - More work but
-          cleaner long-term 3. **Use a library solution** - Fastest but adds a dependency After
-          weighing the tradeoffs, I believe option 2 provides the best balance of maintainability
-          and performance.
+          Let me think through this step by step... First, I need to consider
+          the user's requirements. They want a solution that is both efficient
+          and maintainable. Looking at the codebase, I can see several potential
+          approaches: 1. **Refactor the existing module** - This would minimize
+          disruption 2. **Create a new abstraction layer** - More work but
+          cleaner long-term 3. **Use a library solution** - Fastest but adds a
+          dependency After weighing the tradeoffs, I believe option 2 provides
+          the best balance of maintainability and performance.
         </ReasoningContent>
       </Reasoning>
     </div>

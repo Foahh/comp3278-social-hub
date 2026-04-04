@@ -3,7 +3,12 @@
 import { Copy, Redo, ThumbsDown, ThumbsUp } from "pixelarticons/react"
 import type { ComponentProps } from "react"
 import { Button } from "@/components/ui/8bit/button"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 import { Message, MessageContent } from "@/components/ai/message"
 
@@ -66,22 +71,34 @@ export default function ActionsDemo() {
     <div className="flex w-full flex-col gap-4 p-6">
       <Message from="assistant">
         <MessageContent>
-          Here's a quick example of how to use React hooks. The useState hook lets you add state to
-          functional components, while useEffect handles side effects like data fetching or
-          subscriptions.
+          Here's a quick example of how to use React hooks. The useState hook
+          lets you add state to functional components, while useEffect handles
+          side effects like data fetching or subscriptions.
         </MessageContent>
 
         <Actions>
-          <Action onClick={() => console.log("Copied!")} tooltip="Copy to clipboard">
+          <Action
+            onClick={() => console.log("Copied!")}
+            tooltip="Copy to clipboard"
+          >
             <Copy className="size-4" />
           </Action>
-          <Action onClick={() => console.log("Regenerating...")} tooltip="Regenerate response">
+          <Action
+            onClick={() => console.log("Regenerating...")}
+            tooltip="Regenerate response"
+          >
             <Redo className="size-4" />
           </Action>
-          <Action onClick={() => console.log("Thumbs up!")} tooltip="Good response">
+          <Action
+            onClick={() => console.log("Thumbs up!")}
+            tooltip="Good response"
+          >
             <ThumbsUp className="size-4" />
           </Action>
-          <Action onClick={() => console.log("Thumbs down!")} tooltip="Bad response">
+          <Action
+            onClick={() => console.log("Thumbs down!")}
+            tooltip="Bad response"
+          >
             <ThumbsDown className="size-4" />
           </Action>
         </Actions>

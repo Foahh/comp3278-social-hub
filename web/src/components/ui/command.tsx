@@ -12,10 +12,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Check, Search } from "pixelarticons/react"
-import {
-  InputGroup,
-  InputGroupAddon,
-} from "@/components/ui/input-group"
+import { InputGroup, InputGroupAddon } from "@/components/ui/input-group"
 
 function Command({
   className,

@@ -20,10 +20,18 @@ export const Conversation = ({ className, ...props }: ConversationProps) => (
   />
 )
 
-export type ConversationContentProps = ComponentProps<typeof StickToBottom.Content>
+export type ConversationContentProps = ComponentProps<
+  typeof StickToBottom.Content
+>
 
-export const ConversationContent = ({ className, ...props }: ConversationContentProps) => (
-  <StickToBottom.Content className={cn("flex flex-col gap-8 p-4", className)} {...props} />
+export const ConversationContent = ({
+  className,
+  ...props
+}: ConversationContentProps) => (
+  <StickToBottom.Content
+    className={cn("flex flex-col gap-8 p-4", className)}
+    {...props}
+  />
 )
 
 export type ConversationEmptyStateProps = ComponentProps<"div"> & {
@@ -43,7 +51,7 @@ export const ConversationEmptyState = ({
   <div
     className={cn(
       "flex size-full flex-col items-center justify-center gap-3 p-8 text-center",
-      className,
+      className
     )}
     {...props}
   >
@@ -51,9 +59,9 @@ export const ConversationEmptyState = ({
       <>
         {icon && <div className="text-muted-foreground">{icon}</div>}
         <div className="space-y-1">
-          <h3 className="retro font-medium text-sm">{title}</h3>
+          <h3 className="retro text-sm font-medium">{title}</h3>
           {description && (
-            <p className="retro text-muted-foreground text-sm">{description}</p>
+            <p className="retro text-sm text-muted-foreground">{description}</p>
           )}
         </div>
       </>
@@ -76,7 +84,10 @@ export const ConversationScrollButton = ({
   return (
     !isAtBottom && (
       <Button
-        className={cn("absolute bottom-4 left-[50%] translate-x-[-50%]", className)}
+        className={cn(
+          "absolute bottom-4 left-[50%] translate-x-[-50%]",
+          className
+        )}
         onClick={handleScrollToBottom}
         size="icon"
         type="button"
@@ -98,7 +109,11 @@ export default function ConversationDemo() {
       from: "assistant" as const,
       text: "I'm good, thank you! How can I assist you today?",
     },
-    { id: "3", from: "user" as const, text: "I'm looking for information about your services." },
+    {
+      id: "3",
+      from: "user" as const,
+      text: "I'm looking for information about your services.",
+    },
     {
       id: "4",
       from: "assistant" as const,
@@ -109,7 +124,7 @@ export default function ConversationDemo() {
   return (
     <Conversation className="relative size-full p-4">
       <ConversationContent>
-        {messages.map(msg => (
+        {messages.map((msg) => (
           <Message from={msg.from} key={msg.id}>
             <MessageContent>{msg.text}</MessageContent>
           </Message>

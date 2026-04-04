@@ -29,7 +29,9 @@ function wrapper({ children }: { children: ReactNode }) {
 
 describe("useAnalytics", () => {
   it("fetches analytics data", async () => {
-    server.use(http.get("/api/analytics", () => HttpResponse.json(mockAnalytics)))
+    server.use(
+      http.get("/api/analytics", () => HttpResponse.json(mockAnalytics))
+    )
     const { result } = renderHook(() => useAnalytics(), { wrapper })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data?.top_posts).toHaveLength(1)
@@ -38,7 +40,9 @@ describe("useAnalytics", () => {
   })
 
   it("exposes isLoading while fetching", async () => {
-    server.use(http.get("/api/analytics", () => HttpResponse.json(mockAnalytics)))
+    server.use(
+      http.get("/api/analytics", () => HttpResponse.json(mockAnalytics))
+    )
     const { result } = renderHook(() => useAnalytics(), { wrapper })
     expect(result.current.isLoading).toBe(true)
     await waitFor(() => expect(result.current.isSuccess).toBe(true))

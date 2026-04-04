@@ -52,9 +52,11 @@ const lineNumberTransformer: ShikiTransformer = {
 export async function highlightCode(
   code: string,
   language: BundledLanguage,
-  showLineNumbers = false,
+  showLineNumbers = false
 ) {
-  const transformers: ShikiTransformer[] = showLineNumbers ? [lineNumberTransformer] : []
+  const transformers: ShikiTransformer[] = showLineNumbers
+    ? [lineNumberTransformer]
+    : []
 
   return await Promise.all([
     codeToHtml(code, {
@@ -101,21 +103,23 @@ export const CodeBlock = ({
       <div
         className={cn(
           "group relative w-full overflow-hidden rounded-none border-[0.125rem] border-foreground bg-background text-foreground dark:border-ring",
-          className,
+          className
         )}
         {...props}
       >
         <div className="relative">
           <div
-            className="retro overflow-auto dark:hidden [&>pre]:m-0 [&>pre]:bg-background! [&>pre]:p-4 [&>pre]:text-foreground! [&>pre]:text-sm [&_code]:font-mono [&_code]:text-sm"
+            className="retro overflow-auto dark:hidden [&_code]:font-mono [&_code]:text-sm [&>pre]:m-0 [&>pre]:bg-background! [&>pre]:p-4 [&>pre]:text-sm [&>pre]:text-foreground!"
             dangerouslySetInnerHTML={{ __html: html }}
           />
           <div
-            className="retro hidden overflow-auto dark:block [&>pre]:m-0 [&>pre]:bg-background! [&>pre]:p-4 [&>pre]:text-foreground! [&>pre]:text-sm [&_code]:font-mono [&_code]:text-sm"
+            className="retro hidden overflow-auto dark:block [&_code]:font-mono [&_code]:text-sm [&>pre]:m-0 [&>pre]:bg-background! [&>pre]:p-4 [&>pre]:text-sm [&>pre]:text-foreground!"
             dangerouslySetInnerHTML={{ __html: darkHtml }}
           />
           {children && (
-            <div className="absolute top-2 right-2 flex items-center gap-2">{children}</div>
+            <div className="absolute top-2 right-2 flex items-center gap-2">
+              {children}
+            </div>
           )}
         </div>
       </div>

@@ -4,1158 +4,1158 @@
  */
 
 export interface paths {
-    "/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Index
-         * @description Serve the main chat interface.
-         */
-        get: operations["index__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/auth/register": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Register */
-        post: operations["register_api_auth_register_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/auth/login": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Login */
-        post: operations["login_api_auth_login_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/auth/logout": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Logout */
-        post: operations["logout_api_auth_logout_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/auth/me": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Me */
-        get: operations["me_api_auth_me_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/posts": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Posts */
-        get: operations["list_posts_api_posts_get"];
-        put?: never;
-        /** Create Post */
-        post: operations["create_post_api_posts_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/posts/{post_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get Post */
-        get: operations["get_post_api_posts__post_id__get"];
-        put?: never;
-        post?: never;
-        /** Delete Post */
-        delete: operations["delete_post_api_posts__post_id__delete"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/posts/{post_id}/like": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Toggle Like */
-        post: operations["toggle_like_api_posts__post_id__like_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/posts/{post_id}/comments": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Comments */
-        get: operations["list_comments_api_posts__post_id__comments_get"];
-        put?: never;
-        /** Create Comment */
-        post: operations["create_comment_api_posts__post_id__comments_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/users/{username}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get User Profile */
-        get: operations["get_user_profile_api_users__username__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/users/{username}/avatar": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        /** Upload Avatar */
-        put: operations["upload_avatar_api_users__username__avatar_put"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/analytics": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get Analytics */
-        get: operations["get_analytics_api_analytics_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/health": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Health */
-        get: operations["health_api_health_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/vanna/v2/chat_sse": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Chat Sse
-         * @description Server-Sent Events endpoint for streaming chat.
-         */
-        post: operations["chat_sse_api_vanna_v2_chat_sse_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/vanna/v2/chat_poll": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Chat Poll
-         * @description Polling endpoint for chat.
-         */
-        post: operations["chat_poll_api_vanna_v2_chat_poll_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+  "/": {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Index
+     * @description Serve the main chat interface.
+     */
+    get: operations["index__get"]
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  "/api/auth/register": {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Register */
+    post: operations["register_api_auth_register_post"]
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  "/api/auth/login": {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Login */
+    post: operations["login_api_auth_login_post"]
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  "/api/auth/logout": {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Logout */
+    post: operations["logout_api_auth_logout_post"]
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  "/api/auth/me": {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Me */
+    get: operations["me_api_auth_me_get"]
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  "/api/posts": {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Posts */
+    get: operations["list_posts_api_posts_get"]
+    put?: never
+    /** Create Post */
+    post: operations["create_post_api_posts_post"]
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  "/api/posts/{post_id}": {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Get Post */
+    get: operations["get_post_api_posts__post_id__get"]
+    put?: never
+    post?: never
+    /** Delete Post */
+    delete: operations["delete_post_api_posts__post_id__delete"]
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  "/api/posts/{post_id}/like": {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Toggle Like */
+    post: operations["toggle_like_api_posts__post_id__like_post"]
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  "/api/posts/{post_id}/comments": {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Comments */
+    get: operations["list_comments_api_posts__post_id__comments_get"]
+    put?: never
+    /** Create Comment */
+    post: operations["create_comment_api_posts__post_id__comments_post"]
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  "/api/users/{username}": {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Get User Profile */
+    get: operations["get_user_profile_api_users__username__get"]
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  "/api/users/{username}/avatar": {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Upload Avatar */
+    put: operations["upload_avatar_api_users__username__avatar_put"]
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  "/api/analytics": {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Get Analytics */
+    get: operations["get_analytics_api_analytics_get"]
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  "/api/health": {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Health */
+    get: operations["health_api_health_get"]
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  "/api/vanna/v2/chat_sse": {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Chat Sse
+     * @description Server-Sent Events endpoint for streaming chat.
+     */
+    post: operations["chat_sse_api_vanna_v2_chat_sse_post"]
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  "/api/vanna/v2/chat_poll": {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Chat Poll
+     * @description Polling endpoint for chat.
+     */
+    post: operations["chat_poll_api_vanna_v2_chat_poll_post"]
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
 }
-export type webhooks = Record<string, never>;
+export type webhooks = Record<string, never>
 export interface components {
-    schemas: {
-        /** AnalyticsDayCount */
-        AnalyticsDayCount: {
-            /** Date */
-            date: string;
-            /** Count */
-            count: number;
-        };
-        /** AnalyticsResponse */
-        AnalyticsResponse: {
-            /** Top Posts */
-            top_posts: components["schemas"]["AnalyticsTopPost"][];
-            /** Top Users */
-            top_users: components["schemas"]["AnalyticsTopUser"][];
-            /** Posts Over Time */
-            posts_over_time: components["schemas"]["AnalyticsDayCount"][];
-            /** Likes Over Time */
-            likes_over_time: components["schemas"]["AnalyticsDayCount"][];
-        };
-        /** AnalyticsTopPost */
-        AnalyticsTopPost: {
-            /** Post Id */
-            post_id: number;
-            /** Username */
-            username: string;
-            /** Excerpt */
-            excerpt: string;
-            /** Like Count */
-            like_count: number;
-        };
-        /** AnalyticsTopUser */
-        AnalyticsTopUser: {
-            /** Username */
-            username: string;
-            /** Name */
-            name: string;
-            /** Post Count */
-            post_count: number;
-            /** Total Likes */
-            total_likes: number;
-        };
-        /** AuthResponse */
-        AuthResponse: {
-            /** User Id */
-            user_id: number;
-            /** Username */
-            username: string;
-            /** Name */
-            name: string;
-            /** Avatar Url */
-            avatar_url: string | null;
-        };
-        /** Body_create_post_api_posts_post */
-        Body_create_post_api_posts_post: {
-            /** Text Content */
-            text_content?: string | null;
-            /** Image Urls */
-            image_urls?: string | null;
-            /** Images */
-            images?: string[] | null;
-        };
-        /** Body_upload_avatar_api_users__username__avatar_put */
-        Body_upload_avatar_api_users__username__avatar_put: {
-            /** Avatar */
-            avatar: string;
-        };
-        /**
-         * ChatRequest
-         * @description Request model for chat endpoints.
-         */
-        ChatRequest: {
-            /**
-             * Message
-             * @description User message
-             */
-            message: string;
-            /**
-             * Conversation Id
-             * @description Conversation ID
-             */
-            conversation_id?: string | null;
-            /**
-             * Request Id
-             * @description Request ID for tracing
-             */
-            request_id?: string | null;
-            /** @description Request context for user resolution */
-            request_context?: components["schemas"]["RequestContext"];
-            /**
-             * Metadata
-             * @description Additional metadata
-             */
-            metadata?: {
-                [key: string]: unknown;
-            };
-        };
-        /**
-         * ChatResponse
-         * @description Complete chat response for polling endpoints.
-         */
-        ChatResponse: {
-            /**
-             * Chunks
-             * @description Response chunks
-             */
-            chunks: components["schemas"]["ChatStreamChunk"][];
-            /**
-             * Conversation Id
-             * @description Conversation ID
-             */
-            conversation_id: string;
-            /**
-             * Request Id
-             * @description Request ID
-             */
-            request_id: string;
-            /**
-             * Total Chunks
-             * @description Total number of chunks
-             */
-            total_chunks: number;
-        };
-        /**
-         * ChatStreamChunk
-         * @description Single chunk in a streaming chat response.
-         */
-        ChatStreamChunk: {
-            /**
-             * Rich
-             * @description Rich component data for advanced UIs
-             */
-            rich: {
-                [key: string]: unknown;
-            };
-            /**
-             * Simple
-             * @description Simple component data for basic UIs
-             */
-            simple?: {
-                [key: string]: unknown;
-            } | null;
-            /**
-             * Conversation Id
-             * @description Conversation ID
-             */
-            conversation_id: string;
-            /**
-             * Request Id
-             * @description Request ID
-             */
-            request_id: string;
-            /**
-             * Timestamp
-             * @description Timestamp
-             */
-            timestamp?: number;
-        };
-        /** CommentResponse */
-        CommentResponse: {
-            /** Comment Id */
-            comment_id: number;
-            /** User Id */
-            user_id: number;
-            /** Username */
-            username: string;
-            /** Name */
-            name: string;
-            /** Avatar Url */
-            avatar_url: string | null;
-            /** Content */
-            content: string;
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
-        };
-        /** CreateCommentRequest */
-        CreateCommentRequest: {
-            /** Content */
-            content: string;
-        };
-        /**
-         * FeedSort
-         * @enum {string}
-         */
-        FeedSort: "latest" | "popular";
-        /** HTTPValidationError */
-        HTTPValidationError: {
-            /** Detail */
-            detail?: components["schemas"]["ValidationError"][];
-        };
-        /** ImageResponse */
-        ImageResponse: {
-            /** Image Id */
-            image_id: number;
-            /** Url */
-            url: string;
-            /** Position */
-            position: number;
-        };
-        /** LikeToggleResponse */
-        LikeToggleResponse: {
-            /** Liked */
-            liked: boolean;
-            /** Like Count */
-            like_count: number;
-        };
-        /** LoginRequest */
-        LoginRequest: {
-            /** Username */
-            username: string;
-            /** Password */
-            password: string;
-        };
-        /** PostListResponse */
-        PostListResponse: {
-            /** Posts */
-            posts: components["schemas"]["PostResponse"][];
-            /** Next Cursor */
-            next_cursor: number | null;
-        };
-        /** PostResponse */
-        PostResponse: {
-            /** Post Id */
-            post_id: number;
-            /** User Id */
-            user_id: number;
-            /** Username */
-            username: string;
-            /** Name */
-            name: string;
-            /** Avatar Url */
-            avatar_url: string | null;
-            /** Text Content */
-            text_content: string | null;
-            /** Images */
-            images: components["schemas"]["ImageResponse"][];
-            /** Like Count */
-            like_count: number;
-            /** Comment Count */
-            comment_count: number;
-            /** Liked By Me */
-            liked_by_me: boolean;
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
-        };
-        /** RegisterRequest */
-        RegisterRequest: {
-            /** Username */
-            username: string;
-            /**
-             * Name
-             * @default
-             */
-            name: string;
-            /** Password */
-            password: string;
-        };
-        /**
-         * RequestContext
-         * @description Context from a web request for user resolution.
-         *
-         *     This structured object replaces raw dictionaries for passing request
-         *     data to UserResolver implementations, making it easier to access
-         *     cookies, headers, and other request metadata.
-         *
-         *     Example:
-         *         context = RequestContext(
-         *             cookies={'vanna_email': 'alice@example.com'},
-         *             headers={'Authorization': 'Bearer token'},
-         *             remote_addr='127.0.0.1'
-         *         )
-         *         user = await resolver.resolve_user(context)
-         */
-        RequestContext: {
-            /**
-             * Cookies
-             * @description Request cookies
-             */
-            cookies?: {
-                [key: string]: string;
-            };
-            /**
-             * Headers
-             * @description Request headers
-             */
-            headers?: {
-                [key: string]: string;
-            };
-            /**
-             * Remote Addr
-             * @description Remote IP address
-             */
-            remote_addr?: string | null;
-            /**
-             * Query Params
-             * @description Query parameters
-             */
-            query_params?: {
-                [key: string]: string;
-            };
-            /**
-             * Metadata
-             * @description Additional framework-specific metadata
-             */
-            metadata?: {
-                [key: string]: unknown;
-            };
-        };
-        /** UserProfileResponse */
-        UserProfileResponse: {
-            /** User Id */
-            user_id: number;
-            /** Username */
-            username: string;
-            /** Name */
-            name: string;
-            /** Avatar Url */
-            avatar_url: string | null;
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
-            /** Post Count */
-            post_count: number;
-            /** Total Likes */
-            total_likes: number;
-        };
-        /** ValidationError */
-        ValidationError: {
-            /** Location */
-            loc: (string | number)[];
-            /** Message */
-            msg: string;
-            /** Error Type */
-            type: string;
-            /** Input */
-            input?: unknown;
-            /** Context */
-            ctx?: Record<string, never>;
-        };
-    };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+  schemas: {
+    /** AnalyticsDayCount */
+    AnalyticsDayCount: {
+      /** Date */
+      date: string
+      /** Count */
+      count: number
+    }
+    /** AnalyticsResponse */
+    AnalyticsResponse: {
+      /** Top Posts */
+      top_posts: components["schemas"]["AnalyticsTopPost"][]
+      /** Top Users */
+      top_users: components["schemas"]["AnalyticsTopUser"][]
+      /** Posts Over Time */
+      posts_over_time: components["schemas"]["AnalyticsDayCount"][]
+      /** Likes Over Time */
+      likes_over_time: components["schemas"]["AnalyticsDayCount"][]
+    }
+    /** AnalyticsTopPost */
+    AnalyticsTopPost: {
+      /** Post Id */
+      post_id: number
+      /** Username */
+      username: string
+      /** Excerpt */
+      excerpt: string
+      /** Like Count */
+      like_count: number
+    }
+    /** AnalyticsTopUser */
+    AnalyticsTopUser: {
+      /** Username */
+      username: string
+      /** Name */
+      name: string
+      /** Post Count */
+      post_count: number
+      /** Total Likes */
+      total_likes: number
+    }
+    /** AuthResponse */
+    AuthResponse: {
+      /** User Id */
+      user_id: number
+      /** Username */
+      username: string
+      /** Name */
+      name: string
+      /** Avatar Url */
+      avatar_url: string | null
+    }
+    /** Body_create_post_api_posts_post */
+    Body_create_post_api_posts_post: {
+      /** Text Content */
+      text_content?: string | null
+      /** Image Urls */
+      image_urls?: string | null
+      /** Images */
+      images?: string[] | null
+    }
+    /** Body_upload_avatar_api_users__username__avatar_put */
+    Body_upload_avatar_api_users__username__avatar_put: {
+      /** Avatar */
+      avatar: string
+    }
+    /**
+     * ChatRequest
+     * @description Request model for chat endpoints.
+     */
+    ChatRequest: {
+      /**
+       * Message
+       * @description User message
+       */
+      message: string
+      /**
+       * Conversation Id
+       * @description Conversation ID
+       */
+      conversation_id?: string | null
+      /**
+       * Request Id
+       * @description Request ID for tracing
+       */
+      request_id?: string | null
+      /** @description Request context for user resolution */
+      request_context?: components["schemas"]["RequestContext"]
+      /**
+       * Metadata
+       * @description Additional metadata
+       */
+      metadata?: {
+        [key: string]: unknown
+      }
+    }
+    /**
+     * ChatResponse
+     * @description Complete chat response for polling endpoints.
+     */
+    ChatResponse: {
+      /**
+       * Chunks
+       * @description Response chunks
+       */
+      chunks: components["schemas"]["ChatStreamChunk"][]
+      /**
+       * Conversation Id
+       * @description Conversation ID
+       */
+      conversation_id: string
+      /**
+       * Request Id
+       * @description Request ID
+       */
+      request_id: string
+      /**
+       * Total Chunks
+       * @description Total number of chunks
+       */
+      total_chunks: number
+    }
+    /**
+     * ChatStreamChunk
+     * @description Single chunk in a streaming chat response.
+     */
+    ChatStreamChunk: {
+      /**
+       * Rich
+       * @description Rich component data for advanced UIs
+       */
+      rich: {
+        [key: string]: unknown
+      }
+      /**
+       * Simple
+       * @description Simple component data for basic UIs
+       */
+      simple?: {
+        [key: string]: unknown
+      } | null
+      /**
+       * Conversation Id
+       * @description Conversation ID
+       */
+      conversation_id: string
+      /**
+       * Request Id
+       * @description Request ID
+       */
+      request_id: string
+      /**
+       * Timestamp
+       * @description Timestamp
+       */
+      timestamp?: number
+    }
+    /** CommentResponse */
+    CommentResponse: {
+      /** Comment Id */
+      comment_id: number
+      /** User Id */
+      user_id: number
+      /** Username */
+      username: string
+      /** Name */
+      name: string
+      /** Avatar Url */
+      avatar_url: string | null
+      /** Content */
+      content: string
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+    }
+    /** CreateCommentRequest */
+    CreateCommentRequest: {
+      /** Content */
+      content: string
+    }
+    /**
+     * FeedSort
+     * @enum {string}
+     */
+    FeedSort: "latest" | "popular"
+    /** HTTPValidationError */
+    HTTPValidationError: {
+      /** Detail */
+      detail?: components["schemas"]["ValidationError"][]
+    }
+    /** ImageResponse */
+    ImageResponse: {
+      /** Image Id */
+      image_id: number
+      /** Url */
+      url: string
+      /** Position */
+      position: number
+    }
+    /** LikeToggleResponse */
+    LikeToggleResponse: {
+      /** Liked */
+      liked: boolean
+      /** Like Count */
+      like_count: number
+    }
+    /** LoginRequest */
+    LoginRequest: {
+      /** Username */
+      username: string
+      /** Password */
+      password: string
+    }
+    /** PostListResponse */
+    PostListResponse: {
+      /** Posts */
+      posts: components["schemas"]["PostResponse"][]
+      /** Next Cursor */
+      next_cursor: number | null
+    }
+    /** PostResponse */
+    PostResponse: {
+      /** Post Id */
+      post_id: number
+      /** User Id */
+      user_id: number
+      /** Username */
+      username: string
+      /** Name */
+      name: string
+      /** Avatar Url */
+      avatar_url: string | null
+      /** Text Content */
+      text_content: string | null
+      /** Images */
+      images: components["schemas"]["ImageResponse"][]
+      /** Like Count */
+      like_count: number
+      /** Comment Count */
+      comment_count: number
+      /** Liked By Me */
+      liked_by_me: boolean
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+    }
+    /** RegisterRequest */
+    RegisterRequest: {
+      /** Username */
+      username: string
+      /**
+       * Name
+       * @default
+       */
+      name: string
+      /** Password */
+      password: string
+    }
+    /**
+     * RequestContext
+     * @description Context from a web request for user resolution.
+     *
+     *     This structured object replaces raw dictionaries for passing request
+     *     data to UserResolver implementations, making it easier to access
+     *     cookies, headers, and other request metadata.
+     *
+     *     Example:
+     *         context = RequestContext(
+     *             cookies={'vanna_email': 'alice@example.com'},
+     *             headers={'Authorization': 'Bearer token'},
+     *             remote_addr='127.0.0.1'
+     *         )
+     *         user = await resolver.resolve_user(context)
+     */
+    RequestContext: {
+      /**
+       * Cookies
+       * @description Request cookies
+       */
+      cookies?: {
+        [key: string]: string
+      }
+      /**
+       * Headers
+       * @description Request headers
+       */
+      headers?: {
+        [key: string]: string
+      }
+      /**
+       * Remote Addr
+       * @description Remote IP address
+       */
+      remote_addr?: string | null
+      /**
+       * Query Params
+       * @description Query parameters
+       */
+      query_params?: {
+        [key: string]: string
+      }
+      /**
+       * Metadata
+       * @description Additional framework-specific metadata
+       */
+      metadata?: {
+        [key: string]: unknown
+      }
+    }
+    /** UserProfileResponse */
+    UserProfileResponse: {
+      /** User Id */
+      user_id: number
+      /** Username */
+      username: string
+      /** Name */
+      name: string
+      /** Avatar Url */
+      avatar_url: string | null
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /** Post Count */
+      post_count: number
+      /** Total Likes */
+      total_likes: number
+    }
+    /** ValidationError */
+    ValidationError: {
+      /** Location */
+      loc: (string | number)[]
+      /** Message */
+      msg: string
+      /** Error Type */
+      type: string
+      /** Input */
+      input?: unknown
+      /** Context */
+      ctx?: Record<string, never>
+    }
+  }
+  responses: never
+  parameters: never
+  requestBodies: never
+  headers: never
+  pathItems: never
 }
-export type $defs = Record<string, never>;
+export type $defs = Record<string, never>
 export interface operations {
-    index__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "text/html": string;
-                };
-            };
-        };
-    };
-    register_api_auth_register_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RegisterRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AuthResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    login_api_auth_login_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["LoginRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AuthResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    logout_api_auth_logout_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    me_api_auth_me_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AuthResponse"];
-                };
-            };
-        };
-    };
-    list_posts_api_posts_get: {
-        parameters: {
-            query?: {
-                sort?: components["schemas"]["FeedSort"];
-                cursor?: number | null;
-                username?: string | null;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PostListResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    create_post_api_posts_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "multipart/form-data": components["schemas"]["Body_create_post_api_posts_post"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PostResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    get_post_api_posts__post_id__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                post_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PostResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    delete_post_api_posts__post_id__delete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                post_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    toggle_like_api_posts__post_id__like_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                post_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LikeToggleResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_comments_api_posts__post_id__comments_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                post_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CommentResponse"][];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    create_comment_api_posts__post_id__comments_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                post_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateCommentRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CommentResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    get_user_profile_api_users__username__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                username: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UserProfileResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    upload_avatar_api_users__username__avatar_put: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                username: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": components["schemas"]["Body_upload_avatar_api_users__username__avatar_put"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AuthResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    get_analytics_api_analytics_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AnalyticsResponse"];
-                };
-            };
-        };
-    };
-    health_api_health_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    chat_sse_api_vanna_v2_chat_sse_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ChatRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    chat_poll_api_vanna_v2_chat_poll_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ChatRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ChatResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
+  index__get: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "text/html": string
+        }
+      }
+    }
+  }
+  register_api_auth_register_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RegisterRequest"]
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["AuthResponse"]
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"]
+        }
+      }
+    }
+  }
+  login_api_auth_login_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LoginRequest"]
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["AuthResponse"]
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"]
+        }
+      }
+    }
+  }
+  logout_api_auth_logout_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": {
+            [key: string]: string
+          }
+        }
+      }
+    }
+  }
+  me_api_auth_me_get: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["AuthResponse"]
+        }
+      }
+    }
+  }
+  list_posts_api_posts_get: {
+    parameters: {
+      query?: {
+        sort?: components["schemas"]["FeedSort"]
+        cursor?: number | null
+        username?: string | null
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["PostListResponse"]
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"]
+        }
+      }
+    }
+  }
+  create_post_api_posts_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: {
+      content: {
+        "multipart/form-data": components["schemas"]["Body_create_post_api_posts_post"]
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["PostResponse"]
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"]
+        }
+      }
+    }
+  }
+  get_post_api_posts__post_id__get: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        post_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["PostResponse"]
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"]
+        }
+      }
+    }
+  }
+  delete_post_api_posts__post_id__delete: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        post_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": {
+            [key: string]: string
+          }
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"]
+        }
+      }
+    }
+  }
+  toggle_like_api_posts__post_id__like_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        post_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["LikeToggleResponse"]
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"]
+        }
+      }
+    }
+  }
+  list_comments_api_posts__post_id__comments_get: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        post_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["CommentResponse"][]
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"]
+        }
+      }
+    }
+  }
+  create_comment_api_posts__post_id__comments_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        post_id: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateCommentRequest"]
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["CommentResponse"]
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"]
+        }
+      }
+    }
+  }
+  get_user_profile_api_users__username__get: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        username: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["UserProfileResponse"]
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"]
+        }
+      }
+    }
+  }
+  upload_avatar_api_users__username__avatar_put: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        username: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["Body_upload_avatar_api_users__username__avatar_put"]
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["AuthResponse"]
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"]
+        }
+      }
+    }
+  }
+  get_analytics_api_analytics_get: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["AnalyticsResponse"]
+        }
+      }
+    }
+  }
+  health_api_health_get: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": {
+            [key: string]: string
+          }
+        }
+      }
+    }
+  }
+  chat_sse_api_vanna_v2_chat_sse_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ChatRequest"]
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": unknown
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"]
+        }
+      }
+    }
+  }
+  chat_poll_api_vanna_v2_chat_poll_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ChatRequest"]
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["ChatResponse"]
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"]
+        }
+      }
+    }
+  }
 }

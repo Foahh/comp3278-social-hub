@@ -1,6 +1,6 @@
-import { type VariantProps, cva } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 import {
   Dialog as ShadcnDialog,
@@ -11,34 +11,35 @@ import {
   DialogHeader as ShadcnDialogHeader,
   DialogTitle as ShadcnDialogTitle,
   DialogTrigger as ShadcnDialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog"
 
-import "@/components/ui/8bit/styles/retro.css";
+import "@/components/ui/8bit/styles/retro.css"
 
-const Dialog = ShadcnDialog;
+const Dialog = ShadcnDialog
 
-const DialogTrigger = ShadcnDialogTrigger;
+const DialogTrigger = ShadcnDialogTrigger
 
-const DialogHeader = ShadcnDialogHeader;
+const DialogHeader = ShadcnDialogHeader
 
-const DialogDescription = ShadcnDialogDescription;
+const DialogDescription = ShadcnDialogDescription
 
-const DialogClose = ShadcnDialogClose;
+const DialogClose = ShadcnDialogClose
 
-const DialogFooter = ShadcnDialogFooter;
+const DialogFooter = ShadcnDialogFooter
 
 export interface BitDialogProps
-  extends React.ComponentProps<"div">,
+  extends
+    React.ComponentProps<"div">,
     VariantProps<typeof dialogContentVariants> {}
 
 function DialogTitle({ ...props }: BitDialogProps) {
-  const { className, font } = props;
+  const { className, font } = props
   return (
     <ShadcnDialogTitle
       className={cn(font !== "normal" && "retro", className)}
       {...props}
     />
-  );
+  )
 }
 
 export const dialogContentVariants = cva("", {
@@ -51,7 +52,7 @@ export const dialogContentVariants = cva("", {
   defaultVariants: {
     font: "retro",
   },
-});
+})
 
 function DialogContent({
   className,
@@ -62,7 +63,7 @@ function DialogContent({
   return (
     <ShadcnDialogContent
       className={cn(
-        "bg-card rounded-none border-none",
+        "rounded-none border-none bg-card",
         font !== "normal" && "retro",
         className
       )}
@@ -71,15 +72,15 @@ function DialogContent({
       {children}
 
       <div
-        className="absolute inset-0 border-x-6 -mx-1.5 border-foreground dark:border-ring pointer-events-none"
+        className="pointer-events-none absolute inset-0 -mx-1.5 border-x-6 border-foreground dark:border-ring"
         aria-hidden="true"
       />
       <div
-        className="absolute inset-0 border-y-6 -my-1.5 border-foreground dark:border-ring pointer-events-none"
+        className="pointer-events-none absolute inset-0 -my-1.5 border-y-6 border-foreground dark:border-ring"
         aria-hidden="true"
       />
     </ShadcnDialogContent>
-  );
+  )
 }
 
 export {
@@ -91,4 +92,4 @@ export {
   DialogTitle,
   DialogContent,
   DialogClose,
-};
+}

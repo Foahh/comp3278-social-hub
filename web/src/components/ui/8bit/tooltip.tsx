@@ -1,19 +1,19 @@
-"use client";
+"use client"
 
-import type * as React from "react";
+import type * as React from "react"
 
-import { type VariantProps, cva } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 import {
   Tooltip as ShadcnTooltip,
   TooltipContent as ShadcnTooltipContent,
   TooltipProvider as ShadcnTooltipProvider,
   TooltipTrigger as ShadcnTooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip"
 
-import "@/components/ui/8bit/styles/retro.css";
+import "@/components/ui/8bit/styles/retro.css"
 
 export const tooltipVariants = cva("", {
   variants: {
@@ -25,10 +25,11 @@ export const tooltipVariants = cva("", {
   defaultVariants: {
     font: "retro",
   },
-});
+})
 
 export interface BitTooltipContentProps
-  extends React.ComponentPropsWithoutRef<typeof ShadcnTooltipContent>,
+  extends
+    React.ComponentPropsWithoutRef<typeof ShadcnTooltipContent>,
     VariantProps<typeof tooltipVariants> {}
 
 function TooltipContent({
@@ -37,7 +38,7 @@ function TooltipContent({
   font,
   ...props
 }: BitTooltipContentProps) {
-  const color = tooltipVariants({ font });
+  const color = tooltipVariants({ font })
 
   return (
     <div className={cn("relative inline-flex", className)}>
@@ -55,17 +56,18 @@ function TooltipContent({
         />
         <div
           className={cn(
-            "absolute top-1.5 bottom-1.5 -right-1.5 w-1.5 bg-primary ",
+            "absolute top-1.5 -right-1.5 bottom-1.5 w-1.5 bg-primary",
             color
           )}
         />
       </ShadcnTooltipContent>
     </div>
-  );
+  )
 }
 
 export interface BitTooltipProps
-  extends React.ComponentPropsWithoutRef<typeof ShadcnTooltip>,
+  extends
+    React.ComponentPropsWithoutRef<typeof ShadcnTooltip>,
     VariantProps<typeof tooltipVariants> {}
 
 function Tooltip({ children, ...props }: BitTooltipProps) {
@@ -73,12 +75,13 @@ function Tooltip({ children, ...props }: BitTooltipProps) {
     <ShadcnTooltip data-slot="tooltip" {...props}>
       {children}
     </ShadcnTooltip>
-  );
+  )
 }
 
-export interface BitTooltipProviderProps
-  extends React.ComponentPropsWithoutRef<typeof ShadcnTooltipProvider> {
-  delayDuration?: number;
+export interface BitTooltipProviderProps extends React.ComponentPropsWithoutRef<
+  typeof ShadcnTooltipProvider
+> {
+  delayDuration?: number
 }
 
 function TooltipProvider({
@@ -90,7 +93,7 @@ function TooltipProvider({
     <ShadcnTooltipProvider delayDuration={delayDuration} {...props}>
       {children}
     </ShadcnTooltipProvider>
-  );
+  )
 }
 
 function TooltipTrigger({
@@ -106,7 +109,7 @@ function TooltipTrigger({
     >
       {children}
     </ShadcnTooltipTrigger>
-  );
+  )
 }
 
-export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger };
+export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger }

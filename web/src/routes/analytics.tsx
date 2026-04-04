@@ -54,16 +54,19 @@ function AnalyticsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b text-left text-muted-foreground">
-                  <th className="pb-2 pr-4 font-medium">#</th>
-                  <th className="pb-2 pr-4 font-medium">Post</th>
-                  <th className="pb-2 pr-4 font-medium">Author</th>
-                  <th className="pb-2 font-medium text-right">Likes</th>
+                  <th className="pr-4 pb-2 font-medium">#</th>
+                  <th className="pr-4 pb-2 font-medium">Post</th>
+                  <th className="pr-4 pb-2 font-medium">Author</th>
+                  <th className="pb-2 text-right font-medium">Likes</th>
                 </tr>
               </thead>
               <tbody>
                 {(data?.top_posts.length ?? 0) === 0 && (
                   <tr>
-                    <td colSpan={4} className="py-4 text-center text-muted-foreground">
+                    <td
+                      colSpan={4}
+                      className="py-4 text-center text-muted-foreground"
+                    >
                       No data yet.
                     </td>
                   </tr>
@@ -71,13 +74,17 @@ function AnalyticsPage() {
                 {data?.top_posts.map((post, i) => (
                   <tr key={post.post_id} className="border-b last:border-0">
                     <td className="py-2 pr-4 text-muted-foreground">{i + 1}</td>
-                    <td className="py-2 pr-4 max-w-xs">
+                    <td className="max-w-xs py-2 pr-4">
                       <Link
                         to="/post/$id"
                         params={{ id: String(post.post_id) }}
-                        className="hover:underline line-clamp-1"
+                        className="line-clamp-1 hover:underline"
                       >
-                        {post.excerpt || <span className="italic text-muted-foreground">[image post]</span>}
+                        {post.excerpt || (
+                          <span className="text-muted-foreground italic">
+                            [image post]
+                          </span>
+                        )}
                       </Link>
                     </td>
                     <td className="py-2 pr-4">
@@ -89,7 +96,9 @@ function AnalyticsPage() {
                         @{post.username}
                       </Link>
                     </td>
-                    <td className="py-2 text-right tabular-nums">{post.like_count}</td>
+                    <td className="py-2 text-right tabular-nums">
+                      {post.like_count}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -110,17 +119,20 @@ function AnalyticsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b text-left text-muted-foreground">
-                  <th className="pb-2 pr-4 font-medium">#</th>
-                  <th className="pb-2 pr-4 font-medium">User</th>
-                  <th className="pb-2 pr-4 font-medium">Name</th>
-                  <th className="pb-2 pr-4 font-medium text-right">Posts</th>
-                  <th className="pb-2 font-medium text-right">Total Likes</th>
+                  <th className="pr-4 pb-2 font-medium">#</th>
+                  <th className="pr-4 pb-2 font-medium">User</th>
+                  <th className="pr-4 pb-2 font-medium">Name</th>
+                  <th className="pr-4 pb-2 text-right font-medium">Posts</th>
+                  <th className="pb-2 text-right font-medium">Total Likes</th>
                 </tr>
               </thead>
               <tbody>
                 {(data?.top_users.length ?? 0) === 0 && (
                   <tr>
-                    <td colSpan={5} className="py-4 text-center text-muted-foreground">
+                    <td
+                      colSpan={5}
+                      className="py-4 text-center text-muted-foreground"
+                    >
                       No data yet.
                     </td>
                   </tr>
@@ -138,8 +150,12 @@ function AnalyticsPage() {
                       </Link>
                     </td>
                     <td className="py-2 pr-4">{user.name}</td>
-                    <td className="py-2 pr-4 text-right tabular-nums">{user.post_count}</td>
-                    <td className="py-2 text-right tabular-nums">{user.total_likes}</td>
+                    <td className="py-2 pr-4 text-right tabular-nums">
+                      {user.post_count}
+                    </td>
+                    <td className="py-2 text-right tabular-nums">
+                      {user.total_likes}
+                    </td>
                   </tr>
                 ))}
               </tbody>

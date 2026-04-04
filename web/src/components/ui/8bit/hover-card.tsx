@@ -1,15 +1,15 @@
-import type * as HoverCardPrimitive from "@radix-ui/react-hover-card";
-import { type VariantProps, cva } from "class-variance-authority";
+import type * as HoverCardPrimitive from "@radix-ui/react-hover-card"
+import { type VariantProps, cva } from "class-variance-authority"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 import {
   HoverCard as ShadcnHoverCard,
   HoverCardContent as ShadcnHoverCardContent,
   HoverCardTrigger as ShadcnHoverCardTrigger,
-} from "@/components/ui/hover-card";
+} from "@/components/ui/hover-card"
 
-import "@/components/ui/8bit/styles/retro.css";
+import "@/components/ui/8bit/styles/retro.css"
 
 export const hoverCardVariants = cva("", {
   variants: {
@@ -21,16 +21,17 @@ export const hoverCardVariants = cva("", {
   defaultVariants: {
     font: "retro",
   },
-});
+})
 
 export interface BitHoverCardProps
-  extends React.ComponentProps<typeof HoverCardPrimitive.Content>,
+  extends
+    React.ComponentProps<typeof HoverCardPrimitive.Content>,
     VariantProps<typeof hoverCardVariants> {}
 
 function HoverCard({
   ...props
 }: React.ComponentProps<typeof HoverCardPrimitive.Root>) {
-  return <ShadcnHoverCard {...props} />;
+  return <ShadcnHoverCard {...props} />
 }
 
 function HoverCardTrigger({
@@ -44,7 +45,7 @@ function HoverCardTrigger({
       asChild={asChild}
       {...props}
     />
-  );
+  )
 }
 
 function HoverCardContent({
@@ -67,15 +68,15 @@ function HoverCardContent({
       {children}
 
       <div
-        className="absolute inset-0 border-x-6 -mx-1.5 border-foreground dark:border-ring pointer-events-none"
+        className="pointer-events-none absolute inset-0 -mx-1.5 border-x-6 border-foreground dark:border-ring"
         aria-hidden="true"
       />
       <div
-        className="absolute inset-0 border-y-6 -my-1.5 border-foreground dark:border-ring pointer-events-none"
+        className="pointer-events-none absolute inset-0 -my-1.5 border-y-6 border-foreground dark:border-ring"
         aria-hidden="true"
       />
     </ShadcnHoverCardContent>
-  );
+  )
 }
 
-export { HoverCard, HoverCardTrigger, HoverCardContent };
+export { HoverCard, HoverCardTrigger, HoverCardContent }
