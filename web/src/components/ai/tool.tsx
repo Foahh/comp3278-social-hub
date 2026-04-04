@@ -11,15 +11,23 @@ import {
 } from "lucide-react"
 import type { ComponentProps, ReactNode } from "react"
 import { isValidElement } from "react"
-import { Badge } from "~/components/ui/badge"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible"
-import { cn } from "~/lib/utils"
-import { CodeBlock } from "~/packages/ai/code-block"
+import { Badge } from "@/components/ui/8bit/badge"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { cn } from "@/lib/utils"
+import { CodeBlock } from "@/components/ai/code-block"
+
+import "@/components/ui/8bit/styles/retro.css"
 
 export type ToolProps = ComponentProps<typeof Collapsible>
 
 export const Tool = ({ className, ...props }: ToolProps) => (
-  <Collapsible className={cn("not-prose mb-4 w-full rounded-md border", className)} {...props} />
+  <Collapsible
+    className={cn(
+      "not-prose mb-4 w-full rounded-none border-[0.125rem] border-foreground dark:border-ring",
+      className,
+    )}
+    {...props}
+  />
 )
 
 export interface ToolHeaderProps {
@@ -53,7 +61,7 @@ const getStatusBadge = (status: ToolUIPart["state"]) => {
   }
 
   return (
-    <Badge className="gap-1.5 rounded-full text-xs" variant="secondary">
+    <Badge className="retro gap-1.5 rounded-none text-xs" variant="secondary">
       {icons[status]}
       {labels[status]}
     </Badge>
@@ -62,7 +70,7 @@ const getStatusBadge = (status: ToolUIPart["state"]) => {
 
 export const ToolHeader = ({ className, title, type, state, ...props }: ToolHeaderProps) => (
   <CollapsibleTrigger
-    className={cn("flex w-full items-center justify-between gap-4 p-3", className)}
+    className={cn("retro flex w-full items-center justify-between gap-4 p-3", className)}
     {...props}
   >
     <div className="flex items-center gap-2">
@@ -92,10 +100,10 @@ export type ToolInputProps = ComponentProps<"div"> & {
 
 export const ToolInput = ({ className, input, ...props }: ToolInputProps) => (
   <div className={cn("space-y-2 overflow-hidden p-4", className)} {...props}>
-    <h4 className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
+    <h4 className="retro font-medium text-muted-foreground text-xs uppercase tracking-wide">
       Parameters
     </h4>
-    <div className="rounded-md bg-muted/50">
+    <div className="rounded-none bg-muted/50">
       <CodeBlock code={JSON.stringify(input, null, 2)} language="json" />
     </div>
   </div>
@@ -121,16 +129,16 @@ export const ToolOutput = ({ className, output, errorText, ...props }: ToolOutpu
 
   return (
     <div className={cn("space-y-2 p-4", className)} {...props}>
-      <h4 className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
+      <h4 className="retro font-medium text-muted-foreground text-xs uppercase tracking-wide">
         {errorText ? "Error" : "Result"}
       </h4>
       <div
         className={cn(
-          "overflow-x-auto rounded-md text-xs [&_table]:w-full",
+          "overflow-x-auto rounded-none text-xs [&_table]:w-full",
           errorText ? "bg-destructive/10 text-destructive" : "bg-muted/50 text-foreground",
         )}
       >
-        {errorText && <div>{errorText}</div>}
+        {errorText && <div className="retro">{errorText}</div>}
         {Output}
       </div>
     </div>

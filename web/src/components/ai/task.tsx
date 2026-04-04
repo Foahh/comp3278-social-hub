@@ -1,14 +1,17 @@
-import { ChevronDownIcon, SearchIcon } from "lucide-react"
+import { ChevronDownIcon } from "lucide-react"
 import type { ComponentProps } from "react"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible"
-import { cn } from "~/lib/utils"
+import { Search } from "pixelarticons/react"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { cn } from "@/lib/utils"
+
+import "@/components/ui/8bit/styles/retro.css"
 
 export type TaskItemFileProps = ComponentProps<"div">
 
 export const TaskItemFile = ({ children, className, ...props }: TaskItemFileProps) => (
   <div
     className={cn(
-      "inline-flex items-center gap-1 rounded-md border bg-secondary px-1.5 py-0.5 text-foreground text-xs",
+      "retro inline-flex items-center gap-1 rounded-none border-[0.125rem] border-foreground bg-secondary px-1.5 py-0.5 text-foreground text-xs dark:border-ring",
       className,
     )}
     {...props}
@@ -20,7 +23,7 @@ export const TaskItemFile = ({ children, className, ...props }: TaskItemFileProp
 export type TaskItemProps = ComponentProps<"div">
 
 export const TaskItem = ({ children, className, ...props }: TaskItemProps) => (
-  <div className={cn("text-muted-foreground text-sm", className)} {...props}>
+  <div className={cn("retro text-muted-foreground text-sm", className)} {...props}>
     {children}
   </div>
 )
@@ -38,8 +41,8 @@ export type TaskTriggerProps = ComponentProps<typeof CollapsibleTrigger> & {
 export const TaskTrigger = ({ children, className, title, ...props }: TaskTriggerProps) => (
   <CollapsibleTrigger asChild className={cn("group", className)} {...props}>
     {children ?? (
-      <div className="flex w-full cursor-pointer items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground">
-        <SearchIcon className="size-4" />
+      <div className="retro flex w-full cursor-pointer items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground">
+        <Search className="size-4" />
         <p className="text-sm">{title}</p>
         <ChevronDownIcon className="size-4 transition-transform group-data-[state=open]:rotate-180" />
       </div>

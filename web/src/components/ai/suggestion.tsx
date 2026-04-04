@@ -1,9 +1,11 @@
 "use client"
 
 import type { ComponentProps } from "react"
-import { Button } from "~/components/ui/button"
-import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area"
-import { cn } from "~/lib/utils"
+import { Button } from "@/components/ui/8bit/button"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { cn } from "@/lib/utils"
+
+import "@/components/ui/8bit/styles/retro.css"
 
 export type SuggestionsProps = ComponentProps<typeof ScrollArea>
 
@@ -34,7 +36,7 @@ export const Suggestion = ({
 
   return (
     <Button
-      className={cn("cursor-pointer rounded-full px-4", className)}
+      className={cn("retro cursor-pointer rounded-none px-4", className)}
       onClick={handleClick}
       size={size}
       type="button"
