@@ -535,13 +535,13 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--users",
         type=int,
-        default=10_000,
+        default=1000,
         help="Number of users (default: 12000).",
     )
     parser.add_argument(
         "--posts",
         type=int,
-        default=10_000,
+        default=1000,
         help="Number of posts (default: 100000).",
     )
     parser.add_argument(
