@@ -3,9 +3,10 @@
 import * as React from "react"
 import { Dialog as DialogPrimitive } from "radix-ui"
 
+import { Cancel } from "pixelarticons/react"
+
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { IconPlaceholder } from "@/app/(create)/components/icon-placeholder"
 
 function Dialog({
   ...props
@@ -74,13 +75,7 @@ function DialogContent({
               className="absolute top-4 right-4"
               size="icon-sm"
             >
-              <IconPlaceholder
-                lucide="XIcon"
-                tabler="IconX"
-                hugeicons="Cancel01Icon"
-                phosphor="XIcon"
-                remixicon="RiCloseLine"
-              />
+              <Cancel className="size-4" />
               <span className="sr-only">Close</span>
             </Button>
           </DialogPrimitive.Close>

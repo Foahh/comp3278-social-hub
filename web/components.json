@@ -22,7 +22,7 @@
     "hooks": "@/hooks"
   },
   "registries": {
-    "@8bit": "https://www.8bitcn.com/r/{name}.json",
+    "@8bitcn": "https://www.8bitcn.com/r/{name}.json",
     "@io": {
       "url": "https://shadcn.io/r/{name}.json",
       "params": {

@@ -1,13 +1,15 @@
 "use client"
 
 import { useControllableState } from "@radix-ui/react-use-controllable-state"
-import { BrainIcon, ChevronDownIcon } from "lucide-react"
+import { ChevronDown, Lightbulb } from "pixelarticons/react"
 import type { ComponentProps, ReactNode } from "react"
 import { createContext, memo, useContext, useEffect, useState } from "react"
 import { Streamdown } from "streamdown"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { cn } from "@/lib/utils"
 import { Shimmer } from "@/components/ai/shimmer"
+
+import "@/components/ui/8bit/styles/retro.css"
 
 interface ReasoningContextValue {
   isStreaming: boolean
@@ -93,7 +95,10 @@ export const Reasoning = memo(
     return (
       <ReasoningContext.Provider value={{ isStreaming, isOpen, setIsOpen, duration }}>
         <Collapsible
-          className={cn("not-prose mb-4", className)}
+          className={cn(
+            "not-prose mb-4 rounded-none border-[0.125rem] border-foreground bg-muted/20 p-3 dark:border-ring",
+            className,
+          )}
           onOpenChange={handleOpenChange}
           open={isOpen}
           {...props}
@@ -114,9 +119,13 @@ const defaultGetThinkingMessage = (isStreaming: boolean, duration?: number) => {
     return <Shimmer duration={1}>Thinking...</Shimmer>
   }
   if (duration === undefined) {
-    return <p>Thought for a few seconds</p>
+    return <p className="retro m-0">Thought for a few seconds</p>
   }
-  return <p>Thought for {duration} seconds</p>
+  return (
+    <p className="retro m-0">
+      Thought for {duration} seconds
+    </p>
+  )
 }
 
 export const ReasoningTrigger = memo(
@@ -131,16 +140,16 @@ export const ReasoningTrigger = memo(
     return (
       <CollapsibleTrigger
         className={cn(
-          "flex w-full items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground",
+          "retro flex w-full items-center gap-2 text-left text-muted-foreground text-sm transition-colors hover:text-foreground",
           className,
         )}
         {...props}
       >
         {children ?? (
           <>
-            <BrainIcon className="size-4" />
+            <Lightbulb className="size-4" />
             {getThinkingMessage(isStreaming, duration)}
-            <ChevronDownIcon
+            <ChevronDown
               className={cn("size-4 transition-transform", isOpen ? "rotate-180" : "rotate-0")}
             />
           </>
@@ -157,13 +166,13 @@ export type ReasoningContentProps = ComponentProps<typeof CollapsibleContent> & 
 export const ReasoningContent = memo(({ className, children, ...props }: ReasoningContentProps) => (
   <CollapsibleContent
     className={cn(
-      "mt-4 text-sm",
+      "retro mt-4 border-border border-t pt-4 text-sm",
       "data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 text-muted-foreground outline-none data-[state=closed]:animate-out data-[state=open]:animate-in",
       className,
     )}
     {...props}
   >
-    <Streamdown {...props}>{children}</Streamdown>
+    <Streamdown className="retro">{children}</Streamdown>
   </CollapsibleContent>
 ))
 

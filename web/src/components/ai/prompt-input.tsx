@@ -1,14 +1,14 @@
 import type { ChatStatus, FileUIPart } from "ai"
 import {
-  CornerDownLeftIcon,
-  ImageIcon,
-  Loader2Icon,
-  MicIcon,
-  PaperclipIcon,
-  PlusIcon,
-  SquareIcon,
-  XIcon,
-} from "lucide-react"
+  Attachment,
+  Cancel,
+  CornerDownLeft,
+  Image as ImageIcon,
+  Loader,
+  Mic,
+  Plus,
+  Square,
+} from "pixelarticons/react"
 import { nanoid } from "nanoid"
 import {
   type ChangeEvent,
@@ -32,7 +32,7 @@ import {
   useRef,
   useState,
 } from "react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/8bit/button"
 import {
   Command,
   CommandEmpty,
@@ -47,14 +47,14 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/8bit/dropdown-menu"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupTextarea,
-} from "@/components/ui/input-group"
+} from "@/components/ui/8bit/input-group"
 import {
   Select,
   SelectContent,
@@ -63,6 +63,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
+
+import "@/components/ui/8bit/styles/retro.css"
 
 // ============================================================================
 // Provider Context & Types
@@ -279,39 +281,40 @@ export function PromptInputAttachment({ data, className, ...props }: PromptInput
       <HoverCardTrigger asChild>
         <div
           className={cn(
-            "group relative flex h-8 cursor-pointer select-none items-center gap-1.5 rounded-md border border-border px-1.5 font-medium text-sm transition-all hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+            "retro group relative flex h-8 cursor-pointer select-none items-center gap-1.5 rounded-none border-[0.125rem] border-foreground px-1.5 font-medium text-sm transition-colors hover:bg-accent hover:text-accent-foreground dark:border-ring dark:hover:bg-accent/50",
             className,
           )}
           key={data.id}
           {...props}
         >
           <div className="relative size-5 shrink-0">
-            <div className="absolute inset-0 flex size-5 items-center justify-center overflow-hidden rounded bg-background transition-opacity group-hover:opacity-0">
+            <div className="absolute inset-0 flex size-5 items-center justify-center overflow-hidden bg-background transition-opacity group-hover:opacity-0">
               {isImage ? (
                 <img
                   alt={filename || "attachment"}
-                  className="size-5 object-cover"
+                  className="pixelated size-5 object-cover"
                   height={20}
                   src={data.url}
                   width={20}
                 />
               ) : (
                 <div className="flex size-5 items-center justify-center text-muted-foreground">
-                  <PaperclipIcon className="size-3" />
+                  <Attachment className="size-3" />
                 </div>
               )}
             </div>
             <Button
               aria-label="Remove attachment"
-              className="absolute inset-0 size-5 cursor-pointer rounded p-0 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100 [&>svg]:size-2.5"
+              className="absolute inset-0 size-5 cursor-pointer p-0 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100 [&>svg]:size-2.5"
               onClick={e => {
                 e.stopPropagation()
                 attachments.remove(data.id)
               }}
+              size="icon-xs"
               type="button"
               variant="ghost"
             >
-              <XIcon />
+              <Cancel className="size-2.5" />
               <span className="sr-only">Remove</span>
             </Button>
           </div>
@@ -322,7 +325,7 @@ export function PromptInputAttachment({ data, className, ...props }: PromptInput
       <PromptInputHoverCardContent className="w-auto p-2">
         <div className="w-auto space-y-3">
           {isImage && (
-            <div className="flex max-h-96 w-96 items-center justify-center overflow-hidden rounded-md border">
+            <div className="flex max-h-96 w-96 items-center justify-center overflow-hidden rounded-none border-[0.125rem] border-foreground dark:border-ring">
               <img
                 alt={filename || "attachment preview"}
                 className="max-h-full max-w-full object-contain"
@@ -334,11 +337,11 @@ export function PromptInputAttachment({ data, className, ...props }: PromptInput
           )}
           <div className="flex items-center gap-2.5">
             <div className="min-w-0 flex-1 space-y-1 px-0.5">
-              <h4 className="truncate font-semibold text-sm leading-none">
+              <h4 className="retro truncate font-semibold text-sm leading-none">
                 {filename || (isImage ? "Image" : "Attachment")}
               </h4>
               {data.mediaType && (
-                <p className="truncate font-mono text-muted-foreground text-xs">{data.mediaType}</p>
+                <p className="retro truncate text-muted-foreground text-xs">{data.mediaType}</p>
               )}
             </div>
           </div>
@@ -917,7 +920,7 @@ export const PromptInputActionMenuTrigger = ({
 }: PromptInputActionMenuTriggerProps) => (
   <DropdownMenuTrigger asChild>
     <PromptInputButton className={className} {...props}>
-      {children ?? <PlusIcon className="size-4" />}
+      {children ?? <Plus className="size-4" />}
     </PromptInputButton>
   </DropdownMenuTrigger>
 )
@@ -951,14 +954,14 @@ export const PromptInputSubmit = ({
   children,
   ...props
 }: PromptInputSubmitProps) => {
-  let Icon = <CornerDownLeftIcon className="size-4" />
+  let Icon = <CornerDownLeft className="size-4" />
 
   if (status === "submitted") {
-    Icon = <Loader2Icon className="size-4 animate-spin" />
+    Icon = <Loader className="size-4 animate-spin" />
   } else if (status === "streaming") {
-    Icon = <SquareIcon className="size-4" />
+    Icon = <Square className="size-4" />
   } else if (status === "error") {
-    Icon = <XIcon className="size-4" />
+    Icon = <Cancel className="size-4" />
   }
 
   return (
@@ -1120,7 +1123,7 @@ export const PromptInputSpeechButton = ({
       onClick={toggleListening}
       {...props}
     >
-      <MicIcon className="size-4" />
+      <Mic className="size-4" />
     </PromptInputButton>
   )
 }
@@ -1137,7 +1140,7 @@ export const PromptInputSelectTrigger = ({
 }: PromptInputSelectTriggerProps) => (
   <SelectTrigger
     className={cn(
-      "border-none bg-transparent font-medium text-muted-foreground shadow-none transition-colors",
+      "retro rounded-none border-none bg-transparent font-medium text-muted-foreground shadow-none transition-colors",
       "hover:bg-accent hover:text-foreground aria-expanded:bg-accent aria-expanded:text-foreground",
       className,
     )}
@@ -1202,7 +1205,10 @@ export const PromptInputTab = ({ className, ...props }: PromptInputTabProps) => 
 export type PromptInputTabLabelProps = HTMLAttributes<HTMLHeadingElement>
 
 export const PromptInputTabLabel = ({ className, ...props }: PromptInputTabLabelProps) => (
-  <h3 className={cn("mb-2 px-3 font-medium text-muted-foreground text-xs", className)} {...props} />
+  <h3
+    className={cn("retro mb-2 px-3 font-medium text-muted-foreground text-xs", className)}
+    {...props}
+  />
 )
 
 export type PromptInputTabBodyProps = HTMLAttributes<HTMLDivElement>
@@ -1215,7 +1221,10 @@ export type PromptInputTabItemProps = HTMLAttributes<HTMLDivElement>
 
 export const PromptInputTabItem = ({ className, ...props }: PromptInputTabItemProps) => (
   <div
-    className={cn("flex items-center gap-2 px-3 py-2 text-xs hover:bg-accent", className)}
+    className={cn(
+      "retro flex items-center gap-2 px-3 py-2 text-xs hover:bg-accent",
+      className,
+    )}
     {...props}
   />
 )
@@ -1223,7 +1232,7 @@ export const PromptInputTabItem = ({ className, ...props }: PromptInputTabItemPr
 export type PromptInputCommandProps = ComponentProps<typeof Command>
 
 export const PromptInputCommand = ({ className, ...props }: PromptInputCommandProps) => (
-  <Command className={cn(className)} {...props} />
+  <Command className={cn("retro", className)} {...props} />
 )
 
 export type PromptInputCommandInputProps = ComponentProps<typeof CommandInput>

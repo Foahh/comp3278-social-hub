@@ -1,4 +1,4 @@
-import { CheckIcon, CopyIcon } from "lucide-react"
+import { Check, Copy } from "pixelarticons/react"
 import {
   type ComponentProps,
   createContext,
@@ -9,8 +9,10 @@ import {
   useState,
 } from "react"
 import { type BundledLanguage, codeToHtml, type ShikiTransformer } from "shiki"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/8bit/button"
 import { cn } from "@/lib/utils"
+
+import "@/components/ui/8bit/styles/retro.css"
 
 type CodeBlockProps = HTMLAttributes<HTMLDivElement> & {
   code: string
@@ -98,18 +100,18 @@ export const CodeBlock = ({
     <CodeBlockContext.Provider value={{ code }}>
       <div
         className={cn(
-          "group relative w-full overflow-hidden rounded-md border bg-background text-foreground",
+          "group relative w-full overflow-hidden rounded-none border-[0.125rem] border-foreground bg-background text-foreground dark:border-ring",
           className,
         )}
         {...props}
       >
         <div className="relative">
           <div
-            className="overflow-auto dark:hidden [&>pre]:m-0 [&>pre]:bg-background! [&>pre]:p-4 [&>pre]:text-foreground! [&>pre]:text-sm [&_code]:font-mono [&_code]:text-sm"
+            className="retro overflow-auto dark:hidden [&>pre]:m-0 [&>pre]:bg-background! [&>pre]:p-4 [&>pre]:text-foreground! [&>pre]:text-sm [&_code]:font-mono [&_code]:text-sm"
             dangerouslySetInnerHTML={{ __html: html }}
           />
           <div
-            className="hidden overflow-auto dark:block [&>pre]:m-0 [&>pre]:bg-background! [&>pre]:p-4 [&>pre]:text-foreground! [&>pre]:text-sm [&_code]:font-mono [&_code]:text-sm"
+            className="retro hidden overflow-auto dark:block [&>pre]:m-0 [&>pre]:bg-background! [&>pre]:p-4 [&>pre]:text-foreground! [&>pre]:text-sm [&_code]:font-mono [&_code]:text-sm"
             dangerouslySetInnerHTML={{ __html: darkHtml }}
           />
           {children && (
@@ -154,17 +156,17 @@ export const CodeBlockCopyButton = ({
     }
   }
 
-  const Icon = isCopied ? CheckIcon : CopyIcon
+  const Icon = isCopied ? Check : Copy
 
   return (
     <Button
       className={cn("shrink-0", className)}
       onClick={copyToClipboard}
-      size="icon"
+      size="icon-sm"
       variant="ghost"
       {...props}
     >
-      {children ?? <Icon size={14} />}
+      {children ?? <Icon className="size-3.5" />}
     </Button>
   )
 }

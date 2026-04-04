@@ -1,6 +1,6 @@
 "use client"
 
-import { CopyIcon, RefreshCcwIcon, ThumbsDownIcon, ThumbsUpIcon } from "lucide-react"
+import { Copy, Redo, ThumbsDown, ThumbsUp } from "pixelarticons/react"
 import type { ComponentProps } from "react"
 import { Button } from "@/components/ui/8bit/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
@@ -28,16 +28,13 @@ export const Action = ({
   label,
   className,
   variant = "ghost",
-  size = "sm",
+  size = "icon",
   ...props
 }: ActionProps) => {
   const button = (
     <Button
-      className={cn(
-        "size-9 p-1.5 text-muted-foreground hover:text-foreground [&>span.relative]:hidden",
-        className,
-      )}
-      size={size === "sm" ? "icon-sm" : size === "default" ? "icon" : size}
+      className={cn("text-muted-foreground hover:text-foreground", className)}
+      size={size}
       type="button"
       variant={variant}
       {...props}
@@ -52,7 +49,7 @@ export const Action = ({
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>{button}</TooltipTrigger>
-          <TooltipContent>
+          <TooltipContent className="retro">
             <p>{tooltip}</p>
           </TooltipContent>
         </Tooltip>
@@ -76,16 +73,16 @@ export default function ActionsDemo() {
 
         <Actions>
           <Action onClick={() => console.log("Copied!")} tooltip="Copy to clipboard">
-            <CopyIcon className="size-4" />
+            <Copy className="size-4" />
           </Action>
           <Action onClick={() => console.log("Regenerating...")} tooltip="Regenerate response">
-            <RefreshCcwIcon className="size-4" />
+            <Redo className="size-4" />
           </Action>
           <Action onClick={() => console.log("Thumbs up!")} tooltip="Good response">
-            <ThumbsUpIcon className="size-4" />
+            <ThumbsUp className="size-4" />
           </Action>
           <Action onClick={() => console.log("Thumbs down!")} tooltip="Bad response">
-            <ThumbsDownIcon className="size-4" />
+            <ThumbsDown className="size-4" />
           </Action>
         </Actions>
       </Message>

@@ -1,14 +1,14 @@
 import type { FileUIPart, UIMessage } from "ai"
 import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  PaperclipIcon,
-  XIcon,
-} from "lucide-react"
+  Attachment,
+  Cancel,
+  ChevronLeft,
+  ChevronRight,
+} from "pixelarticons/react"
 import type { ComponentProps, HTMLAttributes, ReactElement } from "react"
 import { createContext, memo, useContext, useEffect, useState } from "react"
 import { Streamdown } from "streamdown"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/8bit/button"
 import { ButtonGroup, ButtonGroupText } from "@/components/ui/button-group"
 import {
   Tooltip,
@@ -17,6 +17,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
+
+import "@/components/ui/8bit/styles/retro.css"
 
 export type MessageProps = HTMLAttributes<HTMLDivElement> & {
   from: UIMessage["role"]
@@ -42,8 +44,8 @@ export const MessageContent = ({
 }: MessageContentProps) => (
   <div
     className={cn(
-      "is-user:dark flex w-fit max-w-full min-w-0 flex-col gap-2 overflow-hidden text-sm",
-      "group-[.is-user]:ml-auto group-[.is-user]:rounded-lg group-[.is-user]:bg-secondary group-[.is-user]:px-4 group-[.is-user]:py-3 group-[.is-user]:text-foreground",
+      "retro is-user:dark flex w-fit max-w-full min-w-0 flex-col gap-2 overflow-hidden text-sm",
+      "group-[.is-user]:ml-auto group-[.is-user]:rounded-none group-[.is-user]:border-[0.125rem] group-[.is-user]:border-foreground group-[.is-user]:bg-secondary group-[.is-user]:px-4 group-[.is-user]:py-3 group-[.is-user]:text-foreground dark:group-[.is-user]:border-ring",
       "group-[.is-assistant]:text-foreground",
       className
     )}
@@ -224,7 +226,7 @@ export const MessageBranchSelector = ({
 
   return (
     <ButtonGroup
-      className="[&>*:not(:first-child)]:rounded-l-md [&>*:not(:last-child)]:rounded-r-md"
+      className="[&>*:not(:first-child)]:rounded-none [&>*:not(:last-child)]:rounded-none"
       orientation="horizontal"
       {...props}
     />
@@ -249,7 +251,7 @@ export const MessageBranchPrevious = ({
       variant="ghost"
       {...props}
     >
-      {children ?? <ChevronLeftIcon size={14} />}
+      {children ?? <ChevronLeft className="size-3.5" />}
     </Button>
   )
 }
@@ -273,7 +275,7 @@ export const MessageBranchNext = ({
       variant="ghost"
       {...props}
     >
-      {children ?? <ChevronRightIcon size={14} />}
+      {children ?? <ChevronRight className="size-3.5" />}
     </Button>
   )
 }
@@ -289,7 +291,7 @@ export const MessageBranchPage = ({
   return (
     <ButtonGroupText
       className={cn(
-        "border-none bg-transparent text-muted-foreground shadow-none",
+        "retro border-none bg-transparent text-muted-foreground shadow-none",
         className
       )}
       {...props}
@@ -305,7 +307,7 @@ export const MessageResponse = memo(
   ({ className, ...props }: MessageResponseProps) => (
     <Streamdown
       className={cn(
-        "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
+        "retro size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
         className
       )}
       {...props}
@@ -337,7 +339,7 @@ export function MessageAttachment({
   return (
     <div
       className={cn(
-        "group relative size-24 overflow-hidden rounded-lg",
+        "group relative size-24 overflow-hidden rounded-none border-[0.125rem] border-foreground dark:border-ring",
         className
       )}
       {...props}
@@ -346,7 +348,7 @@ export function MessageAttachment({
         <>
           <img
             alt={filename || "attachment"}
-            className="size-full object-cover"
+            className="pixelated size-full object-cover"
             height={100}
             src={data.url}
             width={100}
@@ -354,15 +356,16 @@ export function MessageAttachment({
           {onRemove && (
             <Button
               aria-label="Remove attachment"
-              className="absolute top-2 right-2 size-6 rounded-full bg-background/80 p-0 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 hover:bg-background [&>svg]:size-3"
+              className="absolute top-1 right-1 size-6 p-0 opacity-0 transition-opacity group-hover:opacity-100 [&>svg]:size-3"
               onClick={(e) => {
                 e.stopPropagation()
                 onRemove()
               }}
+              size="icon-xs"
               type="button"
               variant="ghost"
             >
-              <XIcon />
+              <Cancel className="size-3" />
               <span className="sr-only">Remove</span>
             </Button>
           )}
@@ -371,8 +374,8 @@ export function MessageAttachment({
         <>
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className="flex size-full shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
-                <PaperclipIcon className="size-4" />
+              <div className="flex size-full shrink-0 items-center justify-center bg-muted text-muted-foreground">
+                <Attachment className="size-4" />
               </div>
             </TooltipTrigger>
             <TooltipContent>
@@ -382,15 +385,16 @@ export function MessageAttachment({
           {onRemove && (
             <Button
               aria-label="Remove attachment"
-              className="size-6 shrink-0 rounded-full p-0 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-accent [&>svg]:size-3"
+              className="size-6 shrink-0 p-0 opacity-0 transition-opacity group-hover:opacity-100 [&>svg]:size-3"
               onClick={(e) => {
                 e.stopPropagation()
                 onRemove()
               }}
+              size="icon-xs"
               type="button"
               variant="ghost"
             >
-              <XIcon />
+              <Cancel className="size-3" />
               <span className="sr-only">Remove</span>
             </Button>
           )}

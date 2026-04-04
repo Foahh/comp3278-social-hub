@@ -1,6 +1,8 @@
 "use client"
 
+import { Check } from "pixelarticons/react"
 import type { ComponentProps, ReactNode } from "react"
+import { useState } from "react"
 import {
   Command,
   CommandDialog,
@@ -12,8 +14,11 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@/components/ui/command"
+import { Button } from "@/components/ui/8bit/button"
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
+
+import "@/components/ui/8bit/styles/retro.css"
 
 export type ModelSelectorProps = ComponentProps<typeof Dialog>
 
@@ -35,9 +40,15 @@ export const ModelSelectorContent = ({
   title = "Model Selector",
   ...props
 }: ModelSelectorContentProps) => (
-  <DialogContent className={cn("p-0", className)} {...props}>
+  <DialogContent
+    className={cn(
+      "rounded-none border-[0.125rem] border-foreground p-0 dark:border-ring",
+      className,
+    )}
+    {...props}
+  >
     <DialogTitle className="sr-only">{title}</DialogTitle>
-    <Command className="**:data-[slot=command-input-wrapper]:h-auto">{children}</Command>
+    <Command className="retro **:data-[slot=command-input-wrapper]:h-auto">{children}</Command>
   </DialogContent>
 )
 
@@ -144,7 +155,7 @@ export const ModelSelectorLogo = ({ provider, className, ...props }: ModelSelect
   <img
     {...props}
     alt={`${provider} logo`}
-    className={cn("size-3 dark:invert", className)}
+    className={cn("pixelated size-3 dark:invert", className)}
     height={12}
     src={`https://models.dev/logos/${provider}.svg`}
     width={12}
@@ -156,7 +167,7 @@ export type ModelSelectorLogoGroupProps = ComponentProps<"div">
 export const ModelSelectorLogoGroup = ({ className, ...props }: ModelSelectorLogoGroupProps) => (
   <div
     className={cn(
-      "-space-x-1 flex shrink-0 items-center [&>img]:rounded-full [&>img]:bg-background [&>img]:p-px [&>img]:ring-1 dark:[&>img]:bg-foreground",
+      "-space-x-1 flex shrink-0 items-center [&>img]:rounded-none [&>img]:border [&>img]:border-border [&>img]:bg-background [&>img]:p-px dark:[&>img]:bg-foreground",
       className,
     )}
     {...props}
@@ -166,12 +177,8 @@ export const ModelSelectorLogoGroup = ({ className, ...props }: ModelSelectorLog
 export type ModelSelectorNameProps = ComponentProps<"span">
 
 export const ModelSelectorName = ({ className, ...props }: ModelSelectorNameProps) => (
-  <span className={cn("flex-1 truncate text-left", className)} {...props} />
+  <span className={cn("retro flex-1 truncate text-left", className)} {...props} />
 )
-
-import { CheckIcon } from "lucide-react"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
 
 const models = [
   {
@@ -216,7 +223,7 @@ export default function ModelSelectorDemo() {
     <div className="flex size-full items-center justify-center p-8">
       <ModelSelector onOpenChange={setOpen} open={open}>
         <ModelSelectorTrigger asChild>
-          <Button className="w-[200px] justify-between" variant="outline">
+          <Button className="w-[200px] justify-between gap-2" variant="outline">
             {selectedModelData?.chefSlug && (
               <ModelSelectorLogo provider={selectedModelData.chefSlug} />
             )}
@@ -250,7 +257,7 @@ export default function ModelSelectorDemo() {
                         ))}
                       </ModelSelectorLogoGroup>
                       {selectedModel === model.id ? (
-                        <CheckIcon className="ml-auto size-4" />
+                        <Check className="ml-auto size-4" />
                       ) : (
                         <div className="ml-auto size-4" />
                       )}
