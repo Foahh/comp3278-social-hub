@@ -1,9 +1,9 @@
-import { LinkButton } from "@/components/ui/8bit/link-button"
+import { LinkButton } from "@/components/ui/8bit/link-button";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@/components/ui/8bit/avatar"
+} from "@/components/ui/8bit/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,22 +11,22 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/8bit/dropdown-menu"
-import { Separator } from "@/components/ui/8bit/separator"
+} from "@/components/ui/8bit/dropdown-menu";
+import { Separator } from "@/components/ui/8bit/separator";
 import {
   Analytics,
+  Robot,
   Login,
   Logout,
   PenSquare,
-  Rss,
+  Coffee,
   User,
   UserPlus,
-} from "pixelarticons/react"
-import { SearchBar } from "./SearchBar"
-import { useAuth } from "@/context/AuthContext"
+} from "pixelarticons/react";
+import { useAuth } from "@/context/AuthContext";
 
 export function SiteHeader() {
-  const { user, isLoading, logout } = useAuth()
+  const { user, isLoading, logout } = useAuth();
 
   return (
     <header className="sticky top-0 z-40 flex shrink-0 flex-col bg-background">
@@ -36,19 +36,17 @@ export function SiteHeader() {
           variant="link"
           className="h-auto min-h-0 shrink-0 gap-2 p-0 font-semibold text-foreground no-underline hover:text-foreground hover:no-underline"
         >
-          <Rss className="size-5" />
+          <Coffee className="size-5" />
           <span className="hidden sm:inline">SocialHub</span>
         </LinkButton>
 
-        <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
-          <SearchBar />
-
+        <div className="flex min-w-0 flex-1 items-center justify-end gap-4">
           {!isLoading && user && (
             <LinkButton
               to="/create"
               variant="ghost"
               size="icon"
-              className="h-8 w-8"
+              className="mx-0 h-8 w-8"
               aria-label="Create a new post"
             >
               <PenSquare className="size-4" />
@@ -83,10 +81,20 @@ export function SiteHeader() {
             to="/analytics"
             variant="ghost"
             size="icon"
-            className="h-8 w-8 shrink-0"
+            className="mx-0 h-8 w-8 shrink-0"
             aria-label="Analytics"
           >
             <Analytics className="size-4" aria-hidden />
+          </LinkButton>
+
+          <LinkButton
+            to="/chat"
+            variant="ghost"
+            size="icon"
+            className="mx-0 h-8 w-8 shrink-0"
+            aria-label="Chat"
+          >
+            <Robot className="size-4" aria-hidden />
           </LinkButton>
 
           {!isLoading && user && (
@@ -139,5 +147,5 @@ export function SiteHeader() {
       </div>
       <Separator orientation="horizontal" />
     </header>
-  )
+  );
 }
