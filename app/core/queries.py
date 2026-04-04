@@ -259,3 +259,53 @@ async def get_user_profile(conn: aiomysql.Connection, username: str) -> dict | N
             (username,),
         )
         return await cur.fetchone()
+
+
+# --- Analytics ---
+
+
+async def get_top_posts_by_likes(conn: aiomysql.Connection, limit: int) -> list[dict]:
+    async with conn.cursor(aiomysql.DictCursor) as cur:
+        await cur.execute(
+            "SELECT p.post_id, u.username, p.text_content, p.like_count "
+            "FROM posts p JOIN users u ON p.user_id = u.user_id "
+            "ORDER BY p.like_count DESC LIMIT %s",
+            (limit,),
+        )
+        return await cur.fetchall()
+
+
+async def get_top_users_by_activity(conn: aiomysql.Connection, limit: int) -> list[dict]:
+    async with conn.cursor(aiomysql.DictCursor) as cur:
+        await cur.execute(
+            "SELECT u.username, u.name, "
+            "COUNT(DISTINCT p.post_id) AS post_count, "
+            "COALESCE(SUM(p.like_count), 0) AS total_likes "
+            "FROM users u LEFT JOIN posts p ON p.user_id = u.user_id "
+            "GROUP BY u.user_id, u.username, u.name "
+            "ORDER BY post_count DESC LIMIT %s",
+            (limit,),
+        )
+        return await cur.fetchall()
+
+
+async def get_posts_per_day(conn: aiomysql.Connection, days: int) -> list[dict]:
+    async with conn.cursor(aiomysql.DictCursor) as cur:
+        await cur.execute(
+            "SELECT DATE(created_at) AS date, COUNT(*) AS count "
+            "FROM posts WHERE created_at >= NOW() - INTERVAL %s DAY "
+            "GROUP BY DATE(created_at) ORDER BY date ASC",
+            (days,),
+        )
+        return await cur.fetchall()
+
+
+async def get_likes_per_day(conn: aiomysql.Connection, days: int) -> list[dict]:
+    async with conn.cursor(aiomysql.DictCursor) as cur:
+        await cur.execute(
+            "SELECT DATE(created_at) AS date, COUNT(*) AS count "
+            "FROM likes WHERE created_at >= NOW() - INTERVAL %s DAY "
+            "GROUP BY DATE(created_at) ORDER BY date ASC",
+            (days,),
+        )
+        return await cur.fetchall()
