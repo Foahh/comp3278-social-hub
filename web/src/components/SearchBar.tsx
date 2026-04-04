@@ -4,6 +4,7 @@ import { Search } from "pixelarticons/react"
 import {
   InputGroup,
   InputGroupAddon,
+  InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/8bit/input-group"
 
@@ -22,17 +23,28 @@ export function SearchBar() {
   return (
     <form onSubmit={handleSubmit} className="flex items-center">
       <InputGroup className="h-8 w-48 text-sm lg:w-64">
-        <InputGroupAddon align="inline-start" aria-hidden>
-          <Search className="size-4" />
-        </InputGroupAddon>
         <InputGroupInput
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="…"
+          placeholder="Search anything…"
           aria-label="Search"
           name="q"
-          className="!h-8 min-h-0 py-0"
+          className="min-h-0 py-0 !h-8"
         />
+        <InputGroupAddon
+          align="inline-end"
+          className="py-0 pr-0 has-[>button]:m-0"
+        >
+          <InputGroupButton
+            type="submit"
+            size="icon-sm"
+            aria-label="Search"
+            title="Search"
+            className="shrink-0 border-l border-foreground/30 bg-muted/40 text-foreground transition-colors hover:bg-accent hover:text-accent-foreground dark:border-ring/50"
+          >
+            <Search className="size-4" />
+          </InputGroupButton>
+        </InputGroupAddon>
       </InputGroup>
     </form>
   )
