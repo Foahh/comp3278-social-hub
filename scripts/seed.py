@@ -13,6 +13,7 @@ import string
 import sys
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
+from datetime import datetime, timedelta
 from pathlib import Path
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -27,11 +28,11 @@ from app.core.auth import hash_password
 from app.core.config import settings
 from app.core.constants import APP_CONSTANTS
 
-type UserRow = tuple[str, str, str]
-type PostRow = tuple[int, str]
+type UserRow = tuple[str, str, str, str, datetime]
+type PostRow = tuple[int, str, datetime]
 type ImageRow = tuple[int, str, int]
-type LikeRow = tuple[int, int]
-type CommentRow = tuple[int, int, str]
+type LikeRow = tuple[int, int, datetime]
+type CommentRow = tuple[int, int, str, datetime]
 
 _USER_BATCH = 2000
 
@@ -58,6 +59,7 @@ class SeedConfig:
     num_posts: int
     max_likes_per_post: int
     max_comments_per_post: int
+    timestamp_window_days: int
 
 
 @dataclass(frozen=True)
@@ -138,7 +140,7 @@ async def _insert_users_batch(
     return await _insert_many_returning_ids(
         conn,
         table="users",
-        columns=("username", "password_hash", "name"),
+        columns=("username", "password_hash", "name", "avatar_key", "created_at"),
         rows=rows,
     )
 
@@ -150,7 +152,7 @@ async def _insert_posts_batch(
     return await _insert_many_returning_ids(
         conn,
         table="posts",
-        columns=("user_id", "text_content"),
+        columns=("user_id", "text_content", "created_at"),
         rows=rows,
     )
 
@@ -174,7 +176,7 @@ async def _insert_likes_batch(
     await _insert_many(
         conn,
         table="likes",
-        columns=("user_id", "post_id"),
+        columns=("user_id", "post_id", "created_at"),
         rows=rows,
     )
 
@@ -186,7 +188,7 @@ async def _insert_comments_batch(
     await _insert_many(
         conn,
         table="comments",
-        columns=("user_id", "post_id", "content"),
+        columns=("user_id", "post_id", "content", "created_at"),
         rows=rows,
     )
 
@@ -245,6 +247,14 @@ _IMAGE_ASPECTS: tuple[tuple[int, int], ...] = (
 )
 
 
+def _random_avatar_url(fake: Faker) -> str:
+    """HTTPS image URL for avatar_key; resolves as-is in app (no S3 upload in seed)."""
+    url = fake.image_url(width=300, height=300)
+    while "placekitten.com" in url.lower():
+        url = fake.image_url(width=300, height=300)
+    return url
+
+
 def _random_image_url(fake: Faker) -> str:
     aw, ah = fake.random_element(elements=_IMAGE_ASPECTS)
     max_side = fake.random_int(min=400, max=1600)
@@ -276,6 +286,13 @@ def _uniform_count(fake: Faker, max_v: int) -> int:
     return fake.random_int(min=0, max=max_v)
 
 
+def _random_dt_between(fake: Faker, start: datetime, end: datetime) -> datetime:
+    """Uniform random time in [start, end]; uses Faker for reproducible seeds."""
+    if start >= end:
+        return start
+    return fake.date_time_between(start_date=start, end_date=end)
+
+
 async def _apply_bulk_insert_session(conn: aiomysql.Connection) -> None:
     """Speed large InnoDB inserts (restored before commit/rollback)."""
     async with conn.cursor() as cur:
@@ -298,6 +315,10 @@ async def _seed(
     password_hash = hash_password(config.password_plain)
     usernames: list[str] = []
     user_ids: list[int] = []
+    window_end = datetime.now()
+    window_start = window_end - timedelta(days=config.timestamp_window_days)
+    user_join_at: dict[int, datetime] = {}
+    post_created_at: dict[int, datetime] = {}
 
     await conn.begin()
     try:
@@ -318,9 +339,15 @@ async def _seed(
                 for _ in range(chunk_size):
                     username = _unique_seed_username(fake)
                     usernames.append(username)
-                    batch.append((username, password_hash, fake.name()))
+                    joined = _random_dt_between(fake, window_start, window_end)
+                    batch.append(
+                        (username, password_hash, fake.name(), _random_avatar_url(fake), joined)
+                    )
 
-                user_ids.extend(await _insert_users_batch(conn, batch))
+                new_user_ids = await _insert_users_batch(conn, batch)
+                for uid, row in zip(new_user_ids, batch, strict=True):
+                    user_join_at[int(uid)] = row[4]
+                user_ids.extend(new_user_ids)
 
                 users_created += chunk_size
                 user_pbar.update(chunk_size)
@@ -344,9 +371,13 @@ async def _seed(
                 post_rows: list[PostRow] = []
                 for _ in range(chunk_size):
                     author_id = int(fake.random_element(user_ids))
-                    post_rows.append((author_id, _random_post_text(fake)))
+                    author_join = user_join_at[author_id]
+                    created = _random_dt_between(fake, author_join, window_end)
+                    post_rows.append((author_id, _random_post_text(fake), created))
 
                 post_ids = await _insert_posts_batch(conn, post_rows)
+                for pid, row in zip(post_ids, post_rows, strict=True):
+                    post_created_at[int(pid)] = row[2]
                 all_post_ids.extend(post_ids)
 
                 image_rows: list[ImageRow] = []
@@ -395,7 +426,11 @@ async def _seed(
             for post_id in all_post_ids:
                 like_count = _uniform_count(fake, config.max_likes_per_post)
                 for user_id in _pick_distinct_user_ids(fake, user_ids, like_count):
-                    likes_buffer.append((int(user_id), int(post_id)))
+                    uid = int(user_id)
+                    pid = int(post_id)
+                    earliest = max(user_join_at[uid], post_created_at[pid])
+                    liked_at = _random_dt_between(fake, earliest, window_end)
+                    likes_buffer.append((uid, pid, liked_at))
                     if len(likes_buffer) >= _ENGAGEMENT_ROWS_PER_INSERT:
                         await flush_likes()
                 likes_pbar.update(1)
@@ -432,8 +467,11 @@ async def _seed(
                 comment_count = _uniform_count(fake, config.max_comments_per_post)
                 for _ in range(comment_count):
                     commenter_id = int(fake.random_element(user_ids))
+                    pid = int(post_id)
+                    earliest = max(user_join_at[commenter_id], post_created_at[pid])
+                    commented_at = _random_dt_between(fake, earliest, window_end)
                     comments_buffer.append(
-                        (commenter_id, int(post_id), _random_comment_text(fake))
+                        (commenter_id, pid, _random_comment_text(fake), commented_at)
                     )
                     if len(comments_buffer) >= _ENGAGEMENT_ROWS_PER_INSERT:
                         await flush_comments()
@@ -564,6 +602,16 @@ def _parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
+        "--timestamp-window-days",
+        type=int,
+        default=30,
+        metavar="D",
+        help=(
+            "Spread created_at timestamps uniformly at random within the last D days "
+            "(users, posts, likes, comments; default: 30)."
+        ),
+    )
+    parser.add_argument(
         "--no-progress",
         action="store_true",
         help="Disable tqdm progress bars.",
@@ -575,6 +623,8 @@ def _parse_args() -> argparse.Namespace:
         parser.error("--users must be at least 1")
     if args.posts < 1:
         parser.error("--posts must be at least 1 (likes and comments need posts)")
+    if args.timestamp_window_days < 1:
+        parser.error("--timestamp-window-days must be at least 1")
 
     for name, value in (
         ("--max-likes-per-post", args.max_likes_per_post),
@@ -595,6 +645,7 @@ def run() -> None:
         num_posts=args.posts,
         max_likes_per_post=args.max_likes_per_post,
         max_comments_per_post=args.max_comments_per_post,
+        timestamp_window_days=args.timestamp_window_days,
     )
 
     asyncio.run(
