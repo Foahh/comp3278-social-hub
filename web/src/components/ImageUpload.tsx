@@ -56,9 +56,7 @@ export function ImageUpload({
           return
         }
         if (!allowed.has(f.type)) {
-          setFileError(
-            `Unsupported file type (${f.type}).`
-          )
+          setFileError(`Unsupported file type (${f.type}).`)
           return
         }
         valid.push(f)

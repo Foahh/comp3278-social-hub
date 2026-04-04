@@ -17,9 +17,7 @@ function ChatPage() {
           You searched for: <span className="font-medium">{q}</span>
         </p>
       ) : null}
-      <p className="mt-4 text-sm">
-        AI search isn't available yet.
-      </p>
+      <p className="mt-4 text-sm">AI search isn't available yet.</p>
     </div>
   )
 }

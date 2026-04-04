@@ -24,7 +24,9 @@ export function estimatePostHeight(post: PostResponse): number {
   if (post.text_content) {
     let prepared = preparedTextCache.get(post.text_content)
     if (!prepared) {
-      prepared = prepare(post.text_content, POST_TEXT_FONT, { whiteSpace: "pre-wrap" })
+      prepared = prepare(post.text_content, POST_TEXT_FONT, {
+        whiteSpace: "pre-wrap",
+      })
       preparedTextCache.set(post.text_content, prepared)
     }
     const { height: textHeight } = layout(

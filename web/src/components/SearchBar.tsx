@@ -29,7 +29,7 @@ export function SearchBar() {
           placeholder="Search anything…"
           aria-label="Search anything"
           name="q"
-          className="min-h-0 h-full min-w-0 py-0"
+          className="h-full min-h-0 min-w-0 py-0"
         />
         <InputGroupAddon
           align="inline-end"

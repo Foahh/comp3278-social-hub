@@ -1,17 +1,17 @@
-import React from "react";
+import React from "react"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 interface CommonSpinnerProps {
-  className?: string;
-  variant?: "classic" | "diamond";
+  className?: string
+  variant?: "classic" | "diamond"
 }
 
 type SpinnerProps = CommonSpinnerProps &
   (
     | (React.ComponentProps<"svg"> & { variant?: "classic" })
     | (React.ComponentProps<"svg"> & { variant: "diamond" })
-  );
+  )
 
 const Spinner = React.forwardRef<SVGSVGElement, SpinnerProps>(
   ({ className, variant = "classic", ...props }, ref) => {
@@ -27,7 +27,7 @@ const Spinner = React.forwardRef<SVGSVGElement, SpinnerProps>(
             xmlns="http://www.w3.org/2000/svg"
             stroke="currentColor"
             strokeWidth="0.25"
-            className={cn("animate-spin size-5", className)}
+            className={cn("size-5 animate-spin", className)}
             role="status"
             aria-label="Loading"
             {...(props as React.ComponentProps<"svg">)}
@@ -121,9 +121,9 @@ const Spinner = React.forwardRef<SVGSVGElement, SpinnerProps>(
           </svg>
         )}
       </>
-    );
+    )
   }
-);
-Spinner.displayName = "Spinner";
+)
+Spinner.displayName = "Spinner"
 
-export { Spinner };
+export { Spinner }

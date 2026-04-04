@@ -163,7 +163,10 @@ function PostImagesCarousel({
     (clientX: number) => {
       if (!api || !progressBarRef.current) return
       const rect = progressBarRef.current.getBoundingClientRect()
-      const fraction = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
+      const fraction = Math.max(
+        0,
+        Math.min(1, (clientX - rect.left) / rect.width)
+      )
       const snaps = api.scrollSnapList()
       if (snaps.length <= 1) return
       const index = Math.round(fraction * (snaps.length - 1))
@@ -299,7 +302,9 @@ function PostImagesCarousel({
               ? `Carousel scroll position, ${progressLabel}`
               : "Carousel scroll position"
           }
-          aria-valuenow={Math.round(Math.max(0, Math.min(scrollProgressPercent, 100)))}
+          aria-valuenow={Math.round(
+            Math.max(0, Math.min(scrollProgressPercent, 100))
+          )}
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuetext={snapCount > 0 ? progressLabel : undefined}
