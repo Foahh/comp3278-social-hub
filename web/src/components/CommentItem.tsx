@@ -33,7 +33,9 @@ export function CommentItem({ comment }: { comment: CommentResponse }) {
             params={{ username: comment.username }}
             className="text-sm hover:underline"
           >
-            <span className="font-medium">{comment.name}</span>{" "}
+            <span className="font-medium text-foreground/85">
+              {comment.name}
+            </span>{" "}
             <span className="font-normal text-muted-foreground">
               @{comment.username}
             </span>
