@@ -48,7 +48,7 @@ function CreatePostPage() {
           params: { id: String(post.post_id) },
         })
       },
-      onError: (err) => toast.error(err.message),
+      onError: () => toast.error("Failed to create post."),
     })
   }
 

@@ -7,6 +7,7 @@ import { CommentItem } from "./CommentItem"
 import { useComments, useCreateComment } from "@/lib/api/hooks/useComments"
 import { useAuth } from "@/context/AuthContext"
 import { appConstants } from "@/lib/appConstants"
+import { toast } from "@/components/ui/8bit/toast"
 
 export function CommentList({
   postId,
@@ -31,8 +32,12 @@ export function CommentList({
         onSuccess: () => {
           setText("")
           setError(null)
+          toast.success("Comment posted.")
         },
-        onError: (err) => setError(err.message),
+        onError: (err) => {
+          setError(err.message)
+          toast.error(err.message)
+        },
       }
     )
   }

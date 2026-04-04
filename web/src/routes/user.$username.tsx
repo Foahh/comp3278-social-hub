@@ -48,10 +48,7 @@ function UserProfilePage() {
     setAvatarError(null)
     updateAvatar.mutate(file, {
       onSuccess: () => toast.success("Profile photo updated."),
-      onError: (err) => {
-        setAvatarError(err.message)
-        toast.error(err.message)
-      },
+      onError: () => toast.error("Failed to update profile photo."),
     })
   }
 

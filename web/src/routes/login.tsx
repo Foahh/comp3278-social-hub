@@ -25,6 +25,7 @@ import {
 import { AtSign, Lock, Login, UserPlus } from "pixelarticons/react"
 import { useLogin } from "@/lib/api/hooks/useAuth"
 import { appConstants } from "@/lib/appConstants"
+import { toast } from "@/components/ui/8bit/toast"
 
 export const Route = createFileRoute("/login")({
   validateSearch: (search: Record<string, unknown>): { redirect?: string } => ({
@@ -49,8 +50,10 @@ function LoginPage() {
         password: fd.get("password") as string,
       },
       {
-        onSuccess: () =>
-          void navigate({ to: redirectTo?.startsWith("/") ? redirectTo : "/" }),
+        onSuccess: () => {
+          toast.success("Welcome back!")
+          void navigate({ to: redirectTo?.startsWith("/") ? redirectTo : "/" })
+        },
         onError: (err) => setError(err.message),
       }
     )

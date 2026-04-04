@@ -25,6 +25,7 @@ import {
 import { AtSign, Lock, Login, User, UserPlus } from "pixelarticons/react"
 import { useRegister } from "@/lib/api/hooks/useAuth"
 import { appConstants } from "@/lib/appConstants"
+import { toast } from "@/components/ui/8bit/toast"
 
 export const Route = createFileRoute("/register")({
   component: RegisterPage,
@@ -54,7 +55,10 @@ function RegisterPage() {
         password,
       },
       {
-        onSuccess: () => void navigate({ to: "/" }),
+        onSuccess: () => {
+          toast.success("Account created.")
+          void navigate({ to: "/" })
+        },
         onError: (err) => setError(err.message),
       }
     )

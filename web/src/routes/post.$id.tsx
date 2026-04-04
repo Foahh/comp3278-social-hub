@@ -26,7 +26,7 @@ function PostDetailPage() {
         toast.success("Post removed.")
         void navigate({ to: "/" })
       },
-      onError: (err) => toast.error(err.message),
+      onError: () => toast.error("Failed to delete post."),
     })
   }
 
