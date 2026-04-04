@@ -31,7 +31,7 @@ export function SearchBar() {
           placeholder="…"
           aria-label="Search"
           name="q"
-          className="min-h-0 py-0 !h-8"
+          className="!h-8 min-h-0 py-0"
         />
       </InputGroup>
     </form>

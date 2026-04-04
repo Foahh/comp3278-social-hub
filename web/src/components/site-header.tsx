@@ -1,6 +1,9 @@
-import { Link } from "@tanstack/react-router"
-import { Button } from "@/components/ui/8bit/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/8bit/avatar"
+import { LinkButton } from "@/components/ui/8bit/link-button"
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/8bit/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +13,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/8bit/dropdown-menu"
 import { Separator } from "@/components/ui/8bit/separator"
-import { Logout, PenSquare, Rss, User } from "pixelarticons/react"
+import {
+  Login,
+  Logout,
+  PenSquare,
+  Rss,
+  User,
+  UserPlus,
+} from "pixelarticons/react"
 import { SearchBar } from "./SearchBar"
 import { useAuth } from "@/context/AuthContext"
 
@@ -20,51 +30,54 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 flex shrink-0 flex-col bg-background">
       <div className="flex h-14 w-full items-center gap-3 px-4 lg:px-6">
-        <Link
+        <LinkButton
           to="/"
-          className="flex shrink-0 items-center gap-2 font-semibold text-foreground"
+          variant="link"
+          className="h-auto min-h-0 shrink-0 gap-2 p-0 font-semibold text-foreground no-underline hover:text-foreground hover:no-underline"
         >
           <Rss className="size-5" />
           <span className="hidden sm:inline">SocialHub</span>
-        </Link>
+        </LinkButton>
 
         <div className="flex flex-1 items-center justify-end gap-2">
           <SearchBar />
 
           {!isLoading && user && (
-            <Button
-              asChild
+            <LinkButton
+              to="/create"
               variant="ghost"
               size="icon"
               className="h-8 w-8"
               aria-label="New post"
             >
-              <Link to="/create">
-                <PenSquare className="size-4" />
-              </Link>
-            </Button>
+              <PenSquare className="size-4" />
+            </LinkButton>
           )}
 
           {!isLoading && !user && (
             <>
-              <Button asChild variant="ghost" size="sm">
-                <Link to="/login" search={{}}>Sign in</Link>
-              </Button>
-              <Button asChild size="sm">
-                <Link to="/register">Sign up</Link>
-              </Button>
+              <LinkButton to="/login" variant="ghost" size="sm">
+                <Login className="size-4 shrink-0" aria-hidden />
+                Sign in
+              </LinkButton>
+              <LinkButton to="/register" size="sm">
+                <UserPlus className="size-4 shrink-0" aria-hidden />
+                Sign up
+              </LinkButton>
             </>
           )}
 
           {!isLoading && user && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                <button className="rounded-full focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none">
                   <Avatar className="size-8">
                     {user.avatar_url && (
                       <AvatarImage src={user.avatar_url} alt={user.name} />
                     )}
-                    <AvatarFallback>{user.name[0]?.toUpperCase() ?? "?"}</AvatarFallback>
+                    <AvatarFallback>
+                      {user.name[0]?.toUpperCase() ?? "?"}
+                    </AvatarFallback>
                   </Avatar>
                 </button>
               </DropdownMenuTrigger>
@@ -72,15 +85,23 @@ export function SiteHeader() {
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col gap-0.5">
                     <span className="text-sm font-medium">{user.name}</span>
-                    <span className="text-xs text-muted-foreground">@{user.username}</span>
+                    <span className="text-xs text-muted-foreground">
+                      @{user.username}
+                    </span>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link to="/user/$username" params={{ username: user.username }}>
+                  <LinkButton
+                    to="/user/$username"
+                    params={{ username: user.username }}
+                    variant="ghost"
+                    size="sm"
+                    className="h-auto min-h-0 w-full cursor-default justify-start gap-2 rounded-none px-2 py-1.5 font-normal"
+                  >
                     <User className="size-4" />
                     Profile
-                  </Link>
+                  </LinkButton>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   variant="destructive"

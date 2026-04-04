@@ -20,9 +20,7 @@ function mapPostInFeed(
     ...data,
     pages: data.pages.map((page) => ({
       ...page,
-      posts: page.posts.map((p) =>
-        p.post_id === postId ? mapFn(p) : p
-      ),
+      posts: page.posts.map((p) => (p.post_id === postId ? mapFn(p) : p)),
     })),
   }
 }
@@ -31,9 +29,7 @@ function optimisticLikePatch(post: PostResponse): PostResponse {
   return {
     ...post,
     liked_by_me: !post.liked_by_me,
-    like_count: post.liked_by_me
-      ? post.like_count - 1
-      : post.like_count + 1,
+    like_count: post.liked_by_me ? post.like_count - 1 : post.like_count + 1,
   }
 }
 
@@ -108,9 +104,7 @@ export function useToggleLike(postId: number) {
       for (const [key, feedData] of feeds) {
         if (!feedData) continue
         queryClient.setQueryData<FeedInfinite>(key, (current) =>
-          current
-            ? mapPostInFeed(current, postId, serverPatch)
-            : current
+          current ? mapPostInFeed(current, postId, serverPatch) : current
         )
       }
     },

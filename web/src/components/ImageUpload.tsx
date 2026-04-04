@@ -1,5 +1,5 @@
 import { useRef, useState, useMemo, useEffect } from "react"
-import { Cancel, Plus } from "pixelarticons/react"
+import { Cancel, Link, Plus } from "pixelarticons/react"
 import { Button } from "@/components/ui/8bit/button"
 import { Input } from "@/components/ui/8bit/input"
 import { appConstants } from "@/lib/appConstants"
@@ -125,11 +125,10 @@ export function ImageUpload({
         size="sm"
         onClick={() => fileInputRef.current?.click()}
       >
-        <Plus className="mr-1 size-3" />
+        <Plus className="size-4 shrink-0" aria-hidden />
         Add image
       </Button>
-
-      <div className="flex gap-2">
+      <div className="flex items-center gap-2">
         <Input
           value={urlInput}
           onChange={(e) => setUrlInput(e.target.value)}
@@ -145,10 +144,11 @@ export function ImageUpload({
         <Button
           type="button"
           variant="outline"
-          size="sm"
+          className="h-[34px] shrink-0 py-0"
           onClick={addUrl}
           disabled={!urlInput.trim()}
         >
+          <Link className="size-4 shrink-0" aria-hidden />
           Add
         </Button>
       </div>

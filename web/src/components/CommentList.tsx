@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Send } from "pixelarticons/react"
 import { Button } from "@/components/ui/8bit/button"
 import { Textarea } from "@/components/ui/8bit/textarea"
 import { Skeleton } from "@/components/ui/8bit/skeleton"
@@ -61,11 +62,8 @@ export function CommentList({
       )}
 
       {user && (
-        <div className="sticky bottom-0 z-10 mt-4 -mx-[0.125rem] w-[calc(100%+0.25rem)] max-w-none border-t border-border bg-background/95 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-sm supports-[backdrop-filter]:bg-background/80">
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-2 px-[0.125rem]"
-          >
+        <div className="sticky bottom-0 z-10 -mx-[0.125rem] mt-10 w-[calc(100%+0.25rem)] max-w-none bg-background/95 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-sm supports-[backdrop-filter]:bg-background/80">
+          <form onSubmit={handleSubmit} className="space-y-2 px-[0.125rem]">
             <Textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -82,6 +80,7 @@ export function CommentList({
                 size="sm"
                 disabled={create.isPending || !text.trim()}
               >
+                <Send className="size-4 shrink-0" aria-hidden />
                 {create.isPending ? "Posting…" : "Post"}
               </Button>
             </div>

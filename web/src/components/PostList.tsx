@@ -1,3 +1,4 @@
+import { ChevronDown } from "pixelarticons/react"
 import { Button } from "@/components/ui/8bit/button"
 import { Skeleton } from "@/components/ui/8bit/skeleton"
 import { PostCard } from "./PostCard"
@@ -45,6 +46,7 @@ export function PostList({
       {hasNextPage && !isFetchingNextPage && (
         <div className="flex justify-center py-4">
           <Button variant="outline" onClick={fetchNextPage}>
+            <ChevronDown className="size-4 shrink-0" aria-hidden />
             Load more
           </Button>
         </div>
