@@ -65,7 +65,7 @@ export function DataTable({ dataframe }: DataTableProps) {
               )}
               {canCopyTable && (
                 <Action
-                  tooltip="Copy table (TSV)"
+                  tooltip="Copy table"
                   onClick={handleCopyTableData}
                 >
                   <Copy className="size-4" />
