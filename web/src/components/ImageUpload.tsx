@@ -23,6 +23,7 @@ export function ImageUpload({
 }: Props) {
   const [urlInput, setUrlInput] = useState("")
   const [fileError, setFileError] = useState<string | null>(null)
+  const [urlError, setUrlError] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [urlBroken, setUrlBroken] = useState<Record<number, true>>({})
 
@@ -82,6 +83,11 @@ export function ImageUpload({
   function addUrl() {
     const trimmed = urlInput.trim()
     if (!trimmed) return
+    if (!trimmed.toLowerCase().startsWith("http")) {
+      setUrlError("URL must start with http:// or https://.")
+      return
+    }
+    setUrlError(null)
     onUrlsChange([...urls, trimmed])
     setUrlInput("")
   }
@@ -151,12 +157,12 @@ export function ImageUpload({
         </div>
       )}
 
-      {fileError && (
+      {(fileError || urlError) && (
         <div
           className="border-2 border-destructive bg-destructive/10 px-3 py-2 text-sm font-bold text-destructive"
           role="alert"
         >
-          {fileError}
+          {fileError ?? urlError}
         </div>
       )}
 
@@ -229,8 +235,12 @@ export function ImageUpload({
         <div className="flex flex-col gap-2 sm:flex-row sm:items-stretch">
           <div className="min-w-0 flex-1">
             <Input
+              data-testid="url-input"
               value={urlInput}
-              onChange={(e) => setUrlInput(e.target.value)}
+              onChange={(e) => {
+                setUrlError(null)
+                setUrlInput(e.target.value)
+              }}
               placeholder="https://…"
               className="text-sm"
               aria-labelledby="image-upload-url-label"

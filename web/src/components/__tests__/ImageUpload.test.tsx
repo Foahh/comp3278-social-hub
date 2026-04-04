@@ -45,4 +45,26 @@ describe("ImageUpload", () => {
     expect(screen.getByText(/unsupported/i)).toBeTruthy()
     expect(onBlobsChange).not.toHaveBeenCalled()
   })
+
+  it("rejects URLs that do not start with http", async () => {
+    const user = userEvent.setup()
+    const onUrlsChange = vi.fn()
+    render(
+      <ImageUpload
+        blobs={[]}
+        urls={[]}
+        onBlobsChange={vi.fn()}
+        onUrlsChange={onUrlsChange}
+      />
+    )
+
+    await user.type(
+      screen.getByTestId("url-input"),
+      "ftp://example.com/img.jpg"
+    )
+    await user.click(screen.getByRole("button", { name: /add/i }))
+
+    expect(screen.getByText(/URL must start with http/i)).toBeTruthy()
+    expect(onUrlsChange).not.toHaveBeenCalled()
+  })
 })

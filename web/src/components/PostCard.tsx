@@ -71,14 +71,14 @@ function PostCarouselImage({
         className={cn(
           carouselImageFrame,
           "relative flex min-h-48 w-max max-w-full items-center justify-center",
-          !loaded && "min-w-0"
+          !loaded && "min-w-[12em]"
         )}
       >
         {!loaded && (
           <div className="absolute inset-2 z-0 flex items-center justify-center bg-card">
             <Spinner
               variant="diamond"
-              className="size-10 text-muted-foreground"
+              className="size-8 text-muted-foreground"
             />
           </div>
         )}
@@ -415,7 +415,7 @@ export function PostCard({
       )}
 
       <CardFooter className="border-t">
-        <div className="flex flex-wrap items-center gap-2 mt-2">
+        <div className="mt-2 flex flex-wrap items-center gap-2">
           <LikeButton post={post} />
           {!hidePostLink && (
             <LinkButton
