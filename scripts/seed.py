@@ -213,7 +213,11 @@ def _random_post_text(fake: Faker) -> str:
     max_chars = fake.random_int(min=25, max=APP_CONSTANTS.max_post_text_length)
     text = fake.text(max_nb_chars=max_chars).replace("\n", " ").strip()
     if len(text) < 10:
-        text = fake.paragraph(nb_sentences=fake.random_int(min=1, max=5)).replace("\n", " ").strip()
+        text = (
+            fake.paragraph(nb_sentences=fake.random_int(min=1, max=5))
+            .replace("\n", " ")
+            .strip()
+        )
     return text[: APP_CONSTANTS.max_post_text_length]
 
 
@@ -230,9 +234,28 @@ def _random_comment_text(fake: Faker) -> str:
     return text[: APP_CONSTANTS.max_comment_length]
 
 
+_IMAGE_ASPECTS: tuple[tuple[int, int], ...] = (
+    (1, 1),
+    (4, 3),
+    (3, 4),
+    (3, 2),
+    (2, 3),
+    (16, 9),
+    (9, 16),
+)
+
+
 def _random_image_url(fake: Faker) -> str:
-    width = fake.random_int(min=120, max=1920)
-    height = fake.random_int(min=120, max=1920)
+    aw, ah = fake.random_element(elements=_IMAGE_ASPECTS)
+    max_side = fake.random_int(min=400, max=1600)
+    if aw >= ah:
+        width = max_side
+        height = max(120, round(max_side * ah / aw))
+    else:
+        height = max_side
+        width = max(120, round(max_side * aw / ah))
+    width = max(120, min(width, 1920))
+    height = max(120, min(height, 1920))
     return fake.image_url(width=width, height=height)
 
 
@@ -327,7 +350,9 @@ async def _seed(
                 for post_id in post_ids:
                     image_count = fake.random_int(min=0, max=5)
                     for position in range(image_count):
-                        image_rows.append((post_id, "url", _random_image_url(fake), position))
+                        image_rows.append(
+                            (post_id, "url", _random_image_url(fake), position)
+                        )
 
                 if image_rows:
                     await _chunked(
@@ -406,7 +431,9 @@ async def _seed(
                 comment_count = _uniform_count(fake, config.max_comments_per_post)
                 for _ in range(comment_count):
                     commenter_id = int(fake.random_element(user_ids))
-                    comments_buffer.append((commenter_id, int(post_id), _random_comment_text(fake)))
+                    comments_buffer.append(
+                        (commenter_id, int(post_id), _random_comment_text(fake))
+                    )
                     if len(comments_buffer) >= _ENGAGEMENT_ROWS_PER_INSERT:
                         await flush_comments()
                 comments_pbar.update(1)
@@ -531,7 +558,9 @@ def _parse_args() -> argparse.Namespace:
         type=int,
         default=100,
         metavar="N",
-        help=("Cap on comments per post; uniform random count in [0, N] per post (default: 100)."),
+        help=(
+            "Cap on comments per post; uniform random count in [0, N] per post (default: 100)."
+        ),
     )
     parser.add_argument(
         "--no-progress",
