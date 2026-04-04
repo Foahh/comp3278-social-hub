@@ -26,7 +26,7 @@ function Skeleton({ children, ...props }: BitSkeletonProp) {
       </div>
       <div className="opacity-60">
         <div className="absolute -bottom-0.5 left-0.5 h-0.5 w-1/2 bg-foreground dark:bg-ring" />
-        <div className="absolute -bottom-0.5 right-0.5 h-0.5 w-1/2 bg-foreground dark:bg-ring" />
+        <div className="absolute right-0.5 -bottom-0.5 h-0.5 w-1/2 bg-foreground dark:bg-ring" />
       </div>
       <div className="absolute top-0 left-0 size-0.5 bg-foreground/60 dark:bg-ring/60" />
       <div className="absolute top-0 right-0 size-0.5 bg-foreground/60 dark:bg-ring/60" />
@@ -38,7 +38,7 @@ function Skeleton({ children, ...props }: BitSkeletonProp) {
       </div>
       <div className="opacity-60">
         <div className="absolute top-0.5 -right-0.5 h-1/2 w-0.5 bg-foreground dark:bg-ring" />
-        <div className="absolute bottom-0.5 -right-0.5 h-1/2 w-0.5 bg-foreground dark:bg-ring" />
+        <div className="absolute -right-0.5 bottom-0.5 h-1/2 w-0.5 bg-foreground dark:bg-ring" />
       </div>
     </div>
   )

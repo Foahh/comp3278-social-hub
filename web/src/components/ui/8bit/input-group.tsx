@@ -9,13 +9,13 @@ import { Textarea } from "@/components/ui/textarea"
 import "@/components/ui/8bit/styles/retro.css"
 
 const inputGroupClassName = cn(
-  "group/input-group relative flex h-9 w-full min-w-0 items-center border-y-[0.125rem] border-foreground bg-input/30 !p-0 outline-none transition-[color,border-color] dark:border-ring",
+  "group/input-group relative flex h-9 w-full min-w-0 items-center border-y-[0.125rem] border-foreground bg-input/30 !p-0 transition-[color,border-color] outline-none dark:border-ring",
   "in-data-[slot=combobox-content]:focus-within:border-inherit",
   "has-[[data-slot=input-group-control]:focus-visible]:border-primary dark:has-[[data-slot=input-group-control]:focus-visible]:border-primary",
   "has-[[data-slot=input-group-control][aria-invalid=true]]:border-destructive dark:has-[[data-slot=input-group-control][aria-invalid=true]]:border-destructive",
   "group-data-[invalid=true]/field:border-destructive dark:group-data-[invalid=true]/field:border-destructive",
   "data-[invalid=true]:border-destructive dark:data-[invalid=true]:border-destructive",
-  "has-[>textarea]:h-auto has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col",
+  "has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto",
   "has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3",
   "has-[>[data-align=inline-end]]:[&>input]:pr-1.5 has-[>[data-align=inline-start]]:[&>input]:pl-1.5"
 )
@@ -48,7 +48,7 @@ function InputGroup({
 }
 
 const inputGroupAddonVariants = cva(
-  "relative z-[1] flex h-auto cursor-text items-center justify-center gap-2 py-2 text-sm font-medium text-muted-foreground select-none retro group-data-[disabled=true]/input-group:opacity-50 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:px-1.5 [&>svg:not([class*='size-'])]:size-4",
+  "retro relative z-[1] flex h-auto cursor-text items-center justify-center gap-2 py-2 text-sm font-medium text-muted-foreground select-none group-data-[disabled=true]/input-group:opacity-50 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:px-1.5 [&>svg:not([class*='size-'])]:size-4",
   {
     variants: {
       align: {
@@ -149,7 +149,7 @@ function InputGroupInput({
     <Input
       data-slot="input-group-control"
       className={cn(
-        "relative z-[1] flex-1 rounded-none border-0 bg-transparent px-3 py-1 shadow-none ring-0 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent retro",
+        "retro relative z-[1] flex-1 rounded-none border-0 bg-transparent px-3 py-1 shadow-none ring-0 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent",
         className
       )}
       {...props}
@@ -165,7 +165,7 @@ function InputGroupTextarea({
     <Textarea
       data-slot="input-group-control"
       className={cn(
-        "relative z-[1] flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none ring-0 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent retro",
+        "retro relative z-[1] flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none ring-0 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent",
         className
       )}
       {...props}

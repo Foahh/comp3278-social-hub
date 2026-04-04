@@ -1,12 +1,12 @@
-import type React from "react";
-import { forwardRef } from "react";
+import type React from "react"
+import { forwardRef } from "react"
 
-import * as AvatarPrimitive from "@radix-ui/react-avatar";
-import { cva } from "class-variance-authority";
+import * as AvatarPrimitive from "@radix-ui/react-avatar"
+import { cva } from "class-variance-authority"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
-import "@/components/ui/8bit/styles/retro.css";
+import "@/components/ui/8bit/styles/retro.css"
 
 export const avatarVariants = cva("", {
   variants: {
@@ -24,77 +24,77 @@ export const avatarVariants = cva("", {
     font: "retro",
     variant: "pixel",
   },
-});
+})
 
 const Avatar = forwardRef<
   React.ComponentRef<typeof AvatarPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> & {
-    font?: "normal" | "retro";
-    variant?: "default" | "retro" | "pixel";
-    overlay?: React.ReactNode;
+    font?: "normal" | "retro"
+    variant?: "default" | "retro" | "pixel"
+    overlay?: React.ReactNode
   }
 >(({ className = "", font, variant = "retro", overlay, ...props }, ref) => {
-  const isPixel = variant === "pixel";
+  const isPixel = variant === "pixel"
 
   return (
     <div className={cn("relative size-max", className)}>
       {/* Pixel frame (only show if pixel variant) */}
       {isPixel && (
         <div
-          className="absolute inset-0 w-full h-full pointer-events-none"
+          className="pointer-events-none absolute inset-0 h-full w-full"
           style={{ zIndex: 10 }}
         >
           {/* Top section - Row 1 */}
-          <div className="absolute top-0 left-[23%] right-[23%] h-[7%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-0 right-[23%] left-[23%] h-[7%] bg-foreground dark:bg-ring"></div>
 
           {/* Top section - Row 2 */}
-          <div className="absolute top-[6.25%] left-[17%] right-[17%] h-[7%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[6.25%] right-[17%] left-[17%] h-[7%] bg-foreground dark:bg-ring"></div>
 
           {/* Top section - Row 3 */}
-          <div className="absolute top-[12.5%] left-[11%] h-[7%] bg-foreground dark:bg-ring w-[20%]"></div>
-          <div className="absolute top-[12.5%] right-[11%] h-[7%] bg-foreground dark:bg-ring w-[20%]"></div>
+          <div className="absolute top-[12.5%] left-[11%] h-[7%] w-[20%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[12.5%] right-[11%] h-[7%] w-[20%] bg-foreground dark:bg-ring"></div>
 
           {/* Top section - Row 4 */}
-          <div className="absolute top-[18.75%] left-[5%] w-[20%] h-[7%] bg-foreground dark:bg-ring"></div>
-          <div className="absolute top-[18.75%] right-[5%] w-[20%] h-[7%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[18.75%] left-[5%] h-[7%] w-[20%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[18.75%] right-[5%] h-[7%] w-[20%] bg-foreground dark:bg-ring"></div>
 
           {/* Top section - Row 5 */}
-          <div className="absolute top-[25%] left-0 w-[20%] h-[7%] bg-foreground dark:bg-ring"></div>
-          <div className="absolute top-[25%] right-0 w-[20%] h-[7%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[25%] left-0 h-[7%] w-[20%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[25%] right-0 h-[7%] w-[20%] bg-foreground dark:bg-ring"></div>
 
           {/* Top section - Rows 6-7 */}
-          <div className="absolute top-[31.25%] left-0 w-[13.5%] h-[13%] bg-foreground dark:bg-ring"></div>
-          <div className="absolute top-[31.25%] right-0 w-[13.5%] h-[13%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[31.25%] left-0 h-[13%] w-[13.5%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[31.25%] right-0 h-[13%] w-[13.5%] bg-foreground dark:bg-ring"></div>
 
           {/* Top section - Rows 8-10 */}
-          <div className="absolute top-[43.75%] left-0 w-[13.5%] h-[7%] bg-foreground dark:bg-ring"></div>
-          <div className="absolute top-[43.75%] right-0 w-[13.5%] h-[7%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[43.75%] left-0 h-[7%] w-[13.5%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[43.75%] right-0 h-[7%] w-[13.5%] bg-foreground dark:bg-ring"></div>
 
           {/* Bottom section - Rows 8-10 (mirror) */}
-          <div className="absolute top-[50%] left-0 w-[13.5%] h-[7%] bg-foreground dark:bg-ring"></div>
-          <div className="absolute top-[50%] right-0 w-[13.5%] h-[7%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[50%] left-0 h-[7%] w-[13.5%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[50%] right-0 h-[7%] w-[13.5%] bg-foreground dark:bg-ring"></div>
 
           {/* Bottom section - Rows 6-7 (mirror) */}
-          <div className="absolute top-[56.25%] left-0 w-[13.5%] h-[13%] bg-foreground dark:bg-ring"></div>
-          <div className="absolute top-[56.25%] right-0 w-[13.5%] h-[13%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[56.25%] left-0 h-[13%] w-[13.5%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[56.25%] right-0 h-[13%] w-[13.5%] bg-foreground dark:bg-ring"></div>
 
           {/* Bottom section - Row 5 (mirror) */}
-          <div className="absolute top-[68.75%] left-0 w-[20%] h-[7%] bg-foreground dark:bg-ring"></div>
-          <div className="absolute top-[68.75%] right-0 w-[20%] h-[7%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[68.75%] left-0 h-[7%] w-[20%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[68.75%] right-0 h-[7%] w-[20%] bg-foreground dark:bg-ring"></div>
 
           {/* Bottom section - Row 4 (mirror) */}
-          <div className="absolute top-[75%] left-[5%] w-[20%] h-[7%] bg-foreground dark:bg-ring"></div>
-          <div className="absolute top-[75%] right-[5%] w-[20%] h-[7%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[75%] left-[5%] h-[7%] w-[20%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[75%] right-[5%] h-[7%] w-[20%] bg-foreground dark:bg-ring"></div>
 
           {/* Bottom section - Row 3 (mirror) */}
-          <div className="absolute top-[81.25%] left-[11%] h-[7%] bg-foreground dark:bg-ring w-[20%]"></div>
-          <div className="absolute top-[81.25%] right-[11%] h-[7%] bg-foreground dark:bg-ring w-[20%]"></div>
+          <div className="absolute top-[81.25%] left-[11%] h-[7%] w-[20%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[81.25%] right-[11%] h-[7%] w-[20%] bg-foreground dark:bg-ring"></div>
 
           {/* Bottom section - Row 2 (mirror) */}
-          <div className="absolute top-[87.5%] left-[17%] right-[17%] h-[7%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute top-[87.5%] right-[17%] left-[17%] h-[7%] bg-foreground dark:bg-ring"></div>
 
           {/* Bottom section - Row 1 (mirror) */}
-          <div className="absolute bottom-0 left-[23%] right-[23%] h-[7%] bg-foreground dark:bg-ring"></div>
+          <div className="absolute right-[23%] bottom-0 left-[23%] h-[7%] bg-foreground dark:bg-ring"></div>
         </div>
       )}
 
@@ -134,18 +134,19 @@ const Avatar = forwardRef<
           <div className="pointer-events-none absolute top-0.5 -left-0.5 z-10 h-1/2 w-0.5 bg-foreground dark:bg-ring" />
           <div className="pointer-events-none absolute bottom-0.5 -left-0.5 z-10 h-1/2 w-0.5 bg-foreground dark:bg-ring" />
           <div className="pointer-events-none absolute top-0.5 -right-0.5 z-10 h-1/2 w-0.5 bg-foreground dark:bg-ring" />
-          <div className="pointer-events-none absolute bottom-0.5 -right-0.5 z-10 h-1/2 w-0.5 bg-foreground dark:bg-ring" />
+          <div className="pointer-events-none absolute -right-0.5 bottom-0.5 z-10 h-1/2 w-0.5 bg-foreground dark:bg-ring" />
         </>
       )}
     </div>
-  );
-});
-Avatar.displayName = AvatarPrimitive.Root.displayName;
+  )
+})
+Avatar.displayName = AvatarPrimitive.Root.displayName
 
-interface BitAvatarImageProps
-  extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image> {
-  font?: "normal" | "retro";
-  variant?: "default" | "retro" | "pixel";
+interface BitAvatarImageProps extends React.ComponentPropsWithoutRef<
+  typeof AvatarPrimitive.Image
+> {
+  font?: "normal" | "retro"
+  variant?: "default" | "retro" | "pixel"
 }
 
 const AvatarImage = forwardRef<
@@ -163,21 +164,22 @@ const AvatarImage = forwardRef<
       )}
       {...props}
     />
-  );
-});
-AvatarImage.displayName = AvatarPrimitive.Image.displayName;
+  )
+})
+AvatarImage.displayName = AvatarPrimitive.Image.displayName
 
-interface BitAvatarFallbackProps
-  extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback> {
-  font?: "normal" | "retro";
-  variant?: "default" | "retro" | "pixel";
+interface BitAvatarFallbackProps extends React.ComponentPropsWithoutRef<
+  typeof AvatarPrimitive.Fallback
+> {
+  font?: "normal" | "retro"
+  variant?: "default" | "retro" | "pixel"
 }
 
 const AvatarFallback = forwardRef<
   React.ComponentRef<typeof AvatarPrimitive.Fallback>,
   BitAvatarFallbackProps
 >(({ className, font, variant = "retro", ...props }, ref) => {
-  const isPixel = variant === "pixel";
+  const isPixel = variant === "pixel"
   return (
     <AvatarPrimitive.Fallback
       ref={ref}
@@ -191,8 +193,8 @@ const AvatarFallback = forwardRef<
       )}
       {...props}
     />
-  );
-});
-AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
+  )
+})
+AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName
 
-export { Avatar, AvatarImage, AvatarFallback };
+export { Avatar, AvatarImage, AvatarFallback }

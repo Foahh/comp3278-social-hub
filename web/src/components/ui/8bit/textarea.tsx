@@ -2,7 +2,10 @@ import { type VariantProps, cva } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
-import { Textarea as ShadcnTextarea } from "@/components/ui/textarea"
+import {
+  InputGroup,
+  InputGroupTextarea,
+} from "@/components/ui/8bit/input-group"
 
 import "@/components/ui/8bit/styles/retro.css"
 
@@ -25,30 +28,17 @@ export interface BitTextareaProps
   asChild?: boolean
 }
 
-function Textarea({ ...props }: BitTextareaProps) {
-  const { className, font } = props
-
+function Textarea({ className, font, ...props }: BitTextareaProps) {
   return (
-    <div className={cn("relative w-full", className)}>
-      <ShadcnTextarea
-        {...props}
+    <InputGroup>
+      <InputGroupTextarea
         className={cn(
-          "rounded-none border-0 ring-0 transition-transform",
-          font !== "normal" && "retro",
+          font === "normal" && "font-sans tracking-normal",
           className
         )}
+        {...props}
       />
-
-      <div
-        className="pointer-events-none absolute inset-0 -my-[0.125rem] border-y-[0.125rem] border-foreground dark:border-ring"
-        aria-hidden="true"
-      />
-
-      <div
-        className="pointer-events-none absolute inset-0 -mx-[0.125rem] border-x-[0.125rem] border-foreground dark:border-ring"
-        aria-hidden="true"
-      />
-    </div>
+    </InputGroup>
   )
 }
 

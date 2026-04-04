@@ -44,10 +44,7 @@ function DropdownMenuSubTrigger({
 }: React.ComponentProps<typeof DropdownMenuPrimitive.DropdownMenuSubTrigger>) {
   return (
     <ShadcnDropdownMenuSubTrigger
-      className={cn(
-        "rounded-none border-0 bg-transparent",
-        className
-      )}
+      className={cn("rounded-none border-0 bg-transparent", className)}
       {...props}
     >
       {children}
@@ -81,10 +78,7 @@ function DropdownMenuItem({
 }) {
   return (
     <ShadcnDropdownMenuItem
-      className={cn(
-        "rounded-none border-0 bg-transparent",
-        className
-      )}
+      className={cn("rounded-none border-0 bg-transparent", className)}
       {...props}
     >
       {children}
