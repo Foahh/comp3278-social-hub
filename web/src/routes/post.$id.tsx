@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import { Delete } from "pixelarticons/react"
 import { Button } from "@/components/ui/8bit/button"
 import { Skeleton } from "@/components/ui/8bit/skeleton"
 import { PostCard } from "@/components/PostCard"
@@ -56,6 +57,7 @@ function PostDetailPage() {
             onClick={handleDelete}
             disabled={deletePost.isPending}
           >
+            <Delete className="size-4 shrink-0" aria-hidden />
             {deletePost.isPending ? "Deleting…" : "Delete post"}
           </Button>
         </div>

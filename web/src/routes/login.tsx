@@ -1,6 +1,7 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import { Button } from "@/components/ui/8bit/button";
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import { useState } from "react"
+import { Button } from "@/components/ui/8bit/button"
+import { LinkButton } from "@/components/ui/8bit/link-button"
 import {
   Card,
   CardContent,
@@ -8,40 +9,40 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/8bit/card";
+} from "@/components/ui/8bit/card"
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field";
+} from "@/components/ui/field"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/8bit/input-group";
-import { AtSign, Lock } from "pixelarticons/react";
-import { useLogin } from "@/lib/api/hooks/useAuth";
-import { appConstants } from "@/lib/appConstants";
+} from "@/components/ui/8bit/input-group"
+import { AtSign, Lock, Login, UserPlus } from "pixelarticons/react"
+import { useLogin } from "@/lib/api/hooks/useAuth"
+import { appConstants } from "@/lib/appConstants"
 
 export const Route = createFileRoute("/login")({
   validateSearch: (search: Record<string, unknown>): { redirect?: string } => ({
     redirect: (search.redirect as string) ?? undefined,
   }),
   component: LoginPage,
-});
+})
 
 function LoginPage() {
-  const { redirect: redirectTo } = Route.useSearch();
-  const navigate = useNavigate();
-  const login = useLogin();
-  const [error, setError] = useState<string | null>(null);
+  const { redirect: redirectTo } = Route.useSearch()
+  const navigate = useNavigate()
+  const login = useLogin()
+  const [error, setError] = useState<string | null>(null)
 
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setError(null);
-    const fd = new FormData(e.currentTarget);
+    e.preventDefault()
+    setError(null)
+    const fd = new FormData(e.currentTarget)
     login.mutate(
       {
         username: fd.get("username") as string,
@@ -51,8 +52,8 @@ function LoginPage() {
         onSuccess: () =>
           void navigate({ to: redirectTo?.startsWith("/") ? redirectTo : "/" }),
         onError: (err) => setError(err.message),
-      },
-    );
+      }
+    )
   }
 
   return (
@@ -116,17 +117,25 @@ function LoginPage() {
                 className="w-full"
                 disabled={login.isPending}
               >
+                <Login className="size-4 shrink-0" aria-hidden />
                 {login.isPending ? "Signing in…" : "Login"}
               </Button>
               <FieldDescription className="text-center">
                 Don&apos;t have an account?
                 <br />
-                <Link to="/register">Sign up</Link>
+                <LinkButton
+                  to="/register"
+                  variant="link"
+                  className="inline-flex h-auto min-h-0 items-center gap-1 p-0 text-sm"
+                >
+                  <UserPlus className="size-4 shrink-0" aria-hidden />
+                  Sign up
+                </LinkButton>
               </FieldDescription>
             </CardFooter>
           </Card>
         </form>
       </div>
     </div>
-  );
+  )
 }

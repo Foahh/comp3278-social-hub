@@ -1,6 +1,7 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import { Button } from "@/components/ui/8bit/button";
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import { useState } from "react"
+import { Button } from "@/components/ui/8bit/button"
+import { LinkButton } from "@/components/ui/8bit/link-button"
 import {
   Card,
   CardContent,
@@ -8,43 +9,43 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/8bit/card";
+} from "@/components/ui/8bit/card"
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field";
+} from "@/components/ui/field"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/8bit/input-group";
-import { AtSign, Lock, User } from "pixelarticons/react";
-import { useRegister } from "@/lib/api/hooks/useAuth";
-import { appConstants } from "@/lib/appConstants";
+} from "@/components/ui/8bit/input-group"
+import { AtSign, Lock, Login, User, UserPlus } from "pixelarticons/react"
+import { useRegister } from "@/lib/api/hooks/useAuth"
+import { appConstants } from "@/lib/appConstants"
 
 export const Route = createFileRoute("/register")({
   component: RegisterPage,
-});
+})
 
 function RegisterPage() {
-  const navigate = useNavigate();
-  const register = useRegister();
-  const [error, setError] = useState<string | null>(null);
-  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const navigate = useNavigate()
+  const register = useRegister()
+  const [error, setError] = useState<string | null>(null)
+  const [passwordError, setPasswordError] = useState<string | null>(null)
 
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setError(null);
-    setPasswordError(null);
-    const fd = new FormData(e.currentTarget);
-    const password = fd.get("password") as string;
-    const confirm = fd.get("confirm") as string;
+    e.preventDefault()
+    setError(null)
+    setPasswordError(null)
+    const fd = new FormData(e.currentTarget)
+    const password = fd.get("password") as string
+    const confirm = fd.get("confirm") as string
     if (password !== confirm) {
-      setPasswordError("Passwords do not match");
-      return;
+      setPasswordError("Passwords do not match")
+      return
     }
     register.mutate(
       {
@@ -55,8 +56,8 @@ function RegisterPage() {
       {
         onSuccess: () => void navigate({ to: "/" }),
         onError: (err) => setError(err.message),
-      },
-    );
+      }
+    )
   }
 
   return (
@@ -166,19 +167,25 @@ function RegisterPage() {
                 className="w-full"
                 disabled={register.isPending}
               >
+                <UserPlus className="size-4 shrink-0" aria-hidden />
                 {register.isPending ? "Creating account…" : "Create account"}
               </Button>
               <FieldDescription className="text-center">
                 Already have an account?
                 <br />
-                <Link to="/login" search={{}}>
+                <LinkButton
+                  to="/login"
+                  variant="link"
+                  className="inline-flex h-auto min-h-0 items-center gap-1 p-0 text-sm"
+                >
+                  <Login className="size-4 shrink-0" aria-hidden />
                   Sign in
-                </Link>
+                </LinkButton>
               </FieldDescription>
             </CardFooter>
           </Card>
         </form>
       </div>
     </div>
-  );
+  )
 }

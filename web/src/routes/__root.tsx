@@ -1,9 +1,10 @@
-import { Outlet, createRootRoute, useRouter } from "@tanstack/react-router"
+import { Outlet, createRootRoute } from "@tanstack/react-router"
 
 import { SiteHeader } from "@/components/site-header"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
-import { Button } from "@/components/ui/8bit/button"
+import { Home } from "pixelarticons/react"
+import { LinkButton } from "@/components/ui/8bit/link-button"
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -11,7 +12,6 @@ export const Route = createRootRoute({
 })
 
 function RootErrorComponent({ error }: { error: unknown }) {
-  const router = useRouter()
   return (
     <ThemeProvider>
       <div className="flex min-h-svh flex-col items-center justify-center gap-4 px-4">
@@ -21,7 +21,10 @@ function RootErrorComponent({ error }: { error: unknown }) {
             ? error.message
             : "An unexpected error occurred."}
         </p>
-        <Button onClick={() => router.navigate({ to: "/" })}>Go home</Button>
+        <LinkButton to="/" className="gap-2">
+          <Home className="size-4 shrink-0" aria-hidden />
+          Go home
+        </LinkButton>
       </div>
     </ThemeProvider>
   )
