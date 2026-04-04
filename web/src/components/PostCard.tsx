@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { Link } from "@tanstack/react-router"
 import { formatDistanceToNow } from "date-fns"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "pixelarticons/react"
 import { Comment } from "pixelarticons/react"
 import {
   Avatar,
