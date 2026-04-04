@@ -60,7 +60,7 @@ function Button({
     <ShadcnButton
       {...rest}
       className={cn(
-        "relative inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-none border-none transition-transform active:translate-y-1 disabled:cursor-not-allowed",
+        "relative inline-flex cursor-pointer items-center justify-center rounded-none border-none transition-transform active:translate-y-1 disabled:cursor-not-allowed",
         size === "icon" && "mx-1 my-0",
         font !== "normal" && "retro",
         className
@@ -70,7 +70,7 @@ function Button({
       asChild={asChild}
     >
       {asChild ? (
-        <span className="relative inline-flex items-center justify-center gap-1.5">
+        <span className="relative inline-flex items-center justify-center">
           {children}
           <PixelButtonDecor variant={variant} size={size} />
         </span>

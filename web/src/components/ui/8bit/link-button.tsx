@@ -30,7 +30,7 @@ export function LinkButton({
       {...props}
       className={cn(
         shadcnButtonVariants({ variant, size }),
-        "relative inline-flex shrink-0 items-center justify-center gap-1.5 rounded-none border-none transition-transform active:translate-y-1",
+        "relative inline-flex shrink-0 items-center justify-center rounded-none border-none transition-transform active:translate-y-1",
         size === "icon" && "mx-1 my-0",
         font !== "normal" && "retro",
         className
