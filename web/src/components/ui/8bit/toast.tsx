@@ -38,10 +38,13 @@ function Toast(props: ToastProps) {
         className={cn(
           "flex w-full items-center rounded-lg p-4 shadow-lg ring-1 ring-black/5 md:max-w-[364px]",
           variant === "default" && "bg-background text-foreground",
-          variant === "success" && "bg-green-500/10 text-green-700 dark:text-green-400",
+          variant === "success" &&
+            "bg-green-500/10 text-green-700 dark:text-green-400",
           variant === "error" && "bg-destructive/10 text-destructive",
-          variant === "warning" && "bg-amber-500/10 text-amber-700 dark:text-amber-400",
-          variant === "info" && "bg-blue-500/10 text-blue-700 dark:text-blue-400",
+          variant === "warning" &&
+            "bg-amber-500/10 text-amber-700 dark:text-amber-400",
+          variant === "info" &&
+            "bg-blue-500/10 text-blue-700 dark:text-blue-400"
         )}
       >
         <div className="flex flex-1 items-center">

@@ -363,9 +363,7 @@ export function PostCard({
 
   const avatar = (
     <Avatar className="size-10">
-      {post.avatar_url && (
-        <AvatarImage src={post.avatar_url} alt={post.name} />
-      )}
+      {post.avatar_url && <AvatarImage src={post.avatar_url} alt={post.name} />}
       <AvatarFallback>{post.name[0]?.toUpperCase() ?? "?"}</AvatarFallback>
     </Avatar>
   )
