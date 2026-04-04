@@ -1,7 +1,9 @@
+import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area"
 import { Copy, Database, Terminal } from "pixelarticons/react"
 import type { DataframeChunk } from "../types"
 import { Action } from "@/components/ai/actions"
 import { toast } from "@/components/ui/8bit/toast"
+import { ScrollBar } from "@/components/ui/8bit/scroll-area"
 import { cn } from "@/lib/utils"
 
 function buildTableTsv(df: DataframeChunk): string {
@@ -35,7 +37,7 @@ export function DataTable({ dataframe }: DataTableProps) {
     const text = buildTableTsv(dataframe)
     if (!text) return
     void navigator.clipboard.writeText(text).then(() => {
-      toast.success("Copied table (TSV)")
+      toast.success("Copied table")
     })
   }
 
@@ -75,42 +77,53 @@ export function DataTable({ dataframe }: DataTableProps) {
           )}
         </div>
       )}
-      <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm">
-          <thead>
-            <tr className="border-b border-border bg-muted/20">
-              {columns.map((col) => (
-                <th
-                  key={col}
-                  className="retro px-3 py-2 text-xs font-medium whitespace-nowrap text-muted-foreground"
-                >
-                  {col}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row, i) => (
-              <tr
-                key={i}
-                className={cn(
-                  "border-b border-border last:border-0",
-                  i % 2 === 0 ? "bg-background" : "bg-muted/10"
-                )}
-              >
+      <ScrollAreaPrimitive.Root
+        className="relative max-h-[min(22rem,50vh)] w-full"
+        data-slot="query-results-scroll"
+      >
+        <ScrollAreaPrimitive.Viewport
+          data-slot="scroll-area-viewport"
+          className="size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1"
+        >
+          <table className="w-full text-left text-sm">
+            <thead>
+              <tr className="border-b border-border bg-muted/20">
                 {columns.map((col) => (
-                  <td
+                  <th
                     key={col}
-                    className="retro px-3 py-1.5 text-xs whitespace-nowrap tabular-nums"
+                    className="retro px-3 py-2 text-xs font-medium whitespace-nowrap text-muted-foreground"
                   >
-                    {row[col] != null ? String(row[col]) : "—"}
-                  </td>
+                    {col}
+                  </th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {data.map((row, i) => (
+                <tr
+                  key={i}
+                  className={cn(
+                    "border-b border-border last:border-0",
+                    i % 2 === 0 ? "bg-background" : "bg-muted/10"
+                  )}
+                >
+                  {columns.map((col) => (
+                    <td
+                      key={col}
+                      className="retro px-3 py-1.5 text-xs whitespace-nowrap tabular-nums"
+                    >
+                      {row[col] != null ? String(row[col]) : "—"}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ScrollAreaPrimitive.Viewport>
+        <ScrollBar />
+        <ScrollBar orientation="horizontal" />
+        <ScrollAreaPrimitive.Corner />
+      </ScrollAreaPrimitive.Root>
       <div className="retro border-t border-border bg-muted/20 px-3 py-1.5 text-xs text-muted-foreground">
         {data.length} row{data.length !== 1 ? "s" : ""}
       </div>
