@@ -15,8 +15,11 @@ export function SearchBar() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const trimmed = query.trim()
-    if (!trimmed) return
-    void navigate({ to: "/chat", search: { q: trimmed } })
+    if (trimmed) {
+      void navigate({ to: "/chat", search: { q: trimmed } })
+    } else {
+      void navigate({ to: "/chat", search: { q: undefined } })
+    }
     setQuery("")
   }
 

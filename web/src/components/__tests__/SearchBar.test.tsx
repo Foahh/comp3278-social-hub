@@ -27,12 +27,25 @@ describe("SearchBar", () => {
     })
   })
 
-  it("does not navigate for whitespace-only input", async () => {
+  it("navigates to /chat without q for whitespace-only input", async () => {
     const user = userEvent.setup()
     render(<SearchBar />)
     await user.type(screen.getByRole("textbox"), "   ")
     await user.keyboard("{Enter}")
-    expect(mockNavigate).not.toHaveBeenCalled()
+    expect(mockNavigate).toHaveBeenCalledWith({
+      to: "/chat",
+      search: { q: undefined },
+    })
+  })
+
+  it("navigates to /chat without q when submitting empty", async () => {
+    const user = userEvent.setup()
+    render(<SearchBar />)
+    await user.click(screen.getByRole("button", { name: "Submit search" }))
+    expect(mockNavigate).toHaveBeenCalledWith({
+      to: "/chat",
+      search: { q: undefined },
+    })
   })
 
   it("clears the input after navigating", async () => {
