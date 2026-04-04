@@ -80,6 +80,10 @@ export function useChat({ initialQuery, chatMetadata }: UseChatOptions) {
                         columns: rich.data?.columns ?? [],
                         title: rich.data?.title,
                         description: rich.data?.description,
+                        sql:
+                          typeof rich.data?.sql === "string"
+                            ? rich.data.sql
+                            : undefined,
                       },
                     ],
                   }
@@ -214,13 +218,16 @@ export function useChat({ initialQuery, chatMetadata }: UseChatOptions) {
     const parts: string[] = []
     if (msg.text) parts.push(msg.text)
     for (const df of msg.dataframes) {
-      if (df.columns.length > 0 && df.data.length > 0) {
+      const sub: string[] = []
+      if (df.sql?.trim()) sub.push(df.sql.trim())
+      if (df.columns.length > 0) {
         const header = df.columns.join("\t")
         const rows = df.data.map((r) =>
           df.columns.map((c) => r[c] ?? "").join("\t")
         )
-        parts.push([header, ...rows].join("\n"))
+        sub.push([header, ...rows].join("\n"))
       }
+      if (sub.length > 0) parts.push(sub.join("\n\n"))
     }
     void navigator.clipboard.writeText(parts.join("\n\n")).then(() => {
       toast.success("Copied to clipboard")

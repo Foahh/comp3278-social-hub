@@ -15,7 +15,7 @@ from vanna.integrations.chromadb import ChromaAgentMemory
 from vanna.integrations.local import LocalFileSystem
 from vanna.integrations.mysql import MySQLRunner
 from vanna.servers.fastapi.routes import register_chat_routes
-from vanna.tools import RunSqlTool, VisualizeDataTool
+from vanna.tools import VisualizeDataTool
 from vanna.tools.agent_memory import (
     SaveQuestionToolArgsTool,
     SaveTextMemoryTool,
@@ -23,6 +23,7 @@ from vanna.tools.agent_memory import (
 )
 
 from app.core.config import settings
+from app.core.run_sql_tool import RunSqlToolWithSql
 from app.core.vanna_chat_model import (
     InjectRequestModelMiddleware,
     MetadataOpenAILlmService,
@@ -114,7 +115,7 @@ def init_vanna() -> Agent:
     registry = ToolRegistry()
     access = ["user", "public"]
     registry.register_local_tool(
-        RunSqlTool(sql_runner=mysql_runner, file_system=vanna_fs),
+        RunSqlToolWithSql(sql_runner=mysql_runner, file_system=vanna_fs),
         access_groups=access,
     )
     registry.register_local_tool(VisualizeDataTool(file_system=vanna_fs), access_groups=access)

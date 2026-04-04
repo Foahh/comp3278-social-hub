@@ -1,8 +1,10 @@
 import { ArrowDown } from "pixelarticons/react"
+import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area"
 import type { ComponentProps } from "react"
 import { useCallback } from "react"
 import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom"
 import { Button } from "@/components/ui/8bit/button"
+import { ScrollBar } from "@/components/ui/8bit/scroll-area"
 import { cn } from "@/lib/utils"
 import { Message, MessageContent } from "@/components/ai/message"
 
@@ -20,19 +22,34 @@ export const Conversation = ({ className, ...props }: ConversationProps) => (
   />
 )
 
-export type ConversationContentProps = ComponentProps<
-  typeof StickToBottom.Content
->
+export type ConversationContentProps = ComponentProps<"div">
 
 export const ConversationContent = ({
   className,
   ...props
-}: ConversationContentProps) => (
-  <StickToBottom.Content
-    className={cn("flex flex-col gap-8 p-4", className)}
-    {...props}
-  />
-)
+}: ConversationContentProps) => {
+  const { scrollRef, contentRef } = useStickToBottomContext()
+
+  return (
+    <ScrollAreaPrimitive.Root
+      className="relative h-full min-h-0 w-full"
+      data-slot="conversation-scroll-area"
+    >
+      <ScrollAreaPrimitive.Viewport
+        ref={scrollRef}
+        className="size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1"
+      >
+        <div
+          ref={contentRef}
+          className={cn("flex flex-col gap-8 p-4", className)}
+          {...props}
+        />
+      </ScrollAreaPrimitive.Viewport>
+      <ScrollBar />
+      <ScrollAreaPrimitive.Corner />
+    </ScrollAreaPrimitive.Root>
+  )
+}
 
 export type ConversationEmptyStateProps = ComponentProps<"div"> & {
   title?: string

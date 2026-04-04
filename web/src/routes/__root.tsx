@@ -35,7 +35,7 @@ function RootComponent() {
     <ThemeProvider>
       <div className="flex min-h-svh flex-col">
         <SiteHeader />
-        <main className="flex-1 py-6">
+        <main className="min-h-0 flex-1 py-6">
           <Outlet />
         </main>
         <Toaster position="bottom-center" />

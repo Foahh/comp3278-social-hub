@@ -4,6 +4,8 @@ export interface DataframeChunk {
   columns: string[]
   title?: string
   description?: string
+  /** Present when results come from run_sql (server adds this). */
+  sql?: string
 }
 
 export interface TaskChunk {
