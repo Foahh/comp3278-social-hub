@@ -177,7 +177,8 @@ async def get_images_for_posts(
     placeholders = ",".join(["%s"] * len(post_ids))
     async with conn.cursor(aiomysql.DictCursor) as cur:
         await cur.execute(
-            f"SELECT * FROM images WHERE post_id IN ({placeholders}) ORDER BY post_id ASC, position ASC",
+            f"SELECT * FROM images WHERE post_id IN ({placeholders})",
+            "ORDER BY post_id ASC, position ASC",
             post_ids,
         )
         rows = await cur.fetchall()
@@ -211,9 +212,7 @@ async def get_post_like_count(conn: aiomysql.Connection, post_id: int) -> int:
     return row[0] if row else 0
 
 
-async def insert_image(
-    conn: aiomysql.Connection, post_id: int, value: str, position: int
-) -> None:
+async def insert_image(conn: aiomysql.Connection, post_id: int, value: str, position: int) -> None:
     async with conn.cursor() as cur:
         await cur.execute(
             "INSERT INTO images (post_id, value, position) VALUES (%s, %s, %s)",

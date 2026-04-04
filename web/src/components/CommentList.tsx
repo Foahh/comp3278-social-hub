@@ -17,13 +17,8 @@ export function CommentList({
   commentCount?: number
 }) {
   const { user } = useAuth()
-  const {
-    data,
-    isLoading,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useComments(postId)
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useComments(postId)
   const create = useCreateComment(postId)
   const [text, setText] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -65,7 +60,8 @@ export function CommentList({
         </div>
       )}
 
-      {!isLoading && comments.map((c) => <CommentItem key={c.comment_id} comment={c} />)}
+      {!isLoading &&
+        comments.map((c) => <CommentItem key={c.comment_id} comment={c} />)}
 
       {!isLoading && comments.length === 0 && (
         <p className="py-4 text-center text-sm text-muted-foreground">

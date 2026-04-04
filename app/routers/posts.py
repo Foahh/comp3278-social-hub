@@ -60,9 +60,9 @@ async def _build_post_response(conn, row: dict, current_user_id: int | None) -> 
 @router.get("", response_model=PostListResponse)
 async def list_posts(
     sort: Annotated[FeedSort, Query()] = FeedSort.latest,
-    cursor: int | None = Query(None),
-    cursor_likes: int | None = Query(None),
-    username: UsernameStr | None = Query(None),
+    cursor: Annotated[int | None, Query()] = None,
+    cursor_likes: Annotated[int | None, Query()] = None,
+    username: Annotated[UsernameStr | None, Query()] = None,
     current_user_id: int | None = Depends(auth.get_optional_user),
 ) -> PostListResponse:
     async with db.get_conn() as conn:
@@ -92,9 +92,7 @@ async def list_posts(
                     conn, user_id, cl, ci, APP_CONSTANTS.feed_page_size
                 )
             else:
-                rows = await queries.list_posts_popular(
-                    conn, cl, ci, APP_CONSTANTS.feed_page_size
-                )
+                rows = await queries.list_posts_popular(conn, cl, ci, APP_CONSTANTS.feed_page_size)
 
         if rows:
             post_ids = [row["post_id"] for row in rows]
@@ -144,7 +142,9 @@ async def list_posts(
         if sort == FeedSort.popular:
             next_cursor_likes = rows[-1]["like_count"]
 
-    return PostListResponse(posts=posts, next_cursor=next_cursor, next_cursor_likes=next_cursor_likes)
+    return PostListResponse(
+        posts=posts, next_cursor=next_cursor, next_cursor_likes=next_cursor_likes
+    )
 
 
 @router.post("", response_model=PostResponse)
@@ -209,9 +209,7 @@ async def create_post(
             post_id = await queries.insert_post(conn, current_user_id, text_content)
             position = 0
             for key in uploaded_keys:
-                await queries.insert_image(
-                    conn, post_id, f"{s3.S3_OBJECT_PREFIX}{key}", position
-                )
+                await queries.insert_image(conn, post_id, f"{s3.S3_OBJECT_PREFIX}{key}", position)
                 position += 1
             for url_input in url_inputs:
                 await queries.insert_image(conn, post_id, str(url_input.url), position)

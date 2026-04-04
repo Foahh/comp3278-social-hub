@@ -34,10 +34,11 @@ function ChatPage() {
     providerHeadings,
   } = useChatModels()
 
-  const { messages, status, sendMessage, retryMessage, handleCopy, abortRef } = useChat({
-    initialQuery: q,
-    chatMetadata,
-  })
+  const { messages, status, sendMessage, retryMessage, handleCopy, abortRef } =
+    useChat({
+      initialQuery: q,
+      chatMetadata,
+    })
 
   const handleSubmit = useCallback(
     (message: PromptInputMessage) => {

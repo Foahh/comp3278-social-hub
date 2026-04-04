@@ -1,9 +1,9 @@
-import { LinkButton } from "@/components/ui/8bit/link-button";
+import { LinkButton } from "@/components/ui/8bit/link-button"
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@/components/ui/8bit/avatar";
+} from "@/components/ui/8bit/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,8 +11,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/8bit/dropdown-menu";
-import { Separator } from "@/components/ui/8bit/separator";
+} from "@/components/ui/8bit/dropdown-menu"
+import { Separator } from "@/components/ui/8bit/separator"
 import {
   Analytics,
   Robot,
@@ -22,11 +22,11 @@ import {
   Coffee,
   User,
   UserPlus,
-} from "pixelarticons/react";
-import { useAuth } from "@/context/AuthContext";
+} from "pixelarticons/react"
+import { useAuth } from "@/context/AuthContext"
 
 export function SiteHeader() {
-  const { user, isLoading, logout } = useAuth();
+  const { user, isLoading, logout } = useAuth()
 
   return (
     <header className="sticky top-0 z-40 flex shrink-0 flex-col bg-background">
@@ -147,5 +147,5 @@ export function SiteHeader() {
       </div>
       <Separator orientation="horizontal" />
     </header>
-  );
+  )
 }

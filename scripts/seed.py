@@ -215,11 +215,7 @@ def _random_post_text(fake: Faker) -> str:
     max_chars = fake.random_int(min=25, max=APP_CONSTANTS.max_post_text_length)
     text = fake.text(max_nb_chars=max_chars).replace("\n", " ").strip()
     if len(text) < 10:
-        text = (
-            fake.paragraph(nb_sentences=fake.random_int(min=1, max=5))
-            .replace("\n", " ")
-            .strip()
-        )
+        text = fake.paragraph(nb_sentences=fake.random_int(min=1, max=5)).replace("\n", " ").strip()
     return text[: APP_CONSTANTS.max_post_text_length]
 
 
@@ -291,6 +287,60 @@ def _random_dt_between(fake: Faker, start: datetime, end: datetime) -> datetime:
     if start >= end:
         return start
     return fake.date_time_between(start_date=start, end_date=end)
+
+
+# Likes/comments used to use uniform [max(user_join, post_created), end] per row. That
+# mixes many short intervals near "now", so aggregate daily counts skew upward and
+# cumulative charts look like exponential growth. Time-first sampling spreads timestamps.
+_LIKE_TIME_ATTEMPTS = 300
+_COMMENT_TIME_ATTEMPTS = 300
+
+
+def _likes_for_post_uniform_time(
+    fake: Faker,
+    post_id: int,
+    like_count: int,
+    user_ids: list[int],
+    user_join_at: dict[int, datetime],
+    post_created_at: dict[int, datetime],
+    window_start: datetime,
+    window_end: datetime,
+) -> list[LikeRow]:
+    """Distinct likers per post; timestamps ~ uniform in window (subject to validity)."""
+    if like_count <= 0 or not user_ids:
+        return []
+
+    post_created = post_created_at[post_id]
+    cap = min(like_count, len(user_ids))
+    rows: list[LikeRow] = []
+    used: set[int] = set()
+
+    for _ in range(cap):
+        placed = False
+        for _attempt in range(_LIKE_TIME_ATTEMPTS):
+            liked_at = _random_dt_between(fake, window_start, window_end)
+            if liked_at < post_created:
+                continue
+            eligible = [u for u in user_ids if u not in used and user_join_at[u] <= liked_at]
+            if not eligible:
+                continue
+            uid = int(fake.random_element(eligible))
+            used.add(uid)
+            rows.append((uid, post_id, liked_at))
+            placed = True
+            break
+
+        if not placed:
+            pool = [u for u in user_ids if u not in used]
+            if not pool:
+                break
+            uid = int(fake.random_element(pool))
+            earliest = max(user_join_at[uid], post_created)
+            liked_at = _random_dt_between(fake, earliest, window_end)
+            used.add(uid)
+            rows.append((uid, post_id, liked_at))
+
+    return rows
 
 
 async def _apply_bulk_insert_session(conn: aiomysql.Connection) -> None:
@@ -425,12 +475,17 @@ async def _seed(
         try:
             for post_id in all_post_ids:
                 like_count = _uniform_count(fake, config.max_likes_per_post)
-                for user_id in _pick_distinct_user_ids(fake, user_ids, like_count):
-                    uid = int(user_id)
-                    pid = int(post_id)
-                    earliest = max(user_join_at[uid], post_created_at[pid])
-                    liked_at = _random_dt_between(fake, earliest, window_end)
-                    likes_buffer.append((uid, pid, liked_at))
+                for row in _likes_for_post_uniform_time(
+                    fake,
+                    post_id,
+                    like_count,
+                    user_ids,
+                    user_join_at,
+                    post_created_at,
+                    window_start,
+                    window_end,
+                ):
+                    likes_buffer.append(row)
                     if len(likes_buffer) >= _ENGAGEMENT_ROWS_PER_INSERT:
                         await flush_likes()
                 likes_pbar.update(1)
@@ -465,13 +520,32 @@ async def _seed(
         try:
             for post_id in all_post_ids:
                 comment_count = _uniform_count(fake, config.max_comments_per_post)
+                post_created = post_created_at[post_id]
                 for _ in range(comment_count):
-                    commenter_id = int(fake.random_element(user_ids))
-                    pid = int(post_id)
-                    earliest = max(user_join_at[commenter_id], post_created_at[pid])
-                    commented_at = _random_dt_between(fake, earliest, window_end)
+                    commenter_id: int
+                    commented_at: datetime
+                    placed = False
+                    for _attempt in range(_COMMENT_TIME_ATTEMPTS):
+                        commented_at = _random_dt_between(fake, window_start, window_end)
+                        if commented_at < post_created:
+                            continue
+                        eligible = [u for u in user_ids if user_join_at[u] <= commented_at]
+                        if not eligible:
+                            continue
+                        commenter_id = int(fake.random_element(eligible))
+                        placed = True
+                        break
+                    if not placed:
+                        commenter_id = int(fake.random_element(user_ids))
+                        earliest = max(user_join_at[commenter_id], post_created)
+                        commented_at = _random_dt_between(fake, earliest, window_end)
                     comments_buffer.append(
-                        (commenter_id, pid, _random_comment_text(fake), commented_at)
+                        (
+                            commenter_id,
+                            post_id,
+                            _random_comment_text(fake),
+                            commented_at,
+                        )
                     )
                     if len(comments_buffer) >= _ENGAGEMENT_ROWS_PER_INSERT:
                         await flush_comments()
@@ -597,9 +671,7 @@ def _parse_args() -> argparse.Namespace:
         type=int,
         default=100,
         metavar="N",
-        help=(
-            "Cap on comments per post; uniform random count in [0, N] per post (default: 100)."
-        ),
+        help=("Cap on comments per post; uniform random count in [0, N] per post (default: 100)."),
     )
     parser.add_argument(
         "--timestamp-window-days",

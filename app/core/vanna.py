@@ -13,7 +13,6 @@ from vanna.core.user.request_context import RequestContext
 from vanna.core.user.resolver import UserResolver
 from vanna.integrations.chromadb import ChromaAgentMemory
 from vanna.integrations.local import LocalFileSystem
-from app.core.async_mysql_runner import AsyncMySQLRunner
 from vanna.servers.fastapi.routes import register_chat_routes
 from vanna.tools import VisualizeDataTool
 from vanna.tools.agent_memory import (
@@ -22,6 +21,7 @@ from vanna.tools.agent_memory import (
     SearchSavedCorrectToolUsesTool,
 )
 
+from app.core.async_mysql_runner import AsyncMySQLRunner
 from app.core.config import settings
 from app.core.run_sql_tool import RunSqlToolWithSql
 from app.core.vanna_chat_model import (

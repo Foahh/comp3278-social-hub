@@ -8,13 +8,14 @@ from __future__ import annotations
 
 import json
 import os
+from collections.abc import AsyncGenerator
 from contextvars import ContextVar, Token
-from typing import Any, AsyncGenerator, Dict, List, Optional
+from typing import Any
 
 from openai import AsyncOpenAI
 from vanna.core.llm import LlmRequest, LlmResponse, LlmStreamChunk
 from vanna.core.middleware import LlmMiddleware
-from vanna.core.tool import ToolCall, ToolSchema
+from vanna.core.tool import ToolCall
 from vanna.integrations.openai import OpenAILlmService
 from vanna.servers.base import ChatHandler
 from vanna.servers.base.models import ChatRequest
@@ -38,7 +39,7 @@ class MetadataOpenAILlmService(OpenAILlmService):
         super().__init__(**kwargs)
 
         # Build an *async* client with the same credentials.
-        async_kwargs: Dict[str, Any] = {}
+        async_kwargs: dict[str, Any] = {}
         api_key = kwargs.get("api_key") or os.getenv("OPENAI_API_KEY")
         if api_key:
             async_kwargs["api_key"] = api_key
@@ -67,10 +68,10 @@ class MetadataOpenAILlmService(OpenAILlmService):
             return LlmResponse(content=None, tool_calls=None, finish_reason=None)
 
         choice = resp.choices[0]
-        content: Optional[str] = getattr(choice.message, "content", None)
+        content: str | None = getattr(choice.message, "content", None)
         tool_calls = self._extract_tool_calls_from_message(choice.message)
 
-        usage: Dict[str, int] = {}
+        usage: dict[str, int] = {}
         if getattr(resp, "usage", None):
             usage = {
                 k: int(v)
@@ -88,14 +89,12 @@ class MetadataOpenAILlmService(OpenAILlmService):
             usage=usage or None,
         )
 
-    async def stream_request(
-        self, request: LlmRequest
-    ) -> AsyncGenerator[LlmStreamChunk, None]:
+    async def stream_request(self, request: LlmRequest) -> AsyncGenerator[LlmStreamChunk]:
         payload = self._build_payload(request)
         stream = await self._async_client.chat.completions.create(**payload, stream=True)
 
-        tc_builders: Dict[int, Dict[str, Optional[str]]] = {}
-        last_finish: Optional[str] = None
+        tc_builders: dict[int, dict[str, str | None]] = {}
+        last_finish: str | None = None
 
         async for event in stream:
             if not getattr(event, "choices", None):
@@ -107,7 +106,7 @@ class MetadataOpenAILlmService(OpenAILlmService):
                 last_finish = getattr(choice, "finish_reason", last_finish)
                 continue
 
-            content_piece: Optional[str] = getattr(delta, "content", None)
+            content_piece: str | None = getattr(delta, "content", None)
             if content_piece:
                 yield LlmStreamChunk(content=content_piece)
 
@@ -115,9 +114,7 @@ class MetadataOpenAILlmService(OpenAILlmService):
             if streamed_tool_calls:
                 for tc in streamed_tool_calls:
                     idx = getattr(tc, "index", 0) or 0
-                    b = tc_builders.setdefault(
-                        idx, {"id": None, "name": None, "arguments": ""}
-                    )
+                    b = tc_builders.setdefault(idx, {"id": None, "name": None, "arguments": ""})
                     if getattr(tc, "id", None):
                         b["id"] = tc.id
                     fn = getattr(tc, "function", None)
@@ -129,18 +126,20 @@ class MetadataOpenAILlmService(OpenAILlmService):
 
             last_finish = getattr(choice, "finish_reason", last_finish)
 
-        final_tool_calls: List[ToolCall] = []
+        final_tool_calls: list[ToolCall] = []
         for b in tc_builders.values():
             if not b.get("name"):
                 continue
             args_raw = b.get("arguments") or "{}"
             try:
                 loaded = json.loads(args_raw)
-                args_dict: Dict[str, Any] = loaded if isinstance(loaded, dict) else {"args": loaded}
+                args_dict: dict[str, Any] = loaded if isinstance(loaded, dict) else {"args": loaded}
             except Exception:
                 args_dict = {"_raw": args_raw}
             final_tool_calls.append(
-                ToolCall(id=b.get("id") or "tool_call", name=b["name"] or "tool", arguments=args_dict)
+                ToolCall(
+                    id=b.get("id") or "tool_call", name=b["name"] or "tool", arguments=args_dict
+                )
             )
 
         if final_tool_calls:

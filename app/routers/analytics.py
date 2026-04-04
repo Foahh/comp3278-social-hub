@@ -42,11 +42,9 @@ async def get_analytics() -> AnalyticsResponse:
             for r in top_user_rows
         ],
         posts_over_time=[
-            AnalyticsDayCount(date=str(r["date"]), count=r["count"])
-            for r in posts_per_day
+            AnalyticsDayCount(date=str(r["date"]), count=r["count"]) for r in posts_per_day
         ],
         likes_over_time=[
-            AnalyticsDayCount(date=str(r["date"]), count=r["count"])
-            for r in likes_per_day
+            AnalyticsDayCount(date=str(r["date"]), count=r["count"]) for r in likes_per_day
         ],
     )

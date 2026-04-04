@@ -1,4 +1,8 @@
-import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query"
 import client from "@/lib/api/client"
 import type { components } from "@/lib/api/schema"
 
@@ -53,7 +57,11 @@ export function useCreateComment(postId: number) {
       queryClient.setQueryData<{ pages: CommentListResponse[] }>(
         ["comments", postId],
         (old) => {
-          if (!old) return { pages: [{ comments: [newComment], next_cursor: null }], pageParams: [undefined] }
+          if (!old)
+            return {
+              pages: [{ comments: [newComment], next_cursor: null }],
+              pageParams: [undefined],
+            }
           const pages = [...old.pages]
           const last = pages[pages.length - 1]
           pages[pages.length - 1] = {

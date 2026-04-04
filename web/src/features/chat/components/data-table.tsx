@@ -66,10 +66,7 @@ export function DataTable({ dataframe }: DataTableProps) {
                 </Action>
               )}
               {canCopyTable && (
-                <Action
-                  tooltip="Copy table"
-                  onClick={handleCopyTableData}
-                >
+                <Action tooltip="Copy table" onClick={handleCopyTableData}>
                   <Copy className="size-4" />
                 </Action>
               )}

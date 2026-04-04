@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Any
-
 import aiomysql
 import pandas as pd
 from vanna.capabilities.sql_runner import RunSqlToolArgs, SqlRunner
