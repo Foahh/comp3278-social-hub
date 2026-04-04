@@ -61,6 +61,13 @@ function AnalyticsPage() {
                 </tr>
               </thead>
               <tbody>
+                {(data?.top_posts.length ?? 0) === 0 && (
+                  <tr>
+                    <td colSpan={4} className="py-4 text-center text-muted-foreground">
+                      No data yet.
+                    </td>
+                  </tr>
+                )}
                 {data?.top_posts.map((post, i) => (
                   <tr key={post.post_id} className="border-b last:border-0">
                     <td className="py-2 pr-4 text-muted-foreground">{i + 1}</td>
@@ -111,6 +118,13 @@ function AnalyticsPage() {
                 </tr>
               </thead>
               <tbody>
+                {(data?.top_users.length ?? 0) === 0 && (
+                  <tr>
+                    <td colSpan={5} className="py-4 text-center text-muted-foreground">
+                      No data yet.
+                    </td>
+                  </tr>
+                )}
                 {data?.top_users.map((user, i) => (
                   <tr key={user.username} className="border-b last:border-0">
                     <td className="py-2 pr-4 text-muted-foreground">{i + 1}</td>
