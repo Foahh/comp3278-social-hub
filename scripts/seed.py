@@ -29,7 +29,7 @@ from app.core.constants import APP_CONSTANTS
 
 type UserRow = tuple[str, str, str]
 type PostRow = tuple[int, str]
-type ImageRow = tuple[int, str, str, int]
+type ImageRow = tuple[int, str, int]
 type LikeRow = tuple[int, int]
 type CommentRow = tuple[int, int, str]
 
@@ -162,7 +162,7 @@ async def _insert_images_batch(
     await _insert_many(
         conn,
         table="images",
-        columns=("post_id", "type", "value", "position"),
+        columns=("post_id", "value", "position"),
         rows=rows,
     )
 
@@ -256,7 +256,10 @@ def _random_image_url(fake: Faker) -> str:
         width = max(120, round(max_side * aw / ah))
     width = max(120, min(width, 1920))
     height = max(120, min(height, 1920))
-    return fake.image_url(width=width, height=height)
+    url = fake.image_url(width=width, height=height)
+    while "placekitten.com" in url.lower():
+        url = fake.image_url(width=width, height=height)
+    return url
 
 
 def _pick_distinct_user_ids(fake: Faker, user_ids: list[int], k: int) -> list[int]:
@@ -350,9 +353,7 @@ async def _seed(
                 for post_id in post_ids:
                     image_count = fake.random_int(min=0, max=5)
                     for position in range(image_count):
-                        image_rows.append(
-                            (post_id, "url", _random_image_url(fake), position)
-                        )
+                        image_rows.append((post_id, _random_image_url(fake), position))
 
                 if image_rows:
                     await _chunked(

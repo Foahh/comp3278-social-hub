@@ -15,7 +15,7 @@ async def _build_auth_response(conn, user_id: int) -> AuthResponse:
         raise NotFoundError("User")
     avatar_url = None
     if user["avatar_key"]:
-        avatar_url = await s3.generate_presigned_url(user["avatar_key"])
+        avatar_url = await s3.resolve_avatar_url(user["avatar_key"])
     return AuthResponse(
         user_id=user["user_id"],
         username=user["username"],
@@ -50,7 +50,7 @@ async def login(body: LoginRequest, response: Response) -> AuthResponse:
 
     avatar_url = None
     if user.get("avatar_key"):
-        avatar_url = await s3.generate_presigned_url(user["avatar_key"])
+        avatar_url = await s3.resolve_avatar_url(user["avatar_key"])
     result = AuthResponse(
         user_id=user["user_id"],
         username=user["username"],

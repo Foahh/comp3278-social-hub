@@ -39,6 +39,9 @@ async def upload_file(key: str, data: bytes, content_type: str) -> None:
         )
 
 
+S3_OBJECT_PREFIX = "s3://"
+
+
 async def generate_presigned_url(key: str, expires_in: int = 3600) -> str:
     from app.core.config import settings
 
@@ -48,6 +51,36 @@ async def generate_presigned_url(key: str, expires_in: int = 3600) -> str:
             Params={"Bucket": settings.s3_bucket, "Key": key},
             ExpiresIn=expires_in,
         )
+
+
+def s3_object_key_for_avatar_delete(avatar_ref: str) -> str | None:
+    """Return the S3 object key to delete, or None if the value is a plain URL (not our bucket).
+
+    Used for ``avatar_key`` and ``images.value`` (``s3://…``).
+    """
+    if avatar_ref.startswith(("http://", "https://")):
+        return None
+    if avatar_ref.startswith(S3_OBJECT_PREFIX):
+        return avatar_ref[len(S3_OBJECT_PREFIX) :]
+    return avatar_ref
+
+
+async def resolve_avatar_url(avatar_ref: str | None) -> str | None:
+    """Turn a stored media ref into a browser-usable URL (avatars and post images).
+
+    Values starting with ``s3://`` are S3 object keys (presigned). ``http(s)://`` are used as-is.
+    Bare keys (no scheme) are treated as legacy S3 keys for backward compatibility.
+    """
+    if not avatar_ref:
+        return None
+    if avatar_ref.startswith(("http://", "https://")):
+        return avatar_ref
+    key = (
+        avatar_ref[len(S3_OBJECT_PREFIX) :]
+        if avatar_ref.startswith(S3_OBJECT_PREFIX)
+        else avatar_ref
+    )
+    return await generate_presigned_url(key)
 
 
 async def delete_file(key: str) -> None:

@@ -20,15 +20,20 @@ CREATE TABLE posts (
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
+CREATE INDEX idx_posts_created_at ON posts(created_at DESC);
+CREATE INDEX idx_posts_like_count  ON posts(like_count DESC);
+CREATE INDEX idx_posts_user_id     ON posts(user_id);
+
 CREATE TABLE images (
     image_id  INT PRIMARY KEY AUTO_INCREMENT,
     post_id   INT                       NOT NULL,
-    type      ENUM('blob', 'url')       NOT NULL,
     value     VARCHAR(2048)             NOT NULL,
     position  SMALLINT       NOT NULL DEFAULT 0,
 
     FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE
 );
+
+CREATE INDEX idx_images_post_id ON images(post_id);
 
 CREATE TABLE likes (
     like_id    INT PRIMARY KEY AUTO_INCREMENT,
@@ -41,6 +46,8 @@ CREATE TABLE likes (
     FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE
 );
 
+CREATE INDEX idx_likes_post_id ON likes(post_id);
+
 CREATE TABLE comments (
     comment_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id    INT      NOT NULL,
@@ -51,6 +58,8 @@ CREATE TABLE comments (
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE
 );
+
+CREATE INDEX idx_comments_post_id ON comments(post_id);
 
 DELIMITER $$
 
@@ -79,10 +88,3 @@ BEGIN
 END$$
 
 DELIMITER ;
-
-CREATE INDEX idx_posts_created_at ON posts(created_at DESC);
-CREATE INDEX idx_posts_like_count  ON posts(like_count DESC);
-CREATE INDEX idx_posts_user_id     ON posts(user_id);
-CREATE INDEX idx_images_post_id    ON images(post_id);
-CREATE INDEX idx_comments_post_id  ON comments(post_id);
-CREATE INDEX idx_likes_post_id     ON likes(post_id);

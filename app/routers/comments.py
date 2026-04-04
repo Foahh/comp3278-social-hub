@@ -17,7 +17,7 @@ async def _build_comment_response(
     user = await queries.get_user_by_id(conn, user_id)
     avatar_url = None
     if user and user.get("avatar_key"):
-        avatar_url = await s3.generate_presigned_url(user["avatar_key"])
+        avatar_url = await s3.resolve_avatar_url(user["avatar_key"])
     return CommentResponse(
         comment_id=comment_id,
         user_id=user_id,
@@ -37,7 +37,7 @@ async def list_comments(post_id: int) -> list[CommentResponse]:
     for row in rows:
         avatar_url = None
         if row.get("avatar_key"):
-            avatar_url = await s3.generate_presigned_url(row["avatar_key"])
+            avatar_url = await s3.resolve_avatar_url(row["avatar_key"])
         result.append(
             CommentResponse(
                 comment_id=row["comment_id"],

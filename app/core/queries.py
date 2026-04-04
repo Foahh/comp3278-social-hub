@@ -169,12 +169,12 @@ async def get_images_for_post(conn: aiomysql.Connection, post_id: int) -> list[d
 
 
 async def insert_image(
-    conn: aiomysql.Connection, post_id: int, type: str, value: str, position: int
+    conn: aiomysql.Connection, post_id: int, value: str, position: int
 ) -> None:
     async with conn.cursor() as cur:
         await cur.execute(
-            "INSERT INTO images (post_id, type, value, position) VALUES (%s, %s, %s, %s)",
-            (post_id, type, value, position),
+            "INSERT INTO images (post_id, value, position) VALUES (%s, %s, %s)",
+            (post_id, value, position),
         )
 
 

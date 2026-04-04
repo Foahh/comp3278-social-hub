@@ -26,10 +26,9 @@ async def _resolve_images(conn, post_id: int) -> list[ImageResponse]:
     rows = await queries.get_images_for_post(conn, post_id)
     result = []
     for row in rows:
-        if row["type"] == "blob":
-            url = await s3.generate_presigned_url(row["value"])
-        else:
-            url = row["value"]
+        url = await s3.resolve_avatar_url(row["value"])
+        if not url:
+            continue
         result.append(ImageResponse(image_id=row["image_id"], url=url, position=row["position"]))
     return result
 
@@ -42,7 +41,7 @@ async def _build_post_response(conn, row: dict, current_user_id: int | None) -> 
         liked_by_me = like is not None
     avatar_url = None
     if row.get("avatar_key"):
-        avatar_url = await s3.generate_presigned_url(row["avatar_key"])
+        avatar_url = await s3.resolve_avatar_url(row["avatar_key"])
     return PostResponse(
         post_id=row["post_id"],
         user_id=row["user_id"],
@@ -169,10 +168,12 @@ async def create_post(
             post_id = await queries.insert_post(conn, current_user_id, text_content)
             position = 0
             for key in uploaded_keys:
-                await queries.insert_image(conn, post_id, "blob", key, position)
+                await queries.insert_image(
+                    conn, post_id, f"{s3.S3_OBJECT_PREFIX}{key}", position
+                )
                 position += 1
             for url_input in url_inputs:
-                await queries.insert_image(conn, post_id, "url", str(url_input.url), position)
+                await queries.insert_image(conn, post_id, str(url_input.url), position)
                 position += 1
     except Exception:
         for key in uploaded_keys:
@@ -209,10 +210,14 @@ async def delete_post(
         if row["user_id"] != current_user_id:
             raise ForbiddenError("You can only delete your own posts")
         image_rows = await queries.get_images_for_post(conn, post_id)
-        blob_keys = [r["value"] for r in image_rows if r["type"] == "blob"]
+        s3_keys_to_delete = [
+            k
+            for r in image_rows
+            if (k := s3.s3_object_key_for_avatar_delete(r["value"])) is not None
+        ]
         await queries.delete_post(conn, post_id)
 
-    for key in blob_keys:
+    for key in s3_keys_to_delete:
         try:
             await s3.delete_file(key)
         except Exception:

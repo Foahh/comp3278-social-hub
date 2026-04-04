@@ -9,11 +9,6 @@ class FeedSort(StrEnum):
     popular = "popular"
 
 
-class ImageType(StrEnum):
-    blob = "blob"
-    url = "url"
-
-
 class ImageInput(BaseModel):
     """Used in create-post requests for URL-type images."""
 
