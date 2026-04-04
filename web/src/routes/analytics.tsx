@@ -1,6 +1,7 @@
+import { useMemo } from "react"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { Analytics as AnalyticsIcon } from "pixelarticons/react"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts"
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import {
   ChartContainer,
   ChartTooltip,
@@ -20,16 +21,44 @@ export const Route = createFileRoute("/analytics")({
   component: AnalyticsPage,
 })
 
-const postsChartConfig: ChartConfig = {
-  count: { label: "Posts", color: "hsl(var(--chart-1))" },
+type DayCountRow = { date: string; count: number }
+
+function toCumulative(rows: DayCountRow[] | undefined): DayCountRow[] {
+  if (!rows?.length) return []
+  let sum = 0
+  return rows.map((r) => {
+    sum += r.count
+    return { date: r.date, count: sum }
+  })
 }
 
-const likesChartConfig: ChartConfig = {
-  count: { label: "Likes", color: "hsl(var(--chart-2))" },
+const cumulativePostsChartConfig: ChartConfig = {
+  count: { label: "Total posts", color: "var(--chart-1)" },
+}
+
+const cumulativeLikesChartConfig: ChartConfig = {
+  count: { label: "Total likes", color: "var(--chart-2)" },
+}
+
+const dailyPostsChartConfig: ChartConfig = {
+  count: { label: "Posts", color: "var(--chart-1)" },
+}
+
+const dailyLikesChartConfig: ChartConfig = {
+  count: { label: "Likes", color: "var(--chart-2)" },
 }
 
 function AnalyticsPage() {
   const { data, isLoading, isError } = useAnalytics()
+
+  const postsCumulative = useMemo(
+    () => toCumulative(data?.posts_over_time),
+    [data?.posts_over_time]
+  )
+  const likesCumulative = useMemo(
+    () => toCumulative(data?.likes_over_time),
+    [data?.likes_over_time]
+  )
 
   if (isError) {
     return (
@@ -168,57 +197,129 @@ function AnalyticsPage() {
         </CardContent>
       </Card>
 
-      {/* Posts Over Time */}
+      {/* Cumulative posts */}
       <Card>
         <CardHeader>
-          <CardTitle>Posts Over Time (last 30 days)</CardTitle>
+          <CardTitle>Cumulative Posts (last 30 days)</CardTitle>
         </CardHeader>
         <CardContent>
           {isLoading ? (
             <Skeleton className="h-48 w-full" />
           ) : (
-            <ChartContainer config={postsChartConfig} className="h-48 w-full">
-              <LineChart data={data?.posts_over_time ?? []}>
+            <ChartContainer
+              config={cumulativePostsChartConfig}
+              className="h-48 w-full"
+            >
+              <AreaChart data={postsCumulative}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" tick={{ fontSize: 10 }} />
                 <YAxis allowDecimals={false} tick={{ fontSize: 10 }} />
                 <ChartTooltip content={<ChartTooltipContent />} />
-                <Line
+                <Area
                   type="monotone"
                   dataKey="count"
                   stroke="var(--color-count)"
-                  dot={false}
+                  fill="var(--color-count)"
+                  fillOpacity={0.25}
                   strokeWidth={2}
                 />
-              </LineChart>
+              </AreaChart>
             </ChartContainer>
           )}
         </CardContent>
       </Card>
 
-      {/* Likes Over Time */}
+      {/* Cumulative likes */}
       <Card>
         <CardHeader>
-          <CardTitle>Likes Over Time (last 30 days)</CardTitle>
+          <CardTitle>Cumulative Likes (last 30 days)</CardTitle>
         </CardHeader>
         <CardContent>
           {isLoading ? (
             <Skeleton className="h-48 w-full" />
           ) : (
-            <ChartContainer config={likesChartConfig} className="h-48 w-full">
-              <LineChart data={data?.likes_over_time ?? []}>
+            <ChartContainer
+              config={cumulativeLikesChartConfig}
+              className="h-48 w-full"
+            >
+              <AreaChart data={likesCumulative}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" tick={{ fontSize: 10 }} />
                 <YAxis allowDecimals={false} tick={{ fontSize: 10 }} />
                 <ChartTooltip content={<ChartTooltipContent />} />
-                <Line
+                <Area
                   type="monotone"
                   dataKey="count"
                   stroke="var(--color-count)"
-                  dot={false}
+                  fill="var(--color-count)"
+                  fillOpacity={0.25}
                   strokeWidth={2}
                 />
-              </LineChart>
+              </AreaChart>
+            </ChartContainer>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Daily posts */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Daily Posts (last 30 days)</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {isLoading ? (
+            <Skeleton className="h-48 w-full" />
+          ) : (
+            <ChartContainer
+              config={dailyPostsChartConfig}
+              className="h-48 w-full"
+            >
+              <AreaChart data={data?.posts_over_time ?? []}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" tick={{ fontSize: 10 }} />
+                <YAxis allowDecimals={false} tick={{ fontSize: 10 }} />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Area
+                  type="monotone"
+                  dataKey="count"
+                  stroke="var(--color-count)"
+                  fill="var(--color-count)"
+                  fillOpacity={0.25}
+                  strokeWidth={2}
+                />
+              </AreaChart>
+            </ChartContainer>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Daily likes */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Daily Likes (last 30 days)</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {isLoading ? (
+            <Skeleton className="h-48 w-full" />
+          ) : (
+            <ChartContainer
+              config={dailyLikesChartConfig}
+              className="h-48 w-full"
+            >
+              <AreaChart data={data?.likes_over_time ?? []}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" tick={{ fontSize: 10 }} />
+                <YAxis allowDecimals={false} tick={{ fontSize: 10 }} />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Area
+                  type="monotone"
+                  dataKey="count"
+                  stroke="var(--color-count)"
+                  fill="var(--color-count)"
+                  fillOpacity={0.25}
+                  strokeWidth={2}
+                />
+              </AreaChart>
             </ChartContainer>
           )}
         </CardContent>
