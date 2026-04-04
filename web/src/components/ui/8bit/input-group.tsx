@@ -21,7 +21,7 @@ const inputGroupClassName = cn(
 )
 
 const inputGroupSideBorderClassName = cn(
-  "pointer-events-none absolute inset-0 z-0 -mx-[0.125rem] border-x-[0.125rem] border-foreground transition-[border-color] dark:border-ring",
+  "pointer-events-none absolute inset-0 z-[2] -mx-[0.125rem] border-x-[0.125rem] border-foreground transition-[border-color] dark:border-ring",
   "group-has-[[data-slot=input-group-control]:focus-visible]/input-group:border-primary",
   "dark:group-has-[[data-slot=input-group-control]:focus-visible]/input-group:border-primary",
   "group-has-[[data-slot=input-group-control][aria-invalid=true]]/input-group:border-destructive",
