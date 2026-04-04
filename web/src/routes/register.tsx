@@ -87,8 +87,7 @@ function RegisterPage() {
                     />
                   </InputGroup>
                   <FieldDescription>
-                    Up to {appConstants.nameMaxLength} characters; leave blank
-                    if you prefer.
+                    Up to {appConstants.nameMaxLength} characters.
                   </FieldDescription>
                 </Field>
                 <Field>
