@@ -11,7 +11,6 @@ import type { AssistantMsg, ChatMsg, UserMsg } from "../types"
 import { DataTable } from "./data-table"
 import { NotificationBanner } from "./notification-banner"
 import { CardDisplay } from "./card-display"
-import { TaskList } from "./task-list"
 import { cn } from "@/lib/utils"
 
 interface ChatMessageListProps {
@@ -84,9 +83,6 @@ function AssistantMessage({
 
   return (
     <Message from="assistant">
-      {/* Task tracker */}
-      {msg.tasks.length > 0 && <TaskList tasks={msg.tasks} />}
-
       {/* Transient status while streaming */}
       {msg.isStreaming && msg.status && (
         <div className="flex items-center gap-2 py-1 text-sm text-muted-foreground">

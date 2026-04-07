@@ -34,7 +34,6 @@ export function useChat({ initialQuery, chatMetadata }: UseChatOptions) {
         role: "assistant",
         text: "",
         dataframes: [],
-        tasks: [],
         notifications: [],
         cards: [],
         isStreaming: true,
@@ -89,44 +88,6 @@ export function useChat({ initialQuery, chatMetadata }: UseChatOptions) {
                       },
                     ],
                   }
-
-                case "task_tracker_update": {
-                  const op = rich.data?.operation
-                  if (op === "add_task" && rich.data?.task) {
-                    const t = rich.data.task
-                    return {
-                      ...msg,
-                      tasks: [
-                        ...msg.tasks,
-                        {
-                          id: t.id,
-                          title: t.title ?? "Working...",
-                          description: t.description,
-                          status: t.status ?? "pending",
-                        },
-                      ],
-                    }
-                  }
-                  if (op === "update_task" && rich.data?.task_id) {
-                    return {
-                      ...msg,
-                      tasks: msg.tasks.map((t) =>
-                        t.id === rich.data.task_id
-                          ? { ...t, status: rich.data.status ?? t.status }
-                          : t
-                      ),
-                    }
-                  }
-                  if (op === "remove_task" && rich.data?.task_id) {
-                    return {
-                      ...msg,
-                      tasks: msg.tasks.filter(
-                        (t) => t.id !== rich.data.task_id
-                      ),
-                    }
-                  }
-                  return msg
-                }
 
                 case "notification":
                   return {

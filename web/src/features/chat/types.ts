@@ -8,13 +8,6 @@ export interface DataframeChunk {
   sql?: string
 }
 
-export interface TaskChunk {
-  id: string
-  title: string
-  description?: string
-  status: string
-}
-
 export interface NotificationChunk {
   id: string
   message: string
@@ -41,7 +34,6 @@ export interface AssistantMsg {
   role: "assistant"
   text: string
   dataframes: DataframeChunk[]
-  tasks: TaskChunk[]
   notifications: NotificationChunk[]
   cards: CardChunk[]
   status?: string
