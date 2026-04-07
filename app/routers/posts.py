@@ -73,12 +73,28 @@ async def list_posts(
         user_id = user_row["user_id"] if user_row else None
 
         if sort == FeedSort.latest:
+            cursor_created_at = None
+            cursor_post_id = None
+            if cursor is not None:
+                last_post = await queries.get_post(conn, cursor)
+                if last_post:
+                    cursor_created_at = last_post["created_at"]
+                    cursor_post_id = last_post["post_id"]
             if user_id is not None:
                 rows = await queries.list_posts_latest_for_user(
-                    conn, user_id, cursor, APP_CONSTANTS.feed_page_size
+                    conn,
+                    user_id,
+                    cursor_created_at,
+                    cursor_post_id,
+                    APP_CONSTANTS.feed_page_size,
                 )
             else:
-                rows = await queries.list_posts_latest(conn, cursor, APP_CONSTANTS.feed_page_size)
+                rows = await queries.list_posts_latest(
+                    conn,
+                    cursor_created_at,
+                    cursor_post_id,
+                    APP_CONSTANTS.feed_page_size,
+                )
         else:
             cl = cursor_likes
             ci = cursor

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import aiomysql
 
 # --- Users ---
@@ -50,20 +52,25 @@ async def get_post(conn: aiomysql.Connection, post_id: int) -> dict | None:
 
 
 async def list_posts_latest(
-    conn: aiomysql.Connection, cursor: int | None, limit: int
+    conn: aiomysql.Connection,
+    cursor_created_at: datetime | None,
+    cursor_post_id: int | None,
+    limit: int,
 ) -> list[dict]:
     async with conn.cursor(aiomysql.DictCursor) as cur:
-        if cursor is not None:
+        if cursor_created_at is not None and cursor_post_id is not None:
             await cur.execute(
                 "SELECT p.*, u.username, u.name, u.avatar_key FROM posts p "
                 "JOIN users u ON p.user_id = u.user_id "
-                "WHERE p.post_id < %s ORDER BY p.post_id DESC LIMIT %s",
-                (cursor, limit),
+                "WHERE (p.created_at, p.post_id) < (%s, %s) "
+                "ORDER BY p.created_at DESC, p.post_id DESC LIMIT %s",
+                (cursor_created_at, cursor_post_id, limit),
             )
         else:
             await cur.execute(
                 "SELECT p.*, u.username, u.name, u.avatar_key FROM posts p "
-                "JOIN users u ON p.user_id = u.user_id ORDER BY p.post_id DESC LIMIT %s",
+                "JOIN users u ON p.user_id = u.user_id "
+                "ORDER BY p.created_at DESC, p.post_id DESC LIMIT %s",
                 (limit,),
             )
         return await cur.fetchall()
@@ -95,22 +102,27 @@ async def list_posts_popular(
 
 
 async def list_posts_latest_for_user(
-    conn: aiomysql.Connection, user_id: int, cursor: int | None, limit: int
+    conn: aiomysql.Connection,
+    user_id: int,
+    cursor_created_at: datetime | None,
+    cursor_post_id: int | None,
+    limit: int,
 ) -> list[dict]:
     async with conn.cursor(aiomysql.DictCursor) as cur:
-        if cursor is not None:
+        if cursor_created_at is not None and cursor_post_id is not None:
             await cur.execute(
                 "SELECT p.*, u.username, u.name, u.avatar_key FROM posts p "
                 "JOIN users u ON p.user_id = u.user_id "
-                "WHERE p.user_id = %s AND p.post_id < %s "
-                "ORDER BY p.post_id DESC LIMIT %s",
-                (user_id, cursor, limit),
+                "WHERE p.user_id = %s AND (p.created_at, p.post_id) < (%s, %s) "
+                "ORDER BY p.created_at DESC, p.post_id DESC LIMIT %s",
+                (user_id, cursor_created_at, cursor_post_id, limit),
             )
         else:
             await cur.execute(
                 "SELECT p.*, u.username, u.name, u.avatar_key FROM posts p "
                 "JOIN users u ON p.user_id = u.user_id "
-                "WHERE p.user_id = %s ORDER BY p.post_id DESC LIMIT %s",
+                "WHERE p.user_id = %s "
+                "ORDER BY p.created_at DESC, p.post_id DESC LIMIT %s",
                 (user_id, limit),
             )
         return await cur.fetchall()
