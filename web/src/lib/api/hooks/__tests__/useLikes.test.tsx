@@ -75,7 +75,7 @@ describe("useToggleLike", () => {
     const feedKey = ["posts", "feed", "latest"] as const
     qc.setQueryDefaults(feedKey, { staleTime: Infinity, gcTime: Infinity })
     const feedData: InfiniteData<PostListResponse> = {
-      pages: [{ posts: [basePost], next_cursor: null }],
+      pages: [{ posts: [basePost], next_cursor: null, next_cursor_likes: null }],
       pageParams: [undefined],
     }
     qc.setQueryData(feedKey, feedData)
