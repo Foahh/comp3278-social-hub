@@ -25,7 +25,11 @@ const mockPost: PostResponse = {
   liked_by_me: false,
   created_at: "2026-04-04T00:00:00",
 }
-const mockPage: PostListResponse = { posts: [mockPost], next_cursor: null, next_cursor_likes: null }
+const mockPage: PostListResponse = {
+  posts: [mockPost],
+  next_cursor: null,
+  next_cursor_likes: null,
+}
 
 function wrapper({ children }: { children: ReactNode }) {
   const [qc] = useState(() => makeTestQueryClient())

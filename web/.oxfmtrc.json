@@ -20,6 +20,7 @@
     "pnpm-lock.yaml",
     "yarn.lock",
     "bun.lock",
-    "**/routeTree.gen.ts"
+    "**/routeTree.gen.ts",
+    "src/lib/api/schema.d.ts"
   ]
 }
