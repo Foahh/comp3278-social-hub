@@ -2,7 +2,7 @@
 
 import type * as React from "react"
 
-import type * as LabelPrimitive from "@radix-ui/react-label"
+import type { Label as LabelPrimitive } from "radix-ui"
 import { type VariantProps, cva } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"

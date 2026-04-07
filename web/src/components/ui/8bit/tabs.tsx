@@ -1,4 +1,4 @@
-import type * as TabsPrimitive from "@radix-ui/react-tabs"
+import type { Tabs as TabsPrimitive } from "radix-ui"
 import { type VariantProps, cva } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"

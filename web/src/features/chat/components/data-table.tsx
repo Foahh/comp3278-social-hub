@@ -1,4 +1,4 @@
-import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area"
+import { ScrollArea as ScrollAreaPrimitive } from "radix-ui"
 import { Copy, Database, Terminal } from "pixelarticons/react"
 import type { DataframeChunk } from "../types"
 import { Action } from "@/components/ai/actions"
