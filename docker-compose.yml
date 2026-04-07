@@ -76,5 +76,4 @@ services:
 volumes:
   mysql_data:
   minio_data:
-  chroma_data:
   caddy_data:
