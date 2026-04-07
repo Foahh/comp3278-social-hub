@@ -38,8 +38,8 @@ function RootComponent() {
         <main className="min-h-0 flex-1 py-6">
           <Outlet />
         </main>
-        <Toaster position="bottom-center" />
       </div>
+      <Toaster position="bottom-left" />
     </ThemeProvider>
   )
 }
