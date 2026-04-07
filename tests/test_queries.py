@@ -53,7 +53,7 @@ async def test_list_posts_latest_no_cursor(mock_conn):
     conn, cursor = mock_conn
     cursor.fetchall = AsyncMock(return_value=[{"post_id": 5}, {"post_id": 3}])
 
-    result = await queries.list_posts_latest(conn, None, APP_CONSTANTS.feed_page_size)
+    result = await queries.list_posts_latest(conn, None, None, APP_CONSTANTS.feed_page_size)
 
     assert len(result) == 2
     assert result[0]["post_id"] == 5
@@ -61,16 +61,21 @@ async def test_list_posts_latest_no_cursor(mock_conn):
 
 @pytest.mark.asyncio
 async def test_list_posts_latest_with_cursor(mock_conn):
+    from datetime import UTC, datetime
+
     from app.core import queries
 
     conn, cursor = mock_conn
     cursor.fetchall = AsyncMock(return_value=[{"post_id": 3}])
+    t = datetime(2024, 6, 1, 12, 0, 0, tzinfo=UTC)
 
-    await queries.list_posts_latest(conn, 5, APP_CONSTANTS.feed_page_size)
+    await queries.list_posts_latest(conn, t, 5, APP_CONSTANTS.feed_page_size)
 
     call_args = cursor.execute.call_args
-    assert "%s" in call_args[0][0]
-    assert 5 in call_args[0][1]
+    sql, params = call_args[0][0], call_args[0][1]
+    assert "(p.created_at, p.post_id) < (%s, %s)" in sql
+    assert params[0] == t
+    assert params[1] == 5
 
 
 @pytest.mark.asyncio
@@ -80,7 +85,9 @@ async def test_list_posts_latest_for_user_no_cursor(mock_conn):
     conn, cursor = mock_conn
     cursor.fetchall = AsyncMock(return_value=[{"post_id": 2, "user_id": 1}])
 
-    result = await queries.list_posts_latest_for_user(conn, 1, None, APP_CONSTANTS.feed_page_size)
+    result = await queries.list_posts_latest_for_user(
+        conn, 1, None, None, APP_CONSTANTS.feed_page_size
+    )
 
     assert len(result) == 1
     call_args = cursor.execute.call_args
