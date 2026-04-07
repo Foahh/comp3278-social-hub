@@ -1,6 +1,5 @@
-/* Uses font from global @font-face in index.css */
 .retro {
-  font-family: Monocraft, ui-monospace, monospace;
+  font-family: var(--font-sans);
   line-height: 1.5;
   letter-spacing: 0.5px;
 }

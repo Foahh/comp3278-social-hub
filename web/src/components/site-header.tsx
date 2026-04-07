@@ -24,6 +24,7 @@ import {
   UserPlus,
 } from "pixelarticons/react"
 import { useAuth } from "@/context/AuthContext"
+import { FontToggleButton } from "@/components/font-toggle-button"
 
 export function SiteHeader() {
   const { user, isLoading, logout } = useAuth()
@@ -143,6 +144,8 @@ export function SiteHeader() {
               </DropdownMenuContent>
             </DropdownMenu>
           )}
+
+          <FontToggleButton />
         </div>
       </div>
       <Separator orientation="horizontal" />

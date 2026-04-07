@@ -126,6 +126,18 @@
   --sidebar-ring: oklch(0.552 0.016 285.938);
 }
 
+html[data-ui-font="inter"] {
+  --font-sans:
+    Inter, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+@layer utilities {
+  .font-sans {
+    font-family: var(--font-sans);
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -134,6 +146,6 @@
     @apply bg-background text-foreground;
   }
   html {
-    @apply font-sans;
+    font-family: var(--font-sans);
   }
 }
