@@ -32,11 +32,11 @@ services:
       timeout: 5s
       retries: 5
 
-  backend:
+  api:
     profiles: ["deploy"]
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile.api
     env_file: .env
     environment:
       MYSQL_HOST: mysql
@@ -59,21 +59,21 @@ services:
       minio:
         condition: service_healthy
 
-  caddy:
+  web:
     profiles: ["deploy"]
-    image: caddy:2-alpine
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.web
     ports:
       - "80:80"
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - ./web/dist:/srv:ro
-      - caddy_data:/data
+      - web_data:/data
     depends_on:
-      - backend
+      - api
 
 volumes:
   mysql_data:
   minio_data:
-  caddy_data:
+  web_data:
   chroma_data:
   vanna_data:

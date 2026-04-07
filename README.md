@@ -157,23 +157,12 @@ This mode:
 
 1. Make sure `.env` exists.
 
-2. Build the frontend:
-
-   ```bash
-   cd web
-   bun ci
-   bun run build
-   cd ..
-   ```
-
-3. Start everything:
+2. Start everything:
 
    ```bash
    docker compose --profile deploy up --build -d
    ```
 
-4. Open:
+3. Open:
 
    - `http://localhost`
-
-Caddy will serve the frontend and forward API requests to the backend.

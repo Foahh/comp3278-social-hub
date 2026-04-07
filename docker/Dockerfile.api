@@ -12,6 +12,7 @@ FROM base AS runtime
 COPY --from=deps /app/.venv /app/.venv
 COPY app/ app/
 COPY schema.sql .
+COPY constants.json .
 ENV PATH="/app/.venv/bin:$PATH"
 
 EXPOSE 8000
