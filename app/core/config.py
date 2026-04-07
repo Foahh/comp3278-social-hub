@@ -1,5 +1,5 @@
 import json
-from typing import Any
+from typing import Any, Optional
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -13,27 +13,27 @@ class Settings(BaseSettings):
     )
 
     # MySQL
-    mysql_host: str = "localhost"
-    mysql_port: int = 3306
-    mysql_user: str = "root"
-    mysql_password: str = "rootpassword"
-    mysql_database: str = "social_media"
+    mysql_host: str
+    mysql_port: int
+    mysql_user: str
+    mysql_password: str
+    mysql_database: str
 
     # MinIO / S3
-    s3_endpoint_url: str = "http://localhost:9000"
-    s3_access_key: str = "minioadmin"
-    s3_secret_key: str = "minioadmin"
-    s3_bucket: str = "social-media"
-    s3_public_url: str = "http://localhost:9000"
+    s3_endpoint_url: str
+    s3_access_key: str
+    s3_secret_key: str
+    s3_bucket: str
+    s3_public_url: str
 
     # Auth
-    jwt_secret: str = "change-me-in-production"
+    jwt_secret: str
     jwt_expire_hours: int = 72
 
     # Vanna / OpenAI-compatible
-    openai_api_key: str = ""
-    openai_base_url: str = ""
-    openai_organization: str = ""
+    openai_api_key: Optional[str] = None
+    openai_base_url: Optional[str] = None
+    openai_organization: Optional[str] = None
 
     vanna_chat_models: str = Field(
         default="",
@@ -41,7 +41,7 @@ class Settings(BaseSettings):
     )
 
     # App
-    cors_origins: list[str] = ["http://localhost:5173"]
+    cors_origins: list[str]
 
     def chat_model_catalog(self) -> list[dict[str, str]]:
         """Parse VANNA_CHAT_MODELS JSON into a list of {id, name, provider}."""
