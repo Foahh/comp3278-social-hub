@@ -50,9 +50,9 @@ services:
       S3_SECRET_KEY: minioadmin
       S3_BUCKET: social-media
       JWT_SECRET: dev-secret-change-in-prod
-      CHROMA_PERSIST_DIRECTORY: /app/chroma_data
     volumes:
-      - chroma_data:/app/chroma_data
+      - chroma_data:/app/.chroma
+      - vanna_data:/app/.vanna
     expose:
       - "8000"
     depends_on:
@@ -77,3 +77,5 @@ volumes:
   mysql_data:
   minio_data:
   caddy_data:
+  chroma_data:
+  vanna_data:

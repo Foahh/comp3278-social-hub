@@ -34,7 +34,6 @@ class Settings(BaseSettings):
     openai_api_key: str = ""
     openai_base_url: str = ""
     openai_organization: str = ""
-    chroma_persist_directory: str = ".chroma"
 
     vanna_chat_models: str = Field(
         default="",

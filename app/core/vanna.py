@@ -32,6 +32,7 @@ from app.core.vanna_chat_model import (
 )
 
 VANNA_FS_ROOT = ".vanna"
+CHROMA_FS_ROOT = ".chroma"
 
 _agent: Agent | None = None
 _memory: ChromaAgentMemory | None = None
@@ -73,7 +74,7 @@ def init_vanna() -> Agent:
         port=settings.mysql_port,
     )
 
-    persist = Path(settings.chroma_persist_directory).expanduser().resolve()
+    persist = Path(CHROMA_FS_ROOT).resolve()
     persist.mkdir(parents=True, exist_ok=True)
     _memory = ChromaAgentMemory(
         persist_directory=str(persist),
