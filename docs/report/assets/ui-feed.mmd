@@ -1,0 +1,8 @@
+graph TB
+    subgraph Feed["Feed page"]
+        Title["Feed"]
+        Tabs["[ Latest | Popular ]"]
+        Title --- Tabs
+        Tabs --> List["PostCard list<br/>(virtualized, infinite scroll)"]
+        List --> Card["PostCard: avatar · name · @handle<br/>text · image carousel<br/>♥ likes · 💬 comments"]
+    end

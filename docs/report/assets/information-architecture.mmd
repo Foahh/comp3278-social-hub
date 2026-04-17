@@ -1,0 +1,18 @@
+graph TD
+    Root["/<br/>SiteHeader + Outlet"]
+
+    Root --> Feed["/ (Feed)<br/>Latest · Popular"]
+    Root --> Login["/login"]
+    Root --> Register["/register"]
+    Root --> Profile["/user/:username"]
+    Root --> Post["/post/:id"]
+    Root --> Analytics["/analytics"]
+    Root --> Chat["/chat"]
+    Root --> Auth["_authenticated layout"]
+
+    Auth --> Create["/create (new post)"]
+
+    Feed --> Post
+    Profile --> Post
+    Analytics --> Post
+    Analytics --> Profile

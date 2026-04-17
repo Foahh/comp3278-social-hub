@@ -1,0 +1,24 @@
+graph LR
+    UI[Chat UI<br/>React + TanStack Router]
+    SSE[/api/vanna/v2/chat_sse/]
+    Handler[ValidatedModelChatHandler]
+    Agent[Vanna Agent]
+    Memory[(ChromaDB<br/>schema + Q/A memory)]
+    LLM[OpenAI-compatible LLM<br/>AsyncOpenAI client]
+    Tool[RunSqlToolWithSql]
+    Runner[AsyncMySQLRunner]
+    DB[(MySQL)]
+
+    UI -- "POST {message, metadata.model}" --> SSE
+    SSE --> Handler
+    Handler -- "set ContextVar(model)" --> Agent
+    Agent -- "retrieve DDL + examples" --> Memory
+    Agent -- "stream chat.completions" --> LLM
+    LLM -- "tool_call: run_sql(sql=...)" --> Agent
+    Agent --> Tool
+    Tool --> Runner
+    Runner --> DB
+    DB --> Runner
+    Runner --> Tool
+    Tool -- "DataFrame + sql" --> Agent
+    Agent -- "SSE events (text, dataframe, status)" --> UI

@@ -1,0 +1,10 @@
+graph TB
+    subgraph Chat["/chat (AI assistant)"]
+        Empty["Empty state<br/>suggested questions"]
+        Stream["Streaming message list<br/>user ↔ agent"]
+        Tool["Embedded SQL / table<br/>tool-call results"]
+        Input["Prompt input<br/>+ model selector"]
+        Empty -.replaced by.-> Stream
+        Stream --> Tool
+        Stream --- Input
+    end

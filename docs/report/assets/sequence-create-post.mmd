@@ -1,0 +1,14 @@
+sequenceDiagram
+    participant U as User (Browser)
+    participant API as FastAPI
+    participant S3 as MinIO
+    participant DB as MySQL
+
+    U->>API: POST /api/posts (multipart form + JWT cookie)
+    API->>API: get_current_user (JWT decode)
+    API->>API: validate text length / MIME / size
+    API->>S3: upload_file(key, bytes) for each image
+    S3-->>API: 200 OK
+    API->>DB: transaction - INSERT posts then INSERT images
+    API->>DB: SELECT post + user + images
+    API-->>U: 200 PostResponse (+presigned image URLs)

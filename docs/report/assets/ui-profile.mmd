@@ -1,0 +1,8 @@
+graph TB
+    subgraph Profile["User profile"]
+        Avatar["avatar<br/>(click to upload if owner)"]
+        Meta["name · @handle<br/>Joined X · N posts · M likes"]
+        Posts["Latest posts (PostList)"]
+        Avatar --- Meta
+        Meta --> Posts
+    end

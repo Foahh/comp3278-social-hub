@@ -1,0 +1,43 @@
+erDiagram
+    USERS ||--o{ POSTS    : "authors"
+    USERS ||--o{ LIKES    : "gives"
+    USERS ||--o{ COMMENTS : "writes"
+    POSTS ||--o{ IMAGES   : "contains"
+    POSTS ||--o{ LIKES    : "receives"
+    POSTS ||--o{ COMMENTS : "receives"
+
+    USERS {
+        INT      user_id PK
+        VARCHAR  username UK "case-insensitive unique"
+        VARCHAR  name
+        VARCHAR  password_hash
+        VARCHAR  avatar_key "nullable; S3 object key"
+        DATETIME created_at
+    }
+    POSTS {
+        INT      post_id PK
+        INT      user_id FK
+        TEXT     text_content "nullable"
+        INT      like_count    "denormalized; maintained by trigger"
+        INT      comment_count "denormalized; maintained by trigger"
+        DATETIME created_at
+    }
+    IMAGES {
+        INT      image_id PK
+        INT      post_id  FK
+        VARCHAR  value    "S3 key or external URL"
+        SMALLINT position "ordering within a post"
+    }
+    LIKES {
+        INT      like_id PK
+        INT      user_id FK
+        INT      post_id FK
+        DATETIME created_at
+    }
+    COMMENTS {
+        INT      comment_id PK
+        INT      user_id    FK
+        INT      post_id    FK
+        TEXT     content
+        DATETIME created_at
+    }

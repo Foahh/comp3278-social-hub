@@ -1,0 +1,17 @@
+sequenceDiagram
+    participant U as User
+    participant API as FastAPI (Vanna routes)
+    participant Agent as Vanna Agent
+    participant Mem as ChromaDB memory
+    participant LLM as LLM
+    participant DB as MySQL
+
+    U->>API: POST /api/chat (question, session cookie)
+    API->>Agent: resolve user via JwtUserResolver
+    Agent->>Mem: similarity search (DDL + training pairs)
+    Agent->>LLM: system + schema + Q (stream)
+    LLM-->>Agent: tool call run_sql(sql=…)
+    Agent->>DB: execute SELECT (via AsyncMySQLRunner)
+    DB-->>Agent: rows
+    Agent-->>API: streamed chunks (text + data)
+    API-->>U: SSE stream

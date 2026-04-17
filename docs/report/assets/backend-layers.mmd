@@ -1,0 +1,12 @@
+graph TD
+    Router["app/routers/*<br/>(auth · posts · likes ·<br/>comments · users · analytics)"]
+    Schema["app/schemas/*<br/>Pydantic models"]
+    Core["app/core/*<br/>auth · db · s3 · queries · vanna"]
+    Queries["core/queries.py<br/>raw parameterized SQL"]
+
+    Router --> Schema
+    Router --> Core
+    Core --> Queries
+    Queries --> MySQL[(MySQL)]
+    Core --> MinIO[(MinIO)]
+    Core --> Vanna[Vanna Agent]

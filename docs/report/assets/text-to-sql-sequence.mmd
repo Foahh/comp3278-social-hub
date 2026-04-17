@@ -1,0 +1,35 @@
+sequenceDiagram
+    participant UI as Chat UI
+    participant SSE as /api/vanna/v2/chat_sse
+    participant H as ValidatedModelChatHandler
+    participant MW as InjectRequestModelMiddleware
+    participant UR as JwtUserResolver
+    participant Mem as ChromaDB
+    participant LLM as AsyncOpenAI
+    participant Tool as RunSqlToolWithSql
+    participant DB as MySQL
+
+    UI->>SSE: POST {message, metadata.model, conversation_id?}
+    SSE->>UR: resolve_user(session cookie)
+    UR-->>SSE: User(id, groups=[user|public])
+    SSE->>H: handle_stream(request)
+    H->>H: validate metadata.model ∈ catalog
+    H->>H: ContextVar _llm_model_override.set(model)
+
+    loop agent loop (up to max steps)
+        H->>Mem: similarity search on question
+        Mem-->>H: DDL + top-k training pairs
+        H->>MW: before_llm_request
+        MW-->>H: inject metadata.model
+        H->>LLM: chat.completions.create(stream=True)
+        LLM-->>H: stream - text deltas
+        H-->>UI: SSE {rich {type text, data {content}}}
+        LLM-->>H: stream - tool_call run_sql args sql
+        H->>Tool: execute(ctx, {sql})
+        Tool->>DB: aiomysql SELECT
+        DB-->>Tool: rows
+        Tool-->>H: DataFrame + merged data with sql
+        H-->>UI: SSE {rich {type dataframe, data {columns, data, sql}}}
+    end
+
+    H-->>UI: SSE data [DONE]

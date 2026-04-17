@@ -1,0 +1,16 @@
+graph LR
+    Browser[Browser<br/>React 19 SPA]
+    Caddy[Caddy<br/>:80]
+    API[FastAPI<br/>Uvicorn :8000]
+    MySQL[(MySQL 9.6<br/>schema + triggers)]
+    MinIO[(MinIO<br/>S3-compatible<br/>avatars + post images)]
+    Chroma[(ChromaDB<br/>agent memory)]
+    LLM[OpenAI-compatible<br/>LLM provider]
+
+    Browser -- "static + /api/*" --> Caddy
+    Caddy -- "/api/* proxy" --> API
+    API -- "aiomysql pool" --> MySQL
+    API -- "aioboto3 presigned URLs" --> MinIO
+    Browser -- "signed GETs" --> MinIO
+    API -- "Vanna Agent" --> Chroma
+    API -- "chat completion (stream)" --> LLM

@@ -1,0 +1,10 @@
+graph TB
+    subgraph Analytics["/analytics"]
+        T1["Top 10 Most Liked Posts (table)"]
+        T2["Top 10 Most Active Users (table)"]
+        C1["Cumulative Posts — 30d (area chart)"]
+        C2["Cumulative Likes — 30d (area chart)"]
+        C3["Daily Posts — 30d (area chart)"]
+        C4["Daily Likes — 30d (area chart)"]
+        T1 --> T2 --> C1 --> C2 --> C3 --> C4
+    end
