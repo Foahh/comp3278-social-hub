@@ -300,7 +300,7 @@ exact role it plays in SocialHub.
 | **AI / text-to-SQL** | Vanna Agent, ChromaDB, AsyncOpenAI, pandas                                           |
 | **Database**       | MySQL 9.6 (schema + triggers in `schema.sql`)                                          |
 | **Reverse proxy**  | Caddy (serves SPA + proxies `/api/*` in the deploy profile)                            |
-| **DevX**           | `uv`, Ruff, Bun, Oxlint/Oxfmt, pytest, vitest, Docker Compose                          |
+| **DevX**           | `uv`, Ruff, Bun (+ `bun test`), Oxlint/Oxfmt, pytest, Docker Compose                   |
 
 ### 6.1 Backend Libraries
 
@@ -416,10 +416,6 @@ exact role it plays in SocialHub.
   `bun install`, `bun dev`, `bun test`, `bun run generate` are the daily commands.
 - **Vite 8** — Dev server (HMR in ~10 ms) and production bundler. Proxies `/api` to the
   FastAPI backend during development via `vite.config.ts`.
-- **Vitest + @testing-library/react + happy-dom** — Unit test stack for React components;
-  `happy-dom` gives a faster, smaller DOM than jsdom.
-- **MSW** — Mocks network requests in component tests so we exercise loading / error
-  states without a live API.
 - **oxlint / oxfmt** — Rust-based alternatives to ESLint/Prettier that are an
   order-of-magnitude faster. Configured as `bun lint` / `bun fmt`.
 - **knip** — Dead-code / unused-export detector; configured via `knip.json`.
@@ -493,7 +489,7 @@ Quality gates:
 ```bash
 uv run pytest                 # backend tests
 uv run ruff check .           # backend lint
-cd web && bun test            # frontend tests (vitest)
+cd web && bun test            # frontend tests (bun test)
 cd web && bun lint && bun fmt # frontend lint/format
 ```
 
