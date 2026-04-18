@@ -44,7 +44,7 @@ Important environment variables:
 Run the supporting services:
 
 ```bash
-docker compose up
+docker compose up -d --wait mysql minio 
 ```
 
 This starts MySQL and MinIO. On the **first** MySQL container start, `schema.sql` is applied automatically.
