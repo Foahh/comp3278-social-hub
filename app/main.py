@@ -46,6 +46,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
         await seed_memory()
         mount_vanna_routes(app)
 
+    log.info("starting complete")
     yield
 
     log.info("shutting down")
