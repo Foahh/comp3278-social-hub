@@ -31,8 +31,8 @@ export function useFeed(sort: FeedSort, filterUsername?: string | null) {
           },
         },
       })
-      if (error) throw new Error("Failed to fetch feed")
-      return data!
+      if (error || !data) throw new Error("Failed to fetch feed")
+      return data
     },
     initialPageParam: undefined as FeedPageParam,
     getNextPageParam: (lastPage) =>

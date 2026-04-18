@@ -23,7 +23,7 @@ export function CommentList({
   const [text, setText] = useState("")
   const [error, setError] = useState<string | null>(null)
 
-  const comments = data?.pages.flatMap((p) => p.comments) ?? []
+  const comments = data?.pages.flatMap((p) => p?.comments ?? []) ?? []
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()

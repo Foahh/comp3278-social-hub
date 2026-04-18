@@ -29,7 +29,7 @@ export function PostList({
   emptyMessage,
   disableLink,
 }: Props) {
-  const posts = pages.flatMap((p) => p.posts)
+  const posts = pages.flatMap((p) => p?.posts ?? [])
   const listRef = useRef<HTMLDivElement>(null)
 
   const virtualizer = useWindowVirtualizer({

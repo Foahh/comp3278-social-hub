@@ -28,8 +28,8 @@ export function useComments(postId: number) {
           },
         }
       )
-      if (error) throw new Error("Failed to fetch comments")
-      return data!
+      if (error || !data) throw new Error("Failed to fetch comments")
+      return data
     },
     initialPageParam: undefined as number | undefined,
     getNextPageParam: (lastPage) => lastPage?.next_cursor ?? undefined,
