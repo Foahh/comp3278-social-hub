@@ -6,29 +6,37 @@ from botocore.config import Config as BotoConfig
 _session: aioboto3.Session | None = None
 _s3_ctx: Any | None = None
 _s3_client: Any | None = None
+_s3_public_ctx: Any | None = None
+_s3_public_client: Any | None = None
 
 
 async def init_s3() -> None:
-    global _session, _s3_ctx, _s3_client
+    global _session, _s3_ctx, _s3_client, _s3_public_ctx, _s3_public_client
     from app.core.config import settings
 
     _session = aioboto3.Session()
-    _s3_ctx = _session.client(
-        "s3",
-        endpoint_url=settings.s3_endpoint_url,
+    common = dict(
         aws_access_key_id=settings.s3_access_key,
         aws_secret_access_key=settings.s3_secret_key,
         config=BotoConfig(signature_version="s3v4"),
     )
+    _s3_ctx = _session.client("s3", endpoint_url=settings.s3_endpoint_url, **common)
     _s3_client = await _s3_ctx.__aenter__()
+
+    _s3_public_ctx = _session.client("s3", endpoint_url=settings.s3_public_url, **common)
+    _s3_public_client = await _s3_public_ctx.__aenter__()
 
 
 async def close_s3() -> None:
-    global _s3_ctx, _s3_client
+    global _s3_ctx, _s3_client, _s3_public_ctx, _s3_public_client
     if _s3_ctx is not None:
         await _s3_ctx.__aexit__(None, None, None)
         _s3_ctx = None
         _s3_client = None
+    if _s3_public_ctx is not None:
+        await _s3_public_ctx.__aexit__(None, None, None)
+        _s3_public_ctx = None
+        _s3_public_client = None
 
 
 async def upload_file(key: str, data: bytes, content_type: str) -> None:
@@ -49,8 +57,8 @@ S3_OBJECT_PREFIX = "s3://"
 async def generate_presigned_url(key: str, expires_in: int = 3600) -> str:
     from app.core.config import settings
 
-    assert _s3_client is not None
-    return await _s3_client.generate_presigned_url(
+    assert _s3_public_client is not None
+    return await _s3_public_client.generate_presigned_url(
         "get_object",
         Params={"Bucket": settings.s3_bucket, "Key": key},
         ExpiresIn=expires_in,
