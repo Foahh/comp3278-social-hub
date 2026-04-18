@@ -10,10 +10,11 @@ RUN uv sync --frozen --no-dev --no-install-project
 
 FROM base AS runtime
 COPY --from=deps /app/.venv /app/.venv
+ENV PATH="/app/.venv/bin:$PATH"
+RUN python -c "from chromadb.utils.embedding_functions.onnx_mini_lm_l6_v2 import ONNXMiniLM_L6_V2; ONNXMiniLM_L6_V2()._download_model_if_not_exists()"
 COPY app/ app/
 COPY schema.sql .
 COPY constants.json .
-ENV PATH="/app/.venv/bin:$PATH"
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
