@@ -32,7 +32,7 @@ export function useComments(postId: number) {
       return data!
     },
     initialPageParam: undefined as number | undefined,
-    getNextPageParam: (lastPage) => lastPage.next_cursor ?? undefined,
+    getNextPageParam: (lastPage) => lastPage?.next_cursor ?? undefined,
   })
 }
 

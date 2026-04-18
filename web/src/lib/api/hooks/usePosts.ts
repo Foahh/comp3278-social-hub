@@ -36,7 +36,7 @@ export function useFeed(sort: FeedSort, filterUsername?: string | null) {
     },
     initialPageParam: undefined as FeedPageParam,
     getNextPageParam: (lastPage) =>
-      lastPage.next_cursor != null
+      lastPage?.next_cursor != null
         ? {
             cursor: lastPage.next_cursor,
             ...(lastPage.next_cursor_likes != null
